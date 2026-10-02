@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Our Story, His Story | GVCS 청소년예술제</title>
+  <meta name="description" content="글로벌선진학교 문경캠퍼스 청소년예술제 — Our Story, His Story. 2026.11.21 (SAT) Coming Soon." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== 상단 메뉴 ===== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="#top">
+        <span class="logo-mark">GVCS</span>
+        <span class="logo-sub">Youth Arts Festival</span>
+      </a>
+      <button class="menu-toggle" aria-label="메뉴 열기" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="gnb">
+        <a href="#about">ABOUT</a>
+        <a href="#production" class="active">PRODUCTION</a>
+        <a href="#story">STORY</a>
+        <a href="#info">INFO</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ===== 페이지 제목 ===== -->
+    <section class="page-title">
+      <p class="eyebrow">글로벌선진학교 문경캠퍼스 청소년예술제</p>
+      <h1>PRODUCTION</h1>
+      <div class="tabs" role="tablist">
+        <a class="tab active" href="#production">ON STAGE / COMING SOON</a>
+        <a class="tab" href="#about">ABOUT FESTIVAL</a>
+      </div>
+    </section>
+
+    <!-- ===== 작품 목록 ===== -->
+    <section class="production" id="production">
+      <h2 class="year">2026</h2>
+
+      <article class="show">
+        <!-- 포스터: 이미지가 준비되면 .poster 안을 <img src="poster.jpg"> 로 바꾸면 됩니다 -->
+        <a class="poster" href="#story" aria-label="Our Story, His Story 공연정보">
+          <span class="badge">COMING SOON</span>
+          <svg class="poster-art" viewBox="0 0 300 420" aria-hidden="true">
+            <defs>
+              <radialGradient id="spot" cx="50%" cy="38%" r="60%">
+                <stop offset="0%" stop-color="#f3e3b8" stop-opacity=".55" />
+                <stop offset="45%" stop-color="#c9a24a" stop-opacity=".12" />
+                <stop offset="100%" stop-color="#000" stop-opacity="0" />
+              </radialGradient>
+            </defs>
+            <rect width="300" height="420" fill="#0d0f1a" />
+            <rect width="300" height="420" fill="url(#spot)" />
+            <!-- 갈라졌다가 하나로 이어지는 두 선 : '통일' -->
+            <path d="M40 330 C 100 300, 120 230, 150 170" stroke="#c9a24a" stroke-width="1.4" fill="none" />
+            <path d="M260 330 C 200 300, 180 230, 150 170" stroke="#e8e2d4" stroke-width="1.4" fill="none" />
+            <line x1="150" y1="170" x2="150" y2="90" stroke="#f3e3b8" stroke-width="1.4" />
+            <circle cx="150" cy="170" r="4" fill="#f3e3b8" />
+            <text x="150" y="60" text-anchor="middle" class="p-small">GVCS YOUTH ARTS FESTIVAL 2026</text>
+            <text x="150" y="372" text-anchor="middle" class="p-title">Our Story,</text>
+            <text x="150" y="400" text-anchor="middle" class="p-title">His Story</text>
+          </svg>
+        </a>
+
+        <div class="show-info">
+          <p class="genre">청소년예술제 · 창작 뮤지컬</p>
+          <h3 class="show-title">Our Story, His Story</h3>
+          <dl class="meta">
+            <div><dt>기간</dt><dd>2026.11.21 (SAT)</dd></div>
+            <div><dt>장소</dt><dd>글로벌선진학교 문경캠퍼스</dd></div>
+            <div><dt>주최</dt><dd>GVCS 문경캠퍼스</dd></div>
+          </dl>
+
+          <div class="countdown" data-target="2026-11-21T00:00:00+09:00" aria-live="polite">
+            <div><b data-unit="d">--</b><span>DAYS</span></div>
+            <div><b data-unit="h">--</b><span>HOURS</span></div>
+            <div><b data-unit="m">--</b><span>MIN</span></div>
+            <div><b data-unit="s">--</b><span>SEC</span></div>
+          </div>
+
+          <div class="actions">
+            <a class="btn" href="#story">공연정보</a>
+            <button class="btn btn-ghost" type="button" disabled title="예매 오픈 예정">예매하기 · Coming Soon</button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ===== 시놉시스 ===== -->
+    <section class="story" id="story">
+      <p class="eyebrow">SYNOPSIS</p>
+      <h2>Our Story, His Story</h2>
+      <div class="synopsis">
+        <p><em>‘통일’</em>을 주제로 하나의 무대를 만들어야 하는 학생들.</p>
+        <p>하지만 서로 다른 생각은 계속 충돌하고,<br />완벽할 것 같았던 공연은 조금씩 흔들리기 시작한다.</p>
+        <p>그리고 누구에게도 말하지 않은 이야기를 품고 있는 한 학생.<br />그 아이의 침묵 뒤에는 과연 어떤 이야기가 숨겨져 있을까…?</p>
+        <p>서로를 이해하는 순간,<br />그들이 만들던 무대는 전혀 다른 이야기가 되어간다.</p>
+        <p class="closing">GVCS에서 펼쳐지는 놀라운 이야기…</p>
+      </div>
+      <p class="signature">Our Story, His Story</p>
+    </section>
+
+    <!-- ===== 예술제 소개 ===== -->
+    <section class="about" id="about">
+      <p class="eyebrow">ABOUT FESTIVAL</p>
+      <h2>GVCS 청소년예술제</h2>
+      <p>글로벌선진학교 문경캠퍼스 학생들이 직접 기획하고 무대에 올리는 예술제입니다.
+        자세한 프로그램과 출연진 소식은 곧 공개됩니다.</p>
+    </section>
+
+    <!-- ===== 공연 정보 ===== -->
+    <section class="info" id="info">
+      <div class="info-item"><span>DATE</span><strong>2026.11.21 (SAT)</strong></div>
+      <div class="info-item"><span>VENUE</span><strong>글로벌선진학교 문경캠퍼스</strong></div>
+      <div class="info-item"><span>TICKET</span><strong>Coming Soon</strong></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="footer-logo">GVCS Youth Arts Festival</p>
+    <p>글로벌선진학교 문경캠퍼스 청소년예술제</p>
+    <p class="copy">© 2026 GVCS Mungyeong Campus. All rights reserved.</p>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
