@@ -25,18 +25,49 @@ onScroll();
 window.addEventListener('scroll', onScroll, { passive: true });
 
 // 메뉴 열기/닫기 (오른쪽 ≡ 버튼)
+// 메뉴 항목 · 국기를 누르거나, 메뉴 바깥을 누르거나, Esc 를 누르면 닫힙니다.
 const toggle = document.querySelector('.menu-toggle');
 const gnb = document.querySelector('.gnb');
-toggle?.addEventListener('click', () => {
-  const open = gnb.classList.toggle('open');
+const setMenu = (open) => {
+  gnb.classList.toggle('open', open);
   toggle.setAttribute('aria-expanded', open);
+  toggle.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+};
+toggle?.addEventListener('click', () => setMenu(!gnb.classList.contains('open')));
+gnb?.addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false); });
+document.addEventListener('close-menu', () => setMenu(false));   // 국기를 눌렀을 때 (i18n.js)
+document.addEventListener('click', (e) => {
+  if (gnb.classList.contains('open') && !gnb.contains(e.target) && !toggle.contains(e.target)) setMenu(false);
 });
-gnb?.addEventListener('click', (e) => {
-  if (e.target.tagName === 'A') {
-    gnb.classList.remove('open');
-    toggle.setAttribute('aria-expanded', false);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && gnb.classList.contains('open')) { setMenu(false); toggle.focus(); }
+});
+
+// 지금 보고 있는 섹션에 맞춰 상단 메뉴 밑줄을 옮깁니다
+// (화면 위쪽 1/3 지점을 지나간 마지막 섹션이 '지금 섹션', 아무것도 안 지났으면 Home)
+const navLinks = [...document.querySelectorAll('.gnb a[href^="#"]')];
+const sections = navLinks
+  .map((a) => a.getAttribute('href'))
+  .filter((id) => id !== '#top')
+  .map((id) => document.querySelector(id))
+  .filter(Boolean);
+const markActive = () => {
+  const line = window.innerHeight / 3;
+  let current = '#top';
+  sections.forEach((sec) => { if (sec.getBoundingClientRect().top <= line) current = `#${sec.id}`; });
+  // 맨 아래까지 내리면 마지막 섹션 (History 가 짧아 위쪽 1/3 에 닿지 못하는 경우 대비)
+  if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+    current = `#${sections[sections.length - 1].id}`;
   }
-});
+  navLinks.forEach((a) => {
+    const on = a.getAttribute('href') === current;
+    a.classList.toggle('active', on);
+    if (on) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current');
+  });
+};
+markActive();
+window.addEventListener('scroll', markActive, { passive: true });
+window.addEventListener('resize', markActive);
 
 // History 페이지 : 썸네일을 누르면 그 자리에서 유튜브 영상 재생
 // (처음부터 영상을 여러 개 띄우면 페이지가 무거워져서, 누를 때만 불러옵니다)
