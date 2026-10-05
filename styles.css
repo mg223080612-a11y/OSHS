@@ -407,3 +407,74 @@ section { scroll-margin-top: 72px; }
   .info { grid-template-columns: 1fr; padding: 60px 20px; }
   .synopsis { font-size: 15px; }
 }
+
+/* ===== History 페이지 ===== */
+.history-head {
+  text-align: center;
+  padding: 160px 20px 70px;
+  background:
+    radial-gradient(ellipse 40% 70% at 50% 0%, rgba(255, 214, 150, .18), transparent 70%),
+    radial-gradient(ellipse 80% 80% at 50% 0%, var(--plum), transparent 70%);
+}
+.history-head h1 {
+  font-family: var(--hand); font-weight: 400;
+  font-size: clamp(64px, 9vw, 130px); line-height: 1.1;
+  color: var(--apricot-soft);
+  margin: 6px 0 10px;
+}
+.history-lead { font-family: var(--serif-ko); color: var(--muted); }
+
+.history-list { max-width: var(--max); margin: 0 auto; padding: 20px 20px 40px; }
+.past {
+  display: grid; grid-template-columns: 260px 1fr; gap: 48px; align-items: center;
+  padding: 56px 0;
+  border-top: 1px solid var(--line);
+}
+.past-year { font-family: var(--serif); font-size: 64px; font-weight: 600; line-height: 1; color: var(--apricot); }
+.past-label { font-family: var(--brand); font-size: 11px; font-weight: 700; letter-spacing: .2em; color: var(--muted); margin-top: 14px; }
+.past-title { font-family: var(--display); font-size: 34px; font-weight: 500; letter-spacing: .04em; margin-top: 4px; }
+
+.video {
+  position: relative; display: block; width: 100%;
+  aspect-ratio: 16 / 9; overflow: hidden;
+  border: 0; padding: 0; background: #000; cursor: pointer;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, .5);
+}
+.video img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s, opacity .3s; opacity: .85; }
+.video:hover img { transform: scale(1.04); opacity: 1; }
+.video iframe { width: 100%; height: 100%; border: 0; display: block; }
+.play {
+  position: absolute; left: 50%; top: 50%;
+  width: 76px; height: 76px; margin: -38px 0 0 -38px;
+  border-radius: 50%;
+  background: rgba(19, 14, 39, .6);
+  border: 2px solid var(--apricot-soft);
+  backdrop-filter: blur(4px);
+  transition: background .2s, transform .2s;
+}
+.play::after {
+  content: ''; position: absolute; left: 30px; top: 23px;
+  border-style: solid; border-width: 15px 0 15px 24px;
+  border-color: transparent transparent transparent var(--apricot-soft);
+}
+.video:hover .play { background: var(--apricot); transform: scale(1.08); }
+.video:hover .play::after { border-left-color: var(--bg); }
+.video:focus-visible { outline: 2px solid var(--apricot); outline-offset: 4px; }
+
+.history-more { text-align: center; color: var(--muted); padding: 30px 20px 90px; font-size: 14px; }
+.history-more a { color: var(--apricot); border-bottom: 1px solid currentColor; }
+
+@media (max-width: 860px) {
+  .history-head { padding: 120px 20px 50px; }
+  .past { grid-template-columns: 1fr; gap: 20px; padding: 40px 0; text-align: center; }
+  .past-year { font-size: 48px; }
+  .past-title { font-size: 26px; }
+}
+
+/* ===== 하단 제작 표기 : made by Sync (저작권 줄 바로 밑, 같은 글씨) ===== */
+.credit {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  margin-top: 4px;
+  font-size: 12px; color: var(--muted);
+}
+.credit strong { font-weight: 500; }
