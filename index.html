@@ -27,15 +27,17 @@
         <svg class="sparkle" viewBox="0 0 40 40" aria-hidden="true">
           <path d="M20 0 C21 14 26 19 40 20 C26 21 21 26 20 40 C19 26 14 21 0 20 C14 19 19 14 20 0Z" />
         </svg>
-        <span>GVCS 청소년예술제</span>
+        <span data-i18n="logo">GVCS 청소년예술제</span>
       </a>
       <nav class="gnb">
         <a href="#top" class="active">Home</a>
         <a href="#production">Production</a>
         <a href="#story">Story</a>
+        <a href="#history">History</a>
         <a href="#info">Info</a>
-        <a href="history.html">History</a>
+        <div class="lang-switch in-menu"></div>
       </nav>
+      <div class="lang-switch in-header"></div>
       <button class="menu-toggle" aria-label="메뉴 열기" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -66,8 +68,8 @@
             </svg>
           </h1>
           <p class="hero-desc">
-            ‘통일’을 주제로 하나의 무대를 만들어 가는 학생들의 이야기<br />
-            <b>GVCS 2026 청소년예술제</b>
+            <span data-i18n="heroDesc">‘통일’을 주제로 하나의 무대를 만들어 가는 학생들의 이야기</span><br />
+            <b data-i18n="heroFest">GVCS 2026 청소년예술제</b>
           </p>
         </div>
 
@@ -81,7 +83,7 @@
             <div><b data-unit="m">--</b><span>MINUTES</span></div>
             <div><b data-unit="s">--</b><span>SECONDS</span></div>
           </div>
-          <a class="pill" href="#production">공연 정보 보기 <span aria-hidden="true">→</span></a>
+          <a class="pill" href="#production"><span data-i18n="pill">공연 정보 보기</span> <span aria-hidden="true">→</span></a>
         </div>
       </div>
 
@@ -110,12 +112,12 @@
         </a>
 
         <div class="show-info">
-          <p class="genre">2026 청소년예술제</p>
+          <p class="genre" data-i18n="genre">2026 청소년예술제</p>
           <h3 class="show-title">Our Story,<br /><span>His Story</span></h3>
           <dl class="meta">
-            <div><dt>일시</dt><dd>2026.11.21 (SAT) 5PM</dd></div>
-            <div><dt>장소</dt><dd>글로벌선진학교 문경캠퍼스 헐버트홀</dd></div>
-            <div><dt>예매</dt><dd>Coming Soon</dd></div>
+            <div><dt data-i18n="dtDate">일시</dt><dd>2026.11.21 (SAT) 5PM</dd></div>
+            <div><dt data-i18n="dtVenue">장소</dt><dd data-i18n="venue">글로벌선진학교 문경캠퍼스 헐버트홀</dd></div>
+            <div><dt data-i18n="dtTicket">예매</dt><dd>Coming Soon</dd></div>
           </dl>
 
           <div class="countdown" data-target="2026-11-21T17:00:00+09:00" aria-live="polite">
@@ -126,8 +128,8 @@
           </div>
 
           <div class="actions">
-            <a class="btn" href="#story">공연정보</a>
-            <button class="btn btn-ghost" type="button" disabled title="예매 오픈 예정">예매하기 · Coming Soon</button>
+            <a class="btn" href="#story" data-i18n="btnInfo">공연정보</a>
+            <button class="btn btn-ghost" type="button" disabled title="예매 오픈 예정" data-i18n="btnTicket">예매하기 · Coming Soon</button>
           </div>
         </div>
       </article>
@@ -138,13 +140,68 @@
       <p class="eyebrow">SYNOPSIS</p>
       <h2>Our Story, <span>His Story</span></h2>
       <div class="synopsis">
-        <p><em>‘통일’</em>을 주제로 하나의 무대를 만들어야 하는 학생들.</p>
-        <p>하지만 서로 다른 생각은 계속 충돌하고,<br />완벽할 것 같았던 공연은 조금씩 흔들리기 시작한다.</p>
-        <p>그리고 누구에게도 말하지 않은 이야기를 품고 있는 한 학생.<br />그 아이의 침묵 뒤에는 과연 어떤 이야기가 숨겨져 있을까…?</p>
-        <p>서로를 이해하는 순간,<br />그들이 만들던 무대는 전혀 다른 이야기가 되어간다.</p>
-        <p class="closing">GVCS에서 펼쳐지는 놀라운 이야기…</p>
+        <p data-i18n="s1"><em>‘통일’</em>을 주제로 하나의 무대를 만들어야 하는 학생들.</p>
+        <p data-i18n="s2">하지만 서로 다른 생각은 계속 충돌하고,<br />완벽할 것 같았던 공연은 조금씩 흔들리기 시작한다.</p>
+        <p data-i18n="s3">그리고 누구에게도 말하지 않은 이야기를 품고 있는 한 학생.<br />그 아이의 침묵 뒤에는 과연 어떤 이야기가 숨겨져 있을까…?</p>
+        <p data-i18n="s4">서로를 이해하는 순간,<br />그들이 만들던 무대는 전혀 다른 이야기가 되어간다.</p>
+        <p class="closing" data-i18n="s5">GVCS에서 펼쳐지는 놀라운 이야기…</p>
       </div>
     </section>
+
+
+    <!-- ===== History : 지난 공연 영상 ===== -->
+    <section class="history-head" id="history">
+      <p class="eyebrow">GVCS YOUTH ARTS FESTIVAL</p>
+      <h2 class="history-h">History</h2>
+      <p class="history-lead" data-i18n="histLead">지난 무대들을 다시 만나보세요.</p>
+    </section>
+
+    <!-- ===== 연도별 공연 영상 =====
+         새 연도를 추가하려면 <article class="past"> 한 덩어리를 복사해서
+         연도 · 제목 · data-id(유튜브 주소의 v= 뒤 11글자)만 바꾸면 됩니다. -->
+    <section class="history-list">
+
+      <article class="past">
+        <div class="past-meta">
+          <p class="past-year">2025</p>
+          <p class="past-label">YOUTH ARTS FESTIVAL</p>
+          <h2 class="past-title">GIFT</h2>
+        </div>
+        <button class="video" type="button" data-id="xbVpOacHacA" aria-label="2025 청소년예술제 GIFT 영상 재생">
+          <img src="https://i.ytimg.com/vi/xbVpOacHacA/maxresdefault.jpg" alt="" loading="lazy" />
+          <span class="play" aria-hidden="true"></span>
+        </button>
+      </article>
+
+      <article class="past">
+        <div class="past-meta">
+          <p class="past-year">2024</p>
+          <p class="past-label">YOUTH ARTS FESTIVAL</p>
+          <h2 class="past-title">To the West</h2>
+        </div>
+        <button class="video" type="button" data-id="-N7dlrumGoM" aria-label="2024 청소년예술제 To the West 영상 재생">
+          <img src="https://i.ytimg.com/vi/-N7dlrumGoM/maxresdefault.jpg" alt="" loading="lazy" />
+          <span class="play" aria-hidden="true"></span>
+        </button>
+      </article>
+
+      <article class="past">
+        <div class="past-meta">
+          <p class="past-year">2023</p>
+          <p class="past-label">YOUTH ARTS FESTIVAL</p>
+          <h2 class="past-title">THE JOURNEY</h2>
+        </div>
+        <button class="video" type="button" data-id="s-Nyu5pvR7k" aria-label="2023 청소년예술제 THE JOURNEY 영상 재생">
+          <img src="https://i.ytimg.com/vi/s-Nyu5pvR7k/maxresdefault.jpg" alt="" loading="lazy" />
+          <span class="play" aria-hidden="true"></span>
+        </button>
+      </article>
+
+    </section>
+
+    <p class="history-more" data-i18n="histMore">
+      더 많은 영상은 <a href="https://www.youtube.com/@GVCSMG" target="_blank" rel="noopener">GVCS 글로벌선진학교[MG] 유튜브</a>에서 볼 수 있어요.
+    </p>
 
     <!-- ===== 공연 정보 ===== -->
     <section class="info" id="info">
@@ -157,13 +214,14 @@
   <footer class="site-footer">
     <img src="apple-touch-icon.png" alt="글로벌선진학교" width="56" height="56" />
     <p class="footer-logo">GLOBAL VISION CHRISTIAN SCHOOL MG</p>
-    <p>글로벌선진학교 문경캠퍼스 2026 청소년예술제</p>
+    <p data-i18n="footer">글로벌선진학교 문경캠퍼스 2026 청소년예술제</p>
     <p class="copy">© 2026 GVCS Mungyeong. All rights reserved.</p>
     <p class="credit">
       <span>made by <strong>GVCS MG coding club Sync</strong></span>
     </p>
   </footer>
 
+  <script src="i18n.js"></script>
   <script src="main.js"></script>
 </body>
 </html>

@@ -411,12 +411,13 @@ section { scroll-margin-top: 72px; }
 /* ===== History 페이지 ===== */
 .history-head {
   text-align: center;
-  padding: 160px 20px 70px;
+  padding: 110px 20px 60px;
+  border-top: 1px solid var(--line);
   background:
     radial-gradient(ellipse 40% 70% at 50% 0%, rgba(255, 214, 150, .18), transparent 70%),
     radial-gradient(ellipse 80% 80% at 50% 0%, var(--plum), transparent 70%);
 }
-.history-head h1 {
+.history-head .history-h {
   font-family: var(--hand); font-weight: 400;
   font-size: clamp(64px, 9vw, 130px); line-height: 1.1;
   color: var(--apricot-soft);
@@ -465,7 +466,7 @@ section { scroll-margin-top: 72px; }
 .history-more a { color: var(--apricot); border-bottom: 1px solid currentColor; }
 
 @media (max-width: 860px) {
-  .history-head { padding: 120px 20px 50px; }
+  .history-head { padding: 70px 20px 40px; }
   .past { grid-template-columns: 1fr; gap: 20px; padding: 40px 0; text-align: center; }
   .past-year { font-size: 48px; }
   .past-title { font-size: 26px; }
@@ -478,3 +479,27 @@ section { scroll-margin-top: 72px; }
   font-size: 12px; color: var(--muted);
 }
 .credit strong { font-weight: 500; }
+
+/* ===== 언어 바꾸기 : 둥근 국기 버튼 ===== */
+.lang-switch { display: flex; align-items: center; gap: 8px; }
+.lang-switch.in-header { justify-self: end; margin-right: 76px; }   /* 오른쪽 ≡ 버튼 자리만큼 비움 */
+.lang-btn {
+  width: 30px; height: 30px; padding: 0;
+  border-radius: 50%; overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, .55);
+  background: none; cursor: pointer;
+  opacity: .75;
+  transition: transform .15s, opacity .15s, border-color .15s;
+}
+.lang-btn svg { display: block; width: 100%; height: 100%; }
+.lang-btn:hover { opacity: 1; transform: translateY(-2px); }
+.lang-btn.active { opacity: 1; border-color: var(--apricot); box-shadow: 0 0 0 2px rgba(240, 196, 107, .35); }
+.lang-btn:focus-visible { outline: 2px solid var(--apricot); outline-offset: 2px; }
+
+/* 펼친 메뉴 안의 국기 줄 : 화면이 좁을 때만 */
+.gnb .lang-switch.in-menu { display: none; }
+.gnb.open .lang-switch.in-menu { display: flex; flex-wrap: wrap; gap: 5px; padding: 16px; }
+
+@media (max-width: 1280px) {
+  .lang-switch.in-header { display: none; }
+}
