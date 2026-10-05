@@ -342,15 +342,6 @@ section { scroll-margin-top: 72px; }
 .synopsis em { font-style: normal; font-weight: 700; color: var(--apricot); }
 .synopsis .closing { font-weight: 500; color: var(--apricot-soft); margin: 44px 0 0; }
 
-/* ===== 공연 정보 ===== */
-.info {
-  max-width: var(--max); margin: 0 auto; padding: 90px 20px;
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 24px;
-}
-.info-item { border-top: 2px solid var(--apricot); padding: 20px 0; }
-.info-item span { display: block; font-family: var(--brand); font-size: 11px; font-weight: 700; letter-spacing: .2em; color: var(--apricot); margin-bottom: 6px; }
-.info-item strong { font-family: var(--display); font-size: 22px; font-weight: 500; letter-spacing: .04em; }
-
 /* ===== 푸터 ===== */
 .site-footer {
   border-top: 1px solid var(--line);
@@ -404,7 +395,6 @@ section { scroll-margin-top: 72px; }
   .page-title { padding-top: 60px; }
   .show { grid-template-columns: 1fr; gap: 36px; }
   .poster { max-width: 360px; width: 100%; margin: 0 auto; }
-  .info { grid-template-columns: 1fr; padding: 60px 20px; }
   .synopsis { font-size: 15px; }
 }
 
