@@ -53,7 +53,7 @@ const TEXT = {
   },
   mn: {
     title: 'Our Story, His Story | GVCS 2026 Залуучуудын урлагийн наадам',
-    logo: 'GVCS Залуучуудын урлагийн наадам',
+    logo: 'GVCS урлагийн наадам',   // 상단바에 한 줄로 들어가도록 짧게 (GVCS 예술제)
     heroDesc: 'Өөр өөр түүхүүд нийлж, нэг түүх болно',
     heroFest: 'GVCS 2026 Залуучуудын урлагийн наадам',
     pill: 'Тоглолтын мэдээлэл',
@@ -119,7 +119,7 @@ const TEXT = {
   },
   es: {
     title: 'Our Story, His Story | Festival Juvenil de las Artes GVCS 2026',
-    logo: 'Festival Juvenil de las Artes GVCS',
+    logo: 'Festival de Artes GVCS',   // 상단바에 한 줄로 들어가도록 짧게
     heroDesc: 'Historias distintas se encuentran y se convierten en una sola',
     heroFest: 'Festival Juvenil de las Artes GVCS 2026',
     pill: 'Ver información',

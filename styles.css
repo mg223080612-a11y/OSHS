@@ -10,9 +10,10 @@
   --apricot: #f0c46b;     /* 물감 튄 살구색 */
   --apricot-soft: #f6d9a0;
   --display: 'Oswald', 'Noto Sans KR', sans-serif;      /* NOVEMBER 21 같은 좁은 글씨 */
-  --brand: 'Montserrat', 'Noto Sans KR', sans-serif;    /* GLOBAL VISION ... */
-  --serif: 'Playfair Display', 'Noto Serif KR', serif;  /* 메인 화면 숫자·메뉴 */
-  --serif-ko: 'Noto Serif KR', serif;
+  /* 글꼴을 늘리면 첫 화면이 느려집니다. 새 글꼴을 추가하기 전에 아래 4가지로 해결되는지 먼저 보세요 */
+  --brand: 'Noto Sans KR', sans-serif;                  /* GLOBAL VISION ... (작은 영문 라벨) */
+  --serif: 'Playfair Display', 'Noto Sans KR', serif;   /* 메인 화면 숫자·메뉴 */
+  --serif-ko: 'Playfair Display', 'Noto Sans KR', serif; /* 로고·부제 : 영문은 Playfair, 한글은 Noto Sans KR */
   --hand: 'Kaushan Script', cursive;                    /* 붓글씨 (포스터의 His Story 느낌) */
   --sans: 'Noto Sans KR', system-ui, sans-serif;
   --max: 1120px;
@@ -55,11 +56,15 @@ section { scroll-margin-top: 72px; }
 }
 .header-inner {
   height: 84px; padding: 0 var(--edge);
-  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center;
   transition: height .3s;
 }
 .scrolled .header-inner { height: 64px; }
-.logo { display: flex; align-items: center; gap: 14px; font-family: var(--serif-ko); font-size: 24px; font-weight: 500; }
+/* 로고 글자 : 화면 배율(확대)로 칸이 좁아지면 글자도 같이 작아짐.
+   그래도 넘치는 긴 번역은 촘촘한 두 줄로 바뀌어 상단바 안에 들어감 (잘리지 않음) */
+.logo { display: flex; align-items: center; gap: 14px; min-width: 0; font-family: var(--serif-ko); font-size: clamp(16px, 1.6vw, 24px); font-weight: 500; }
+.logo span { line-height: 1.15; }
+.sparkle { flex-shrink: 0; }
 .sparkle { width: 40px; height: 40px; fill: var(--apricot-soft); filter: drop-shadow(0 0 6px rgba(246, 217, 160, .6)); }
 .gnb { display: flex; gap: 44px; }
 .gnb a {
@@ -189,7 +194,7 @@ section { scroll-margin-top: 72px; }
   animation: draw 1.4s .6s ease-out forwards;
 }
 @keyframes draw { to { stroke-dashoffset: 0; } }
-.hero-desc { font-family: var(--serif-ko); font-size: clamp(16px, 1.5vw, 20px); line-height: 1.8; }
+.hero-desc { font-family: var(--serif-ko); font-size: clamp(16px, 1.5vw, 20px); line-height: 1.8; text-wrap: balance; }  /* 줄바꿈 시 한 단어만 남지 않게 */
 .hero-desc b { font-family: var(--serif); font-weight: 500; color: var(--apricot-soft); }
 
 .dday { text-align: center; width: clamp(340px, 30vw, 440px); }
@@ -361,13 +366,13 @@ section { scroll-margin-top: 72px; }
 
 /* ===== 태블릿 이하 ===== */
 @media (max-width: 1100px) {
-  .header-inner { grid-template-columns: 1fr auto; }
+  .header-inner { grid-template-columns: minmax(0, 1fr) auto; }
   .gnb { margin-right: 80px; gap: 28px; }
 }
 
 @media (max-width: 860px) {
   .header-inner, .scrolled .header-inner { height: 64px; }
-  .logo { font-size: 19px; gap: 10px; }
+  .logo { font-size: clamp(14px, 4.4vw, 19px); gap: 10px; margin-right: 64px; }   /* 오른쪽 ≡ 버튼 밑으로 들어가지 않게 */
   .sparkle { width: 30px; height: 30px; }
   .gnb { display: none; }
   .menu-toggle { border-left: 0; }
@@ -405,9 +410,10 @@ section { scroll-margin-top: 72px; }
 }
 .history-head .history-h {
   font-family: var(--hand); font-weight: 400;
-  font-size: clamp(64px, 9vw, 130px); line-height: 1.1;
+  font-size: clamp(64px, 9vw, 130px); line-height: 1.35;
   color: var(--apricot-soft);
-  margin: 6px 0 10px;
+  /* 붓글씨체는 y 꼬리가 아래로 길게 내려와서, 아래 문장과 겹치지 않게 글자 크기에 비례해 띄움 */
+  margin: 0 0 .2em;
 }
 .history-lead { font-family: var(--serif-ko); color: var(--muted); }
 
@@ -492,4 +498,12 @@ section { scroll-margin-top: 72px; }
 @media (min-width: 1281px) {
   .menu-toggle { display: none; }
   .lang-switch.in-header { margin-right: 0; }
+}
+
+/* ===== '동작 줄이기'를 켠 기기 : 깜빡임 · 먼지 · 흔들림 같은 움직임을 모두 멈춤 ===== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .underline { stroke-dashoffset: 0; }   /* 그려지는 밑줄은 처음부터 다 그려진 상태로 */
+  .video:hover img, .video:hover .play, .pill:hover, .lang-btn:hover { transform: none; }
 }
