@@ -429,7 +429,7 @@ section { scroll-margin-top: 72px; }
 }
 .history-lead { font-family: var(--serif-ko); color: var(--muted); }
 
-.history-list { max-width: var(--max); margin: 0 auto; padding: 20px 20px 40px; }
+.history-list { max-width: var(--max); margin: 0 auto; padding: 20px 20px 90px; }
 .past {
   display: grid; grid-template-columns: 260px 1fr; gap: 48px; align-items: center;
   padding: 56px 0;
@@ -466,8 +466,6 @@ section { scroll-margin-top: 72px; }
 .video:hover .play::after { border-left-color: var(--bg); }
 .video:focus-visible { outline: 2px solid var(--apricot); outline-offset: 4px; }
 
-.history-more { text-align: center; color: var(--muted); padding: 30px 20px 90px; font-size: 14px; }
-.history-more a { color: var(--apricot); border-bottom: 1px solid currentColor; }
 
 @media (max-width: 860px) {
   .history-head { padding: 70px 20px 40px; }

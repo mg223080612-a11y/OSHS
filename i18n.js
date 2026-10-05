@@ -3,9 +3,6 @@
 // 한국어는 HTML 에 적힌 원래 글자를 그대로 쓰고, 다른 언어는 아래 TEXT 에서 가져옵니다.
 // 문장을 고치려면 TEXT 의 해당 언어 · 이름을 찾아 바꾸면 됩니다.
 
-const YT = 'https://www.youtube.com/@GVCSMG';
-const ytLink = (label) => `<a href="${YT}" target="_blank" rel="noopener">${label}</a>`;
-
 const TEXT = {
   en: {
     title: 'Our Story, His Story | 2026 Youth Arts Festival',
@@ -24,7 +21,6 @@ const TEXT = {
     s4: 'The moment they understand one another,<br />the stage they were building becomes a completely different story.',
     s5: 'See you on November 21 at Hulbert Hall.',
     histLead: 'Revisit the stages of past years.',
-    histMore: `More videos on the ${ytLink('GVCS [MG] YouTube channel')}.`,
     footer: 'Global Vision Christian School, Mungyeong Campus · 2026 Youth Arts Festival',
   },
   id: {
@@ -44,7 +40,6 @@ const TEXT = {
     s4: 'Saat mereka mulai saling memahami,<br />panggung yang mereka bangun menjadi kisah yang sama sekali berbeda.',
     s5: 'Sampai jumpa pada 21 November di Hulbert Hall.',
     histLead: 'Saksikan kembali panggung-panggung tahun sebelumnya.',
-    histMore: `Video lainnya dapat ditonton di ${ytLink('kanal YouTube GVCS [MG]')}.`,
     footer: 'Global Vision Christian School, Kampus Mungyeong · Festival Seni Remaja 2026',
   },
   mn: {
@@ -64,7 +59,6 @@ const TEXT = {
     s4: 'Бие биенээ ойлгох тэр мөчид<br />тэдний бүтээж буй тайз огт өөр түүх болон хувирна.',
     s5: '11-р сарын 21-нд Hulbert Hall-д уулзацгаая.',
     histLead: 'Өмнөх жилүүдийн тоглолтыг дахин үзээрэй.',
-    histMore: `Бусад бичлэгийг ${ytLink('GVCS [MG] YouTube сувгаас')} үзэх боломжтой.`,
     footer: 'Global Vision Christian School, Мүнгёон кампус · 2026 Залуучуудын урлагийн наадам',
   },
   zh: {
@@ -84,7 +78,6 @@ const TEXT = {
     s4: '在彼此理解的那一刻，<br />他们打造的舞台变成了一个完全不同的故事。',
     s5: '11月21日，Hulbert Hall 不见不散。',
     histLead: '重温往届的舞台。',
-    histMore: `更多视频请前往 ${ytLink('GVCS [MG] YouTube 频道')} 观看。`,
     footer: 'Global Vision Christian School 闻庆校区 · 2026 青少年艺术节',
   },
   de: {
@@ -104,7 +97,6 @@ const TEXT = {
     s4: 'In dem Moment, in dem sie einander verstehen,<br />wird ihre Bühne zu einer ganz anderen Geschichte.',
     s5: 'Wir sehen uns am 21. November in der Hulbert Hall.',
     histLead: 'Erleben Sie die Bühnen der vergangenen Jahre noch einmal.',
-    histMore: `Weitere Videos gibt es auf dem ${ytLink('YouTube-Kanal von GVCS [MG]')}.`,
     footer: 'Global Vision Christian School, Campus Mungyeong · Jugendkunstfestival 2026',
   },
   es: {
@@ -124,7 +116,6 @@ const TEXT = {
     s4: 'En el momento en que se comprenden,<br />el escenario que construían se convierte en una historia completamente distinta.',
     s5: 'Nos vemos el 21 de noviembre en el Hulbert Hall.',
     histLead: 'Revive los escenarios de años anteriores.',
-    histMore: `Más vídeos en el ${ytLink('canal de YouTube de GVCS [MG]')}.`,
     footer: 'Global Vision Christian School, campus Mungyeong · Festival Juvenil de las Artes 2026',
   },
 };
