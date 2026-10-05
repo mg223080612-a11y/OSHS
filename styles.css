@@ -60,12 +60,10 @@ section { scroll-margin-top: 72px; }
   transition: height .3s;
 }
 .scrolled .header-inner { height: 64px; }
-/* 로고 글자 : 화면 배율(확대)로 칸이 좁아지면 글자도 같이 작아짐.
-   그래도 넘치는 긴 번역은 촘촘한 두 줄로 바뀌어 상단바 안에 들어감 (잘리지 않음) */
-.logo { display: flex; align-items: center; gap: 14px; min-width: 0; font-family: var(--serif-ko); font-size: clamp(16px, 1.6vw, 24px); font-weight: 500; }
-.logo span { line-height: 1.15; }
-.sparkle { flex-shrink: 0; }
-.sparkle { width: 40px; height: 40px; fill: var(--apricot-soft); filter: drop-shadow(0 0 6px rgba(246, 217, 160, .6)); }
+/* 학교 로고 이미지 : 높이를 정해 두고, 화면 확대로 칸이 좁아지면 비율을 지킨 채 작아짐 */
+.logo { display: flex; align-items: center; min-width: 0; }
+.logo img { display: block; height: 46px; width: auto; max-width: 100%; object-fit: contain; object-position: left center; transition: height .3s; }
+.scrolled .logo img { height: 40px; }
 .gnb { display: flex; gap: 44px; }
 .gnb a {
   font-family: var(--serif); font-size: 18px;
@@ -334,12 +332,26 @@ section { scroll-margin-top: 72px; }
 /* ===== 푸터 ===== */
 .site-footer {
   border-top: 1px solid var(--line);
-  text-align: center; padding: 48px 20px;
+  padding: 48px 20px;
   font-size: 13px; color: var(--muted);
 }
-.site-footer img { border-radius: 50%; margin-bottom: 12px; }
-.footer-logo { font-family: var(--brand); font-weight: 700; font-size: 13px; letter-spacing: .1em; color: var(--text); }
-.copy { margin-top: 12px; font-size: 12px; }
+/* 로고 | 세로줄 | 정보 를 한 덩어리로 묶어 가운데 정렬 */
+.footer-inner {
+  display: flex; align-items: center; justify-content: center;
+  gap: 32px;
+  max-width: var(--max); margin: 0 auto;
+}
+.footer-ci { display: block; height: 56px; width: auto; max-width: 100%; flex-shrink: 0; }
+.footer-info { text-align: left; padding-left: 32px; border-left: 1px solid var(--line); line-height: 1.6; }
+.footer-info .credit { justify-content: flex-start; }
+.copy { margin-top: 6px; font-size: 12px; }
+
+/* 휴대폰 : 로고 위, 정보 아래로 쌓고 가운데 정렬 */
+@media (max-width: 600px) {
+  .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
+  .footer-info { text-align: center; padding-left: 0; border-left: 0; }
+  .footer-info .credit { justify-content: center; }
+}
 
 /* ===== 메뉴 펼침 (≡ 버튼) =====
    · 휴대폰(860px 이하) : 메뉴 + 국기 전체가 오른쪽에서 펼쳐짐
@@ -372,8 +384,8 @@ section { scroll-margin-top: 72px; }
 
 @media (max-width: 860px) {
   .header-inner, .scrolled .header-inner { height: 64px; }
-  .logo { font-size: clamp(14px, 4.4vw, 19px); gap: 10px; margin-right: 64px; }   /* 오른쪽 ≡ 버튼 밑으로 들어가지 않게 */
-  .sparkle { width: 30px; height: 30px; }
+  .logo { margin-right: 64px; }   /* 오른쪽 ≡ 버튼 밑으로 들어가지 않게 */
+  .logo img, .scrolled .logo img { height: 38px; }
   .gnb { display: none; }
   .menu-toggle { border-left: 0; }
 

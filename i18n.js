@@ -9,9 +9,7 @@ const ytLink = (label) => `<a href="${YT}" target="_blank" rel="noopener">${labe
 const TEXT = {
   en: {
     title: 'Our Story, His Story | 2026 Youth Arts Festival',
-    logo: 'GVCS Youth Arts Festival',
     heroDesc: 'Different stories meet and become one story',
-    heroFest: 'GVCS 2026 Youth Arts Festival',
     pill: 'View show info',
     genre: '2026 Youth Arts Festival',
     dtDate: 'When', dtVenue: 'Venue', dtTicket: 'Tickets',
@@ -31,9 +29,7 @@ const TEXT = {
   },
   id: {
     title: 'Our Story, His Story | Festival Seni Remaja GVCS 2026',
-    logo: 'Festival Seni Remaja GVCS',
     heroDesc: 'Kisah-kisah yang berbeda bertemu dan menjadi satu kisah',
-    heroFest: 'Festival Seni Remaja GVCS 2026',
     pill: 'Lihat info pertunjukan',
     genre: 'Festival Seni Remaja 2026',
     dtDate: 'Waktu', dtVenue: 'Tempat', dtTicket: 'Tiket',
@@ -53,9 +49,7 @@ const TEXT = {
   },
   mn: {
     title: 'Our Story, His Story | GVCS 2026 Залуучуудын урлагийн наадам',
-    logo: 'GVCS урлагийн наадам',   // 상단바에 한 줄로 들어가도록 짧게 (GVCS 예술제)
     heroDesc: 'Өөр өөр түүхүүд нийлж, нэг түүх болно',
-    heroFest: 'GVCS 2026 Залуучуудын урлагийн наадам',
     pill: 'Тоглолтын мэдээлэл',
     genre: '2026 Залуучуудын урлагийн наадам',
     dtDate: 'Хэзээ', dtVenue: 'Хаана', dtTicket: 'Тасалбар',
@@ -75,9 +69,7 @@ const TEXT = {
   },
   zh: {
     title: 'Our Story, His Story | GVCS 2026 青少年艺术节',
-    logo: 'GVCS 青少年艺术节',
     heroDesc: '不同的故事相遇，成为同一个故事',
-    heroFest: 'GVCS 2026 青少年艺术节',
     pill: '查看演出信息',
     genre: '2026 青少年艺术节',
     dtDate: '时间', dtVenue: '地点', dtTicket: '购票',
@@ -97,9 +89,7 @@ const TEXT = {
   },
   de: {
     title: 'Our Story, His Story | GVCS Jugendkunstfestival 2026',
-    logo: 'GVCS Jugendkunstfestival',
     heroDesc: 'Verschiedene Geschichten begegnen sich und werden zu einer',
-    heroFest: 'GVCS Jugendkunstfestival 2026',
     pill: 'Zur Aufführung',
     genre: 'Jugendkunstfestival 2026',
     dtDate: 'Termin', dtVenue: 'Ort', dtTicket: 'Tickets',
@@ -119,9 +109,7 @@ const TEXT = {
   },
   es: {
     title: 'Our Story, His Story | Festival Juvenil de las Artes GVCS 2026',
-    logo: 'Festival de Artes GVCS',   // 상단바에 한 줄로 들어가도록 짧게
     heroDesc: 'Historias distintas se encuentran y se convierten en una sola',
-    heroFest: 'Festival Juvenil de las Artes GVCS 2026',
     pill: 'Ver información',
     genre: 'Festival Juvenil de las Artes 2026',
     dtDate: 'Fecha', dtVenue: 'Lugar', dtTicket: 'Entradas',
