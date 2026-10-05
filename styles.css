@@ -3,7 +3,7 @@
   --bg: #130e27;          /* 포스터 아래쪽 짙은 보라 */
   --bg-soft: #1d1536;
   --plum: #3b2558;        /* 포스터 책장 쪽 보라 */
-  --curtain: #7a1530;     /* 무대 막 */
+  --curtain: #4a2a72;     /* 무대 막 (보라) */
   --line: rgba(240, 196, 107, .18);
   --text: #f4eee6;
   --muted: #a99fbd;
@@ -17,7 +17,7 @@
   --sans: 'Noto Sans KR', system-ui, sans-serif;
   --max: 1120px;
   --edge: clamp(20px, 5vw, 80px);  /* 화면 양옆 여백 : 로고·제목·D-DAY·메뉴 버튼이 이 선에 맞춰짐 */
-  --curtain-w: clamp(18px, 9vw, 170px);  /* 양쪽 붉은 막 너비 */
+  --curtain-w: clamp(18px, 9vw, 170px);  /* 양쪽 보라색 막 너비 */
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -105,13 +105,13 @@ section { scroll-margin-top: 72px; }
   animation: flicker 6s ease-in-out infinite;
 }
 @keyframes flicker { 50% { opacity: .8; } }
-/* 양쪽 붉은 막 (오른쪽 기준으로 그리고, 왼쪽은 좌우 반전) */
+/* 양쪽 보라색 막 (오른쪽 기준으로 그리고, 왼쪽은 좌우 반전) */
 .stage .curtain {
   left: auto; width: var(--curtain-w);
   background:
     linear-gradient(90deg, rgba(0, 0, 0, .75), transparent 30%),
     repeating-linear-gradient(90deg,
-      #3d0a18 0, var(--curtain) 22px, #a3213f 34px, var(--curtain) 46px, #3d0a18 68px);
+      #1c0f33 0, var(--curtain) 22px, #6d4a9c 34px, var(--curtain) 46px, #1c0f33 68px);
   box-shadow: inset 30px 0 60px rgba(0, 0, 0, .6);
   opacity: .9;
 }
