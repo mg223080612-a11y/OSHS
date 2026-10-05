@@ -213,6 +213,8 @@ section { scroll-margin-top: 72px; }
   font-family: var(--serif); font-size: 24px; letter-spacing: .04em;
   padding-bottom: 18px; border-bottom: 1px solid rgba(255, 255, 255, .35);
 }
+/* 시간 바로 아래 줄에 장소를 작고 넓게 */
+.dday-full .hall { display: block; margin-top: 4px; font-size: .62em; letter-spacing: .28em; opacity: .85; }
 .hero .countdown { justify-content: space-between; margin: 26px 0 36px; gap: 0; }
 .hero .countdown div { flex: 1; max-width: none; border: 0; background: none; padding: 0; }
 .hero .countdown b { font-family: var(--serif); font-weight: 500; font-size: 42px; color: var(--text); }
@@ -267,14 +269,14 @@ section { scroll-margin-top: 72px; }
 }
 .poster img { display: block; width: 100%; height: auto; }
 
-.genre { font-family: var(--brand); font-size: 13px; font-weight: 700; color: var(--apricot); letter-spacing: .05em; }
 .show-title {
   font-family: var(--display);
-  font-size: clamp(32px, 4vw, 44px);
-  font-weight: 500; line-height: 1.1;
-  letter-spacing: .02em;
-  margin: 8px 0 24px;
+  font-size: clamp(44px, 6vw, 72px);
+  font-weight: 600; line-height: 1.02;
+  letter-spacing: .01em;
+  margin: 0 0 24px;
 }
+.show-title span { color: var(--apricot); }
 .tagline { font-weight: 500; color: var(--apricot-soft); margin-bottom: 28px; }
 .meta { border-top: 1px solid var(--line); }
 .meta div { display: flex; gap: 24px; padding: 14px 0; border-bottom: 1px solid var(--line); }
