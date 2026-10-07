@@ -109,7 +109,65 @@ const TEXT = {
 };
 
 // ----- 국기 (원 안에 들어가는 단순한 그림, 30×30) -----
-const star = (cx, cy, r, rot = 0) => {
+
+// 태극기 : 국기법의 비율을 따라 계산해서 그립니다.
+//  · 태극과 4괘는 깃발의 대각선(가로 3 : 세로 2) 위에 놓임
+//  · 태극 : 위 빨강 · 아래 파랑. 왼쪽은 빨강이, 오른쪽은 파랑이 휘어 들어감
+//  · 4괘 : 왼쪽 위 건(☰) · 오른쪽 아래 곤(☷) · 오른쪽 위 감(☵) · 왼쪽 아래 리(☲)
+//  둥근 버튼(지름 30) 안에 4괘까지 다 들어가도록 크기를 맞췄고,
+//  작은 화면에서도 괘의 끊어진 막대가 보이도록 막대 굵기 · 간격만 조금 키웠습니다.
+function taegukgi() {
+  const C = 15;              // 가운데
+  const R = 6;               // 태극 반지름
+  const BAR_LEN = 6.2;       // 괘 막대 길이
+  const BAR_W = 1.25;        // 괘 막대 굵기
+  const BAR_GAP = 0.8;       // 괘 막대 사이 간격
+  const SPLIT = 1.1;         // 끊어진 막대 가운데 틈
+  const TO_BAR = 2.6;        // 태극 가장자리 ~ 첫 막대
+  const f = (n) => n.toFixed(2);
+
+  // 대각선 방향 (가로 3 : 세로 2)
+  const k = Math.hypot(3, 2);
+  const toBR = [3 / k, 2 / k];     // 가운데 → 오른쪽 아래
+  const toTR = [3 / k, -2 / k];    // 가운데 → 오른쪽 위
+  const at = (dir, d) => [C + dir[0] * d, C + dir[1] * d];
+
+  // 태극 : 파란 원 위에 빨간 S 모양을 덮음 (작은 반원 지름 = 태극 반지름)
+  const A = at(toBR, -R);   // 왼쪽 위 끝
+  const B = at(toBR, R);    // 오른쪽 아래 끝
+  const r2 = R / 2;
+  const taeguk =
+    `<circle cx="${C}" cy="${C}" r="${R}" fill="#0047a0"/>` +
+    `<path fill="#cd2e3a" d="M${f(A[0])} ${f(A[1])}` +
+    `A${R} ${R} 0 0 1 ${f(B[0])} ${f(B[1])}` +      // 큰 반원 (위쪽)
+    `A${r2} ${r2} 0 0 0 ${C} ${C}` +                 // 오른쪽 : 파랑이 위로 휘어 들어감
+    `A${r2} ${r2} 0 0 1 ${f(A[0])} ${f(A[1])}Z"/>`;  // 왼쪽 : 빨강이 아래로 휘어 내려감
+
+  // 괘 하나 : lines 는 안쪽 막대부터 [true = 이어진 막대, false = 끊어진 막대]
+  const trigram = (dir, lines) => {
+    const angle = Math.atan2(dir[1], dir[0]) * 180 / Math.PI + 90;  // 막대는 대각선에 수직
+    return lines.map((solid, i) => {
+      const [x, y] = at(dir, R + TO_BAR + BAR_W / 2 + i * (BAR_W + BAR_GAP));
+      const half = BAR_LEN / 2;
+      const parts = solid
+        ? [[-half, BAR_LEN]]
+        : [[-half, half - SPLIT / 2], [SPLIT / 2, half - SPLIT / 2]];
+      return parts.map(([start, len]) =>
+        `<rect x="${f(start)}" y="${f(-BAR_W / 2)}" width="${f(len)}" height="${f(BAR_W)}" ` +
+        `transform="translate(${f(x)} ${f(y)}) rotate(${f(angle)})"/>`).join('');
+    }).join('');
+  };
+  const neg = (d) => [-d[0], -d[1]];
+  const trigrams =
+    trigram(neg(toBR), [true, true, true]) +     // 건 ☰ 왼쪽 위
+    trigram(toBR, [false, false, false]) +       // 곤 ☷ 오른쪽 아래
+    trigram(toTR, [false, true, false]) +        // 감 ☵ 오른쪽 위
+    trigram(neg(toTR), [true, false, true]);     // 리 ☲ 왼쪽 아래
+
+  return `<rect width="30" height="30" fill="#fff"/>${taeguk}<g fill="#000">${trigrams}</g>`;
+}
+
+const star =(cx, cy, r, rot = 0) => {
   const pts = [];
   for (let i = 0; i < 10; i++) {
     const rr = i % 2 ? r * 0.382 : r;
@@ -119,20 +177,45 @@ const star = (cx, cy, r, rot = 0) => {
   return `<polygon points="${pts.join(' ')}" fill="#ffde00"/>`;
 };
 
+function chinaStars() {
+  const S = 1.6, X0 = 9, Y0 = 9.5;   // 격자 1칸 = 1.6, 큰 별 중심 = (9, 9.5)
+  const at = (gx, gy) => [X0 + (gx - 5) * S, Y0 + (gy - 5) * S];
+  const [bx, by] = at(5, 5);
+  const small = [[10, 2], [12, 4], [12, 7], [10, 9]].map(([gx, gy]) => {
+    const [x, y] = at(gx, gy);
+    const rot = Math.atan2(by - y, bx - x) * 180 / Math.PI + 90;   // 꼭짓점 하나를 큰 별 쪽으로
+    return star(x, y, 1 * S, rot);
+  });
+  return star(bx, by, 3 * S) + small.join('');
+}
+
 const FLAGS = {
-  ko: `<rect width="30" height="30" fill="#fff"/>
-       <circle cx="15" cy="15" r="7" fill="#0047a0"/>
-       <path d="M8 15a7 7 0 0 1 14 0a3.5 3.5 0 0 1-7 0a3.5 3.5 0 0 0-7 0z" fill="#cd2e3a"/>
-       <g stroke="#111" stroke-width="1.3"><path d="M4 8l3-3M5.5 9.5l3-3M3.5 12l2.5-2.5"/><path d="M22 5l3 3M23.5 3.5l3 3M21 21l3 3M22.5 19.5l3 3M4 22l3 3M5.5 20.5l3 3"/></g>`,
+  ko: taegukgi(),
+  // 영국 : 빨간 대각선은 흰 대각선 한가운데가 아니라 한쪽으로 치우쳐 있음 (바람개비처럼).
+  //        왼쪽 위·오른쪽 아래 칸에서는 대각선 아래·위, 오른쪽 위·왼쪽 아래 칸에서는 위·아래로.
   en: `<rect width="30" height="30" fill="#012169"/>
        <path d="M0 0L30 30M30 0L0 30" stroke="#fff" stroke-width="6"/>
-       <path d="M0 0L30 30M30 0L0 30" stroke="#c8102e" stroke-width="2"/>
+       <path d="M-.7 .7L14.3 15.7M30.7 29.3L15.7 14.3M29.3 -.7L14.3 14.3M.7 30.7L15.7 15.7" stroke="#c8102e" stroke-width="2"/>
        <path d="M15 0V30M0 15H30" stroke="#fff" stroke-width="10"/>
        <path d="M15 0V30M0 15H30" stroke="#c8102e" stroke-width="6"/>`,
   id: `<rect width="30" height="30" fill="#fff"/><rect width="30" height="15" fill="#ce1126"/>`,
+  // 몽골 : 왼쪽 빨간 띠의 소욤보 문양 (위에서부터 불꽃 · 해 · 달 · 삼각형 · 막대 · 태극 · 막대 · 삼각형, 양옆 세로 막대)
   mn: `<rect width="10" height="30" fill="#c4272f"/><rect x="10" width="10" height="30" fill="#015197"/><rect x="20" width="10" height="30" fill="#c4272f"/>
-       <circle cx="5" cy="10" r="1.8" fill="#f9cf02"/><rect x="3" y="13" width="4" height="1.5" fill="#f9cf02"/><rect x="3" y="15.5" width="4" height="5" fill="none" stroke="#f9cf02" stroke-width="1"/><rect x="3" y="21.5" width="4" height="1.5" fill="#f9cf02"/>`,
-  zh: `<rect width="30" height="30" fill="#ee1c25"/>${star(9, 10, 5)}${star(15, 5, 1.6, 20)}${star(17.5, 8, 1.6, 40)}${star(17.5, 12, 1.6, 0)}${star(15, 15, 1.6, 20)}`,
+       <g fill="#f9cf02">
+         <path d="M3.9 8.6Q3.6 7.2 4.3 6.6Q4.4 7.4 4.8 7.6Q4.8 6.4 5.3 5.6Q5.8 6.4 5.8 7.6Q6.2 7.4 6.3 6.6Q7 7.2 6.7 8.6Z"/>
+         <circle cx="5.3" cy="10" r="1.2"/>
+         <path d="M3.9 11.5A1.4 1.4 0 0 0 6.7 11.5A1.8 1.8 0 0 1 3.9 11.5Z"/>
+         <path d="M3.3 13H7.3L5.3 14.6Z"/>
+         <rect x="3.3" y="15.1" width="4" height=".6"/>
+         <circle cx="5.3" cy="17.6" r="1.5"/>
+         <rect x="3.3" y="19.5" width="4" height=".6"/>
+         <path d="M3.3 20.5H7.3L5.3 22.1Z"/>
+         <rect x="2.3" y="13" width=".6" height="9.1"/>
+         <rect x="7.7" y="13" width=".6" height="9.1"/>
+       </g>
+       <path d="M5.3 16.1A1.5 1.5 0 0 1 5.3 19.1A.75 .75 0 0 1 5.3 17.6A.75 .75 0 0 0 5.3 16.1Z" fill="#c4272f"/>`,
+  // 중국 : 국기법의 격자(가로 30 × 세로 20) 위치를 그대로 1.6배. 작은 별 4개는 각각 한 꼭짓점이 큰 별 중심을 향함
+  zh: `<rect width="30" height="30" fill="#ee1c25"/>${chinaStars()}`,
   de: `<rect width="30" height="10" fill="#000"/><rect y="10" width="30" height="10" fill="#dd0000"/><rect y="20" width="30" height="10" fill="#ffce00"/>`,
   es: `<rect width="30" height="30" fill="#aa151b"/><rect y="7.5" width="30" height="15" fill="#f1bf00"/>`,
 };
