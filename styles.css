@@ -488,6 +488,7 @@ section { scroll-margin-top: 72px; }
 .lang-switch { display: flex; align-items: center; gap: 8px; }
 .lang-switch.in-header { justify-self: end; margin-right: 76px; }   /* 오른쪽 ≡ 버튼 자리만큼 비움 */
 .lang-btn {
+  position: relative;
   width: 30px; height: 30px; padding: 0;
   border-radius: 50%; overflow: hidden;
   border: 2px solid rgba(255, 255, 255, .55);
@@ -499,6 +500,16 @@ section { scroll-margin-top: 72px; }
 .lang-btn:hover { opacity: 1; transform: translateY(-2px); }
 .lang-btn.active { opacity: 1; border-color: var(--apricot); box-shadow: 0 0 0 2px rgba(240, 196, 107, .35); }
 .lang-btn:focus-visible { outline: 2px solid var(--apricot); outline-offset: 2px; }
+/* 커서를 올리면(키보드로 고를 때도) 국기 위에 KO · EN 같은 이니셜이 가운데 뜸 */
+.lang-code {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  font: 700 10px/1 var(--sans); letter-spacing: .04em;
+  color: #fff; background: rgba(19, 14, 39, .62);
+  opacity: 0; transition: opacity .15s;
+  pointer-events: none;
+}
+.lang-btn:hover .lang-code, .lang-btn:focus-visible .lang-code { opacity: 1; }
 
 /* 펼친 메뉴 안의 국기 줄 : 화면이 좁을 때만 */
 .gnb .lang-switch.in-menu { display: none; }

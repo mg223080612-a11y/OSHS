@@ -110,63 +110,6 @@ const TEXT = {
 
 // ----- 국기 (원 안에 들어가는 단순한 그림, 30×30) -----
 
-// 태극기 : 국기법의 비율을 따라 계산해서 그립니다.
-//  · 태극과 4괘는 깃발의 대각선(가로 3 : 세로 2) 위에 놓임
-//  · 태극 : 위 빨강 · 아래 파랑. 왼쪽은 파랑이 위로, 오른쪽은 빨강이 아래로 휘어 들어감
-//  · 4괘 : 왼쪽 위 건(☰) · 오른쪽 아래 곤(☷) · 오른쪽 위 감(☵) · 왼쪽 아래 리(☲)
-//  둥근 버튼(지름 30) 안에 4괘까지 다 들어가도록 크기를 맞췄고,
-//  작은 화면에서도 괘의 끊어진 막대가 보이도록 막대 굵기 · 간격만 조금 키웠습니다.
-function taegukgi() {
-  const C = 15;              // 가운데
-  const R = 6;               // 태극 반지름
-  const BAR_LEN = 6.2;       // 괘 막대 길이
-  const BAR_W = 1.25;        // 괘 막대 굵기
-  const BAR_GAP = 0.8;       // 괘 막대 사이 간격
-  const SPLIT = 1.1;         // 끊어진 막대 가운데 틈
-  const TO_BAR = 2.6;        // 태극 가장자리 ~ 첫 막대
-  const f = (n) => n.toFixed(2);
-
-  // 대각선 방향 (가로 3 : 세로 2)
-  const k = Math.hypot(3, 2);
-  const toBR = [3 / k, 2 / k];     // 가운데 → 오른쪽 아래
-  const toTR = [3 / k, -2 / k];    // 가운데 → 오른쪽 위
-  const at = (dir, d) => [C + dir[0] * d, C + dir[1] * d];
-
-  // 태극 : 파란 원 위에 빨간 S 모양을 덮음 (작은 반원 지름 = 태극 반지름)
-  const A = at(toBR, -R);   // 왼쪽 위 끝
-  const B = at(toBR, R);    // 오른쪽 아래 끝
-  const r2 = R / 2;
-  const taeguk =
-    `<circle cx="${C}" cy="${C}" r="${R}" fill="#0047a0"/>` +
-    `<path fill="#cd2e3a" d="M${f(A[0])} ${f(A[1])}` +
-    `A${R} ${R} 0 0 1 ${f(B[0])} ${f(B[1])}` +      // 큰 반원 (위쪽)
-    `A${r2} ${r2} 0 0 1 ${C} ${C}` +                 // 오른쪽 : 빨강이 아래로 휘어 내려감
-    `A${r2} ${r2} 0 0 0 ${f(A[0])} ${f(A[1])}Z"/>`;  // 왼쪽 : 파랑이 위로 휘어 올라감
-
-  // 괘 하나 : lines 는 안쪽 막대부터 [true = 이어진 막대, false = 끊어진 막대]
-  const trigram = (dir, lines) => {
-    const angle = Math.atan2(dir[1], dir[0]) * 180 / Math.PI + 90;  // 막대는 대각선에 수직
-    return lines.map((solid, i) => {
-      const [x, y] = at(dir, R + TO_BAR + BAR_W / 2 + i * (BAR_W + BAR_GAP));
-      const half = BAR_LEN / 2;
-      const parts = solid
-        ? [[-half, BAR_LEN]]
-        : [[-half, half - SPLIT / 2], [SPLIT / 2, half - SPLIT / 2]];
-      return parts.map(([start, len]) =>
-        `<rect x="${f(start)}" y="${f(-BAR_W / 2)}" width="${f(len)}" height="${f(BAR_W)}" ` +
-        `transform="translate(${f(x)} ${f(y)}) rotate(${f(angle)})"/>`).join('');
-    }).join('');
-  };
-  const neg = (d) => [-d[0], -d[1]];
-  const trigrams =
-    trigram(neg(toBR), [true, true, true]) +     // 건 ☰ 왼쪽 위
-    trigram(toBR, [false, false, false]) +       // 곤 ☷ 오른쪽 아래
-    trigram(toTR, [false, true, false]) +        // 감 ☵ 오른쪽 위
-    trigram(neg(toTR), [true, false, true]);     // 리 ☲ 왼쪽 아래
-
-  return `<rect width="30" height="30" fill="#fff"/>${taeguk}<g fill="#000">${trigrams}</g>`;
-}
-
 const star =(cx, cy, r, rot = 0) => {
   const pts = [];
   for (let i = 0; i < 10; i++) {
@@ -190,7 +133,8 @@ function chinaStars() {
 }
 
 const FLAGS = {
-  ko: taegukgi(),
+  // 태극기 : 받은 태극기 이미지를 태극 중심에 맞춰 정사각형으로 만든 것 (flag-ko.png)
+  ko: `<rect width="30" height="30" fill="#fff"/><image href="flag-ko.png" width="30" height="30"/>`,
   // 영국 : 빨간 대각선은 흰 대각선 한가운데가 아니라 한쪽으로 치우쳐 있음 (바람개비처럼).
   //        왼쪽 위·오른쪽 아래 칸에서는 대각선 아래·위, 오른쪽 위·왼쪽 아래 칸에서는 위·아래로.
   en: `<rect width="30" height="30" fill="#012169"/>
@@ -275,6 +219,7 @@ document.querySelectorAll('.lang-switch').forEach((box) => {
   box.innerHTML = LANGS.map(([code, name]) => `
     <button class="lang-btn" type="button" data-lang="${code}" title="${name}" aria-label="${name}">
       <svg viewBox="0 0 30 30" aria-hidden="true">${FLAGS[code]}</svg>
+      <span class="lang-code" aria-hidden="true">${code.toUpperCase()}</span>
     </button>`).join('');
   box.addEventListener('click', (e) => {
     const btn = e.target.closest('.lang-btn');
