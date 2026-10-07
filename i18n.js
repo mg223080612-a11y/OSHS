@@ -112,7 +112,7 @@ const TEXT = {
 
 // 태극기 : 국기법의 비율을 따라 계산해서 그립니다.
 //  · 태극과 4괘는 깃발의 대각선(가로 3 : 세로 2) 위에 놓임
-//  · 태극 : 위 빨강 · 아래 파랑. 왼쪽은 빨강이, 오른쪽은 파랑이 휘어 들어감
+//  · 태극 : 위 빨강 · 아래 파랑. 왼쪽은 파랑이 위로, 오른쪽은 빨강이 아래로 휘어 들어감
 //  · 4괘 : 왼쪽 위 건(☰) · 오른쪽 아래 곤(☷) · 오른쪽 위 감(☵) · 왼쪽 아래 리(☲)
 //  둥근 버튼(지름 30) 안에 4괘까지 다 들어가도록 크기를 맞췄고,
 //  작은 화면에서도 괘의 끊어진 막대가 보이도록 막대 굵기 · 간격만 조금 키웠습니다.
@@ -140,8 +140,8 @@ function taegukgi() {
     `<circle cx="${C}" cy="${C}" r="${R}" fill="#0047a0"/>` +
     `<path fill="#cd2e3a" d="M${f(A[0])} ${f(A[1])}` +
     `A${R} ${R} 0 0 1 ${f(B[0])} ${f(B[1])}` +      // 큰 반원 (위쪽)
-    `A${r2} ${r2} 0 0 0 ${C} ${C}` +                 // 오른쪽 : 파랑이 위로 휘어 들어감
-    `A${r2} ${r2} 0 0 1 ${f(A[0])} ${f(A[1])}Z"/>`;  // 왼쪽 : 빨강이 아래로 휘어 내려감
+    `A${r2} ${r2} 0 0 1 ${C} ${C}` +                 // 오른쪽 : 빨강이 아래로 휘어 내려감
+    `A${r2} ${r2} 0 0 0 ${f(A[0])} ${f(A[1])}Z"/>`;  // 왼쪽 : 파랑이 위로 휘어 올라감
 
   // 괘 하나 : lines 는 안쪽 막대부터 [true = 이어진 막대, false = 끊어진 막대]
   const trigram = (dir, lines) => {
@@ -199,25 +199,52 @@ const FLAGS = {
        <path d="M15 0V30M0 15H30" stroke="#fff" stroke-width="10"/>
        <path d="M15 0V30M0 15H30" stroke="#c8102e" stroke-width="6"/>`,
   id: `<rect width="30" height="30" fill="#fff"/><rect width="30" height="15" fill="#ce1126"/>`,
-  // 몽골 : 왼쪽 빨간 띠의 소욤보 문양 (위에서부터 불꽃 · 해 · 달 · 삼각형 · 막대 · 태극 · 막대 · 삼각형, 양옆 세로 막대)
+  // 몽골 : 왼쪽 빨간 띠의 소욤보 문양. 94×192 칸에 실제 국기 비율로 그린 뒤 줄여서 띠 안에 넣음
+  //        (위에서부터 불꽃 · 해 · 달 · 삼각형 · 막대 · 태극 · 막대 · 삼각형, 양옆 굵은 세로 막대)
   mn: `<rect width="10" height="30" fill="#c4272f"/><rect x="10" width="10" height="30" fill="#015197"/><rect x="20" width="10" height="30" fill="#c4272f"/>
-       <g fill="#f9cf02">
-         <path d="M3.9 8.6Q3.6 7.2 4.3 6.6Q4.4 7.4 4.8 7.6Q4.8 6.4 5.3 5.6Q5.8 6.4 5.8 7.6Q6.2 7.4 6.3 6.6Q7 7.2 6.7 8.6Z"/>
-         <circle cx="5.3" cy="10" r="1.2"/>
-         <path d="M3.9 11.5A1.4 1.4 0 0 0 6.7 11.5A1.8 1.8 0 0 1 3.9 11.5Z"/>
-         <path d="M3.3 13H7.3L5.3 14.6Z"/>
-         <rect x="3.3" y="15.1" width="4" height=".6"/>
-         <circle cx="5.3" cy="17.6" r="1.5"/>
-         <rect x="3.3" y="19.5" width="4" height=".6"/>
-         <path d="M3.3 20.5H7.3L5.3 22.1Z"/>
-         <rect x="2.3" y="13" width=".6" height="9.1"/>
-         <rect x="7.7" y="13" width=".6" height="9.1"/>
-       </g>
-       <path d="M5.3 16.1A1.5 1.5 0 0 1 5.3 19.1A.75 .75 0 0 1 5.3 17.6A.75 .75 0 0 0 5.3 16.1Z" fill="#c4272f"/>`,
+       <g transform="translate(2.17 8) scale(.0729)">
+         <g fill="#f9cf02">
+           <path d="M33 30Q30 18 37 12Q38 20 42 22Q41 9 47 0Q53 9 52 22Q56 20 57 12Q64 18 61 30Z"/>
+           <circle cx="47" cy="48" r="14"/>
+           <path d="M22 62A25 25 0 0 0 72 62A30 30 0 0 1 22 62Z"/>
+           <rect x="0" y="92" width="20" height="100"/>
+           <rect x="74" y="92" width="20" height="100"/>
+           <path d="M26 94H68L47 106Z"/>
+           <rect x="26" y="110" width="42" height="6"/>
+           <circle cx="47" cy="139" r="18"/>
+           <rect x="26" y="162" width="42" height="6"/>
+           <path d="M26 176H68L47 190Z"/>
+         </g>
+         <path d="M47 121A18 18 0 0 1 47 157A9 9 0 0 1 47 139A9 9 0 0 0 47 121Z" fill="#c4272f"/>
+         <circle cx="47" cy="130" r="3" fill="#c4272f"/>
+         <circle cx="47" cy="148" r="3" fill="#f9cf02"/>
+       </g>`,
   // 중국 : 국기법의 격자(가로 30 × 세로 20) 위치를 그대로 1.6배. 작은 별 4개는 각각 한 꼭짓점이 큰 별 중심을 향함
   zh: `<rect width="30" height="30" fill="#ee1c25"/>${chinaStars()}`,
   de: `<rect width="30" height="10" fill="#000"/><rect y="10" width="30" height="10" fill="#dd0000"/><rect y="20" width="30" height="10" fill="#ffce00"/>`,
-  es: `<rect width="30" height="30" fill="#aa151b"/><rect y="7.5" width="30" height="15" fill="#f1bf00"/>`,
+  // 스페인 : 빨강 1 : 노랑 2 : 빨강 1 + 깃대 쪽의 국장 (헤라클레스 기둥 2개 · 왕관 · 4분할 방패).
+  //          작은 버튼에서도 형태가 보이도록 단순화. 40×46 칸에 그린 뒤 줄여서 넣음
+  es: `<rect width="30" height="30" fill="#aa151b"/><rect y="7.5" width="30" height="15" fill="#f1bf00"/>
+       <g transform="translate(6.2 9.5) scale(.24)">
+         <g fill="#c8b100">
+           <path d="M0 8H7V11H0Z M33 8H40V11H33Z"/>
+           <path d="M1 4L2 6L3.5 3.5L5 6L6 4V8H1Z M34 4L35 6L36.5 3.5L38 6L39 4V8H34Z"/>
+           <rect x="0" y="40" width="7" height="3"/><rect x="33" y="40" width="7" height="3"/>
+         </g>
+         <rect x="1" y="11" width="5" height="29" fill="#e6e6e6" stroke="#8a8a8a" stroke-width=".6"/>
+         <rect x="34" y="11" width="5" height="29" fill="#e6e6e6" stroke="#8a8a8a" stroke-width=".6"/>
+         <path d="M-1 24Q3.5 21 8 24V27Q3.5 24 -1 27Z M32 24Q36.5 21 41 24V27Q36.5 24 32 27Z" fill="#aa151b"/>
+         <path d="M11 11L13 4L16.5 8L20 2L23.5 8L27 4L29 11Z" fill="#c8b100"/>
+         <path d="M14 8Q20 5 26 8V10H14Z" fill="#aa151b"/>
+         <path d="M10 12H30V32Q30 41 20 41Q10 41 10 32Z" fill="#aa151b" stroke="#c8b100" stroke-width=".8"/>
+         <rect x="20" y="12" width="10" height="11" fill="#fff"/>
+         <path d="M10 23H20V33H10Z" fill="#c8b100"/>
+         <path d="M12 23V33M15 23V33M18 23V33" stroke="#aa151b" stroke-width="1.4"/>
+         <path d="M12.5 15H17.5V21H12.5Z M12 14H13.5V15H12Z M14.25 14H15.75V15H14.25Z M16.5 14H18V15H16.5Z" fill="#c8b100"/>
+         <circle cx="25" cy="17.5" r="2.6" fill="#9b2c7c"/>
+         <path d="M22 28H28M25 25V31" stroke="#c8b100" stroke-width="1.2"/>
+         <ellipse cx="20" cy="23" rx="3" ry="3.6" fill="#1f4aa8" stroke="#aa151b" stroke-width=".8"/>
+       </g>`,
 };
 
 const LANGS = [
