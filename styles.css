@@ -283,7 +283,6 @@ section { scroll-margin-top: 72px; }
 .meta dt { flex: 0 0 6em; color: var(--muted); font-size: 14px; }
 .meta dd { font-weight: 400; }
 .meta .map-link { color: var(--apricot); border-bottom: 1px solid currentColor; }
-.meta .soon-text { color: var(--muted); }
 
 .countdown { display: flex; gap: 10px; margin: 32px 0; }
 .countdown div {
