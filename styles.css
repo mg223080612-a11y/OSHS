@@ -326,7 +326,7 @@ section { scroll-margin-top: 72px; }
 }
 .story h2 span { color: var(--apricot); }
 .synopsis { max-width: 620px; margin: 0 auto; font-size: 17px; line-height: 2.1; }
-.synopsis p { margin-bottom: 28px; }
+.synopsis p { margin-bottom: 28px; text-wrap: balance; }   /* 가운데 정렬 문단이 마지막 줄에 한 단어만 남지 않게 */
 .synopsis em { font-style: normal; font-weight: 700; color: var(--apricot); }
 .synopsis .closing { font-weight: 500; color: var(--apricot-soft); margin: 44px 0 0; }
 /* Our Story · His Story · History 강조 : 줄거리의 ‘통일’과 같은 모양 */
