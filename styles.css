@@ -329,8 +329,8 @@ section { scroll-margin-top: 72px; }
 .synopsis p { margin-bottom: 28px; }
 .synopsis em { font-style: normal; font-weight: 700; color: var(--apricot); }
 .synopsis .closing { font-weight: 500; color: var(--apricot-soft); margin: 44px 0 0; }
-/* 줄거리 아래 제목 풀이 : 글씨는 줄거리와 똑같이, 강조 단어도 줄거리의 ‘통일’과 같은 모양 */
-.theme b { font-weight: 700; color: var(--apricot); }
+/* Our Story · His Story · History 강조 : 줄거리의 ‘통일’과 같은 모양 */
+.synopsis b { font-weight: 700; color: var(--apricot); }
 
 /* ===== 푸터 ===== */
 .site-footer {
