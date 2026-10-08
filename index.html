@@ -24,6 +24,26 @@
   <!-- 글꼴은 4가지만 씁니다. 한글 글꼴은 파일이 무거워서 하나(Noto Sans KR)로 통일했습니다 -->
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:wght@500;600&family=Kaushan+Script&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <!-- 새로고침할 때 제목이 다른 글꼴로 잠깐 보였다가 바뀌는 것 막기 :
+       제목에 쓰는 글꼴이 준비될 때까지 화면을 잠깐 숨겼다가 한 번에 보여 줌.
+       인터넷이 느려도 최대 2초 뒤에는 무조건 보여 줍니다. -->
+  <script>
+    (function () {
+      var root = document.documentElement;
+      if (!document.fonts || !document.fonts.load) return;   // 오래된 브라우저는 그냥 표시
+      root.classList.add('fonts-wait');
+      var show = function () { root.classList.remove('fonts-wait'); };
+      var KO = '줄거리 서로 다른 이야기가 만나 하나의 되다 청소년예술제';
+      var fonts = [
+        ['400 1em "Kaushan Script"', 'Our Story, His Story History'],
+        ['500 1em Oswald', 'PRODUCTION'], ['600 1em Oswald', 'Our Story, His Story'],
+        ['500 1em "Playfair Display"', 'D-DAY 11.21 Home'], ['600 1em "Playfair Display"', '11.21 2025'],
+        ['700 1em "Noto Sans KR"', KO], ['300 1em "Noto Sans KR"', KO]
+      ];
+      Promise.all(fonts.map(function (f) { return document.fonts.load(f[0], f[1]); })).then(show, show);
+      setTimeout(show, 2000);
+    })();
+  </script>
 </head>
 <body>
 
