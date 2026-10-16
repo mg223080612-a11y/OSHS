@@ -23,16 +23,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <!-- 글꼴은 4가지만 씁니다. 한글 글꼴은 파일이 무거워서 하나(Noto Sans KR)로 통일했습니다 -->
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:wght@500;600&family=Kaushan+Script&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/common.css" />
+  <link rel="stylesheet" href="css/home.css" />
   <script src="js/fonts-wait.js"></script>
   <!-- 예전 한 페이지 시절 주소(#production · #story · #history)로 들어오면 새 페이지로 이동 -->
   <script>
-    if (/^#(production|story|history)$/.test(location.hash)) location.replace(location.hash.slice(1) + '.html');
+    if (/^#(production|story|history)$/.test(location.hash)) location.replace('pages/' + location.hash.slice(1) + '.html');
   </script>
 </head>
 <body data-page="home">
 
-  <!-- ===== 상단 메뉴 : 4개 페이지에 똑같이 들어 있습니다. 고칠 때는 4개 파일 모두 고치세요 ===== -->
+  <!-- ===== 상단 메뉴 : 5개 페이지(index.html + pages/ 4개)에 똑같이 들어 있습니다. 고칠 때는 5개 파일 모두 고치세요 ===== -->
   <header class="site-header">
     <div class="header-inner">
       <!-- 학교 가로형 CI (흰색, 배경 투명). 원본 : 문경캠퍼스 가로형 CI_white.png 를 여백만 잘라냄 -->
@@ -41,9 +42,10 @@
       </a>
       <nav class="gnb">
         <a href="index.html" class="active" aria-current="page">Home</a>
-        <a href="production.html">Production</a>
-        <a href="story.html">Story</a>
-        <a href="history.html">History</a>
+        <a href="pages/production.html">Production</a>
+        <a href="pages/story.html">Story</a>
+        <a href="pages/cast.html">Cast</a>
+        <a href="pages/history.html">History</a>
         <div class="lang-switch in-menu"></div>
       </nav>
       <div class="lang-switch in-header"></div>
@@ -92,14 +94,14 @@
             <div><b data-unit="m">--</b><span>MINUTES</span></div>
             <div><b data-unit="s">--</b><span>SECONDS</span></div>
           </div>
-          <a class="pill" href="production.html"><span data-i18n="pill">공연 정보 보기</span> <span aria-hidden="true">→</span></a>
+          <a class="pill" href="pages/production.html"><span data-i18n="pill">공연 정보 보기</span> <span aria-hidden="true">→</span></a>
         </div>
       </div>
 
     </section>
   </main>
 
-  <!-- ===== 푸터 : 4개 페이지에 똑같이 들어 있습니다 ===== -->
+  <!-- ===== 푸터 : 5개 페이지에 똑같이 들어 있습니다 ===== -->
   <footer class="site-footer">
     <!-- 왼쪽 : 학교 로고 / 오른쪽 : 정보 (휴대폰에서는 위아래로 쌓임) -->
     <div class="footer-inner">
@@ -116,5 +118,6 @@
 
   <script src="js/i18n.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/home.js"></script>
 </body>
 </html>

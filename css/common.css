@@ -1,0 +1,231 @@
+/* =====================================================================
+   공통 : 모든 페이지에서 씀
+   색 · 글꼴 · 상단바 · 메뉴 · 언어 버튼 · 페이지 제목 · 푸터. 색을 바꾸려면 맨 위 :root 만 고치세요
+   ===================================================================== */
+
+/* ===== 디자인 토큰 : 포스터 색에서 뽑았습니다. 색을 바꾸려면 여기만 고치세요 ===== */
+:root {
+  --bg: #130e27;          /* 포스터 아래쪽 짙은 보라 */
+  --bg-soft: #1d1536;
+  --plum: #3b2558;        /* 포스터 책장 쪽 보라 */
+  --curtain: #4a2a72;     /* 무대 막 (보라) */
+  --line: rgba(240, 196, 107, .18);
+  --text: #f4eee6;
+  --muted: #a99fbd;
+  --apricot: #f0c46b;     /* 물감 튄 살구색 */
+  --apricot-soft: #f6d9a0;
+  --display: 'Oswald', 'Noto Sans KR', sans-serif;      /* NOVEMBER 21 같은 좁은 글씨 */
+  /* 글꼴을 늘리면 첫 화면이 느려집니다. 새 글꼴을 추가하기 전에 아래 4가지로 해결되는지 먼저 보세요 */
+  --brand: 'Noto Sans KR', sans-serif;                  /* GLOBAL VISION ... (작은 영문 라벨) */
+  --serif: 'Playfair Display', 'Noto Sans KR', serif;   /* 메인 화면 숫자·메뉴 */
+  --serif-ko: 'Playfair Display', 'Noto Sans KR', serif; /* 로고·부제 : 영문은 Playfair, 한글은 Noto Sans KR */
+  --hand: 'Kaushan Script', cursive;                    /* 붓글씨 (포스터의 His Story 느낌) */
+  --sans: 'Noto Sans KR', system-ui, sans-serif;
+  --max: 1120px;
+  --edge: clamp(20px, 5vw, 80px);  /* 화면 양옆 여백 : 로고·제목·D-DAY·메뉴 버튼이 이 선에 맞춰짐 */
+  --curtain-w: clamp(18px, 9vw, 170px);  /* 양쪽 보라색 막 너비 */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 300;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;   /* 한글이 단어 중간에서 줄바뀜하지 않게 */
+  /* 내용이 짧은 페이지에서도 푸터가 화면 맨 아래에 붙도록 */
+  display: flex; flex-direction: column; min-height: 100vh; min-height: 100svh;
+}
+main { flex: 1; }
+/* Home 이 아닌 페이지 : 내용이 고정된 상단바(64px) 밑에서 시작 */
+body:not([data-page="home"]) main { padding-top: 64px; }
+/* 글꼴 준비 전에는 내용만 숨기고 (배경색은 그대로), 준비되면 부드럽게 나타남 — js/fonts-wait.js */
+html { background: var(--bg); }
+body > * { transition: opacity .25s ease; }
+.fonts-wait body > * { opacity: 0; }
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; }
+
+.eyebrow {
+  font-family: var(--brand);
+  font-size: 12px; font-weight: 700;
+  letter-spacing: .2em;
+  color: var(--apricot);
+}
+
+/* ===== 헤더 : 메인 화면 위에 투명하게 떠 있다가, 스크롤하면 배경이 생김 ===== */
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+  border-bottom: 1px solid rgba(255, 255, 255, .14);
+  transition: background .3s, backdrop-filter .3s;
+}
+.site-header.scrolled {
+  background: rgba(19, 14, 39, .95);
+  backdrop-filter: blur(10px);
+  border-color: var(--line);
+}
+.header-inner {
+  height: 84px; padding: 0 var(--edge);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center;
+  transition: height .3s;
+}
+.scrolled .header-inner { height: 64px; }
+/* 학교 로고 이미지 : 높이를 정해 두고, 화면 확대로 칸이 좁아지면 비율을 지킨 채 작아짐 */
+.logo { display: flex; align-items: center; min-width: 0; }
+.logo img { display: block; height: 46px; width: auto; max-width: 100%; object-fit: contain; object-position: left center; transition: height .3s; }
+.scrolled .logo img { height: 40px; }
+.gnb { display: flex; gap: 44px; }
+.gnb a {
+  font-family: var(--serif); font-size: 18px;
+  color: var(--text); opacity: .8;
+  padding: 8px 4px;
+  border-bottom: 2px solid transparent;
+  transition: opacity .2s, color .2s;
+}
+.gnb a:hover { opacity: 1; }
+.gnb a.active { color: var(--apricot-soft); opacity: 1; border-color: var(--apricot-soft); }
+.menu-toggle {
+  position: absolute; right: var(--edge); top: 50%; transform: translateY(-50%);
+  background: none; border: 0; cursor: pointer;
+  padding: 12px 0 12px 28px;
+  border-left: 1px solid rgba(255, 255, 255, .25);
+}
+.menu-toggle span { display: block; width: 26px; height: 1.5px; background: var(--text); margin: 6px 0; }
+
+/* ===== 페이지 제목 (Production · Cast 위쪽의 큰 제목) ===== */
+.page-title { text-align: center; padding: 70px 20px 30px; }
+.page-title .page-h {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(48px, 8vw, 88px);
+  letter-spacing: .1em;
+  line-height: 1.1;
+  margin: 12px 0 36px;
+}
+.tabs { display: inline-flex; border-bottom: 1px solid var(--line); }
+.tab {
+  font-family: var(--display); font-size: 15px; letter-spacing: .12em;
+  padding: 12px 22px; color: var(--muted);
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.tab.active { color: var(--text); border-color: var(--apricot); }
+
+/* ===== 푸터 ===== */
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding: 48px 20px;
+  font-size: 13px; color: var(--muted);
+}
+/* 로고 | 세로줄 | 정보 를 한 덩어리로 묶어 가운데 정렬 */
+.footer-inner {
+  display: flex; align-items: center; justify-content: center;
+  gap: 32px;
+  max-width: var(--max); margin: 0 auto;
+}
+.footer-ci { display: block; height: 56px; width: auto; max-width: 100%; flex-shrink: 0; }
+.footer-info { text-align: left; padding-left: 32px; border-left: 1px solid var(--line); line-height: 1.6; }
+.footer-info .credit { justify-content: flex-start; }
+.copy { margin-top: 6px; font-size: 12px; }
+
+/* 휴대폰 : 로고 위, 정보 아래로 쌓고 가운데 정렬 */
+@media (max-width: 600px) {
+  .footer-inner { flex-direction: column; gap: 20px; text-align: center; }
+  .footer-info { text-align: center; padding-left: 0; border-left: 0; }
+  .footer-info .credit { justify-content: center; }
+}
+
+/* ===== 메뉴 펼침 (≡ 버튼) =====
+   · 휴대폰(860px 이하) : 메뉴 + 국기 전체가 오른쪽에서 펼쳐짐
+   · 태블릿~노트북      : 메뉴는 이미 상단에 보이므로 국기만 내려옴
+   · 큰 화면(1281px~)   : 국기가 상단바에 다 보이므로 ≡ 버튼 자체를 숨김 */
+@media (max-width: 860px) {
+.gnb.open {
+  position: fixed; top: 64px; right: 0;
+  display: flex; flex-direction: column; gap: 0;
+  width: min(280px, 100%);
+  margin: 0 !important;
+  background: rgba(19, 14, 39, .97);
+  border: 1px solid var(--line);
+}
+.gnb.open a { padding: 16px 24px; border-bottom: 1px solid var(--line); opacity: 1; }
+}
+@media (min-width: 861px) {
+  .gnb.open .lang-switch.in-menu {
+    position: absolute; top: 100%; right: var(--edge);
+    background: rgba(19, 14, 39, .97);
+    border: 1px solid var(--line);
+  }
+}
+
+/* ===== 태블릿 이하 ===== */
+@media (max-width: 1100px) {
+  .header-inner { grid-template-columns: minmax(0, 1fr) auto; }
+  .gnb { margin-right: 80px; gap: 28px; }
+}
+
+@media (max-width: 860px) {
+  .header-inner, .scrolled .header-inner { height: 64px; }
+  .logo { margin-right: 64px; }   /* 오른쪽 ≡ 버튼 밑으로 들어가지 않게 */
+  .logo img, .scrolled .logo img { height: 38px; }
+  .gnb { display: none; }
+  .menu-toggle { border-left: 0; }
+  .page-title { padding-top: 50px; }
+}
+
+/* ===== 하단 제작 표기 : made by Sync (저작권 줄 바로 밑, 같은 글씨) ===== */
+.credit {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  margin-top: 4px;
+  font-size: 12px; color: var(--muted);
+}
+.credit strong { font-weight: 500; }
+
+/* ===== 언어 바꾸기 : 둥근 국기 버튼 ===== */
+.lang-switch { display: flex; align-items: center; gap: 8px; }
+.lang-switch.in-header { justify-self: end; margin-right: 76px; }   /* 오른쪽 ≡ 버튼 자리만큼 비움 */
+.lang-btn {
+  position: relative;
+  width: 30px; height: 30px; padding: 0;
+  border-radius: 50%; overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, .55);
+  background: none; cursor: pointer;
+  opacity: .75;
+  transition: transform .15s, opacity .15s, border-color .15s;
+}
+.lang-btn svg { display: block; width: 100%; height: 100%; }
+.lang-btn:hover { opacity: 1; transform: translateY(-2px); }
+.lang-btn.active { opacity: 1; border-color: var(--apricot); box-shadow: 0 0 0 2px rgba(240, 196, 107, .35); }
+.lang-btn:focus-visible { outline: 2px solid var(--apricot); outline-offset: 2px; }
+/* 커서를 올리면(키보드로 고를 때도) 국기 위에 KO · EN 같은 이니셜이 가운데 뜸 */
+.lang-code {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  font: 700 10px/1 var(--sans); letter-spacing: .04em;
+  color: #fff; background: rgba(19, 14, 39, .62);
+  opacity: 0; transition: opacity .15s;
+  pointer-events: none;
+}
+.lang-btn:hover .lang-code, .lang-btn:focus-visible .lang-code { opacity: 1; }
+
+/* 펼친 메뉴 안의 국기 줄 : 화면이 좁을 때만 */
+.gnb .lang-switch.in-menu { display: none; }
+.gnb.open .lang-switch.in-menu { display: flex; flex-wrap: wrap; gap: 5px; padding: 16px; }
+
+@media (max-width: 1280px) {
+  .lang-switch.in-header { display: none; }
+}
+@media (min-width: 1281px) {
+  .menu-toggle { display: none; }
+  .lang-switch.in-header { margin-right: 0; }
+}
+
+/* ===== '동작 줄이기'를 켠 기기 : 깜빡임 · 먼지 · 흔들림 같은 움직임을 모두 멈춤 ===== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .underline { stroke-dashoffset: 0; }   /* 그려지는 밑줄은 처음부터 다 그려진 상태로 */
+  .video:hover img, .video:hover .play, .pill:hover, .lang-btn:hover { transform: none; }
+}

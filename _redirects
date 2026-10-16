@@ -1,0 +1,9 @@
+# Cloudflare Pages 주소 이동 규칙 (이전 주소 → 새 주소)
+# 페이지 파일을 pages/ 폴더로 옮기기 전의 주소로 들어와도 새 페이지가 열리게 합니다.
+/production       /pages/production  301
+/production.html  /pages/production  301
+/story            /pages/story       301
+/story.html       /pages/story       301
+/history          /pages/history     301
+/history.html     /pages/history     301
+/cast             /pages/cast        301

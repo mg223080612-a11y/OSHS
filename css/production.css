@@ -1,0 +1,49 @@
+/* =====================================================================
+   Production (pages/production.html)
+   포스터 + 공연 정보(일시 · 장소 · 오시는 길) + 줄거리 보기 버튼
+   ===================================================================== */
+
+/* ===== 작품 목록 ===== */
+.production { max-width: var(--max); margin: 0 auto; padding: 30px 20px 110px; }
+.show {
+  display: grid;
+  grid-template-columns: minmax(240px, 380px) 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.poster {
+  position: relative; display: block;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, .55);
+}
+.poster img { display: block; width: 100%; height: auto; }
+
+.show-title {
+  font-family: var(--display);
+  font-size: clamp(44px, 6vw, 72px);
+  font-weight: 600; line-height: 1.02;
+  letter-spacing: .01em;
+  margin: 0 0 24px;
+}
+.show-title span { color: var(--apricot); }
+.tagline { font-weight: 500; color: var(--apricot-soft); margin-bottom: 28px; }
+.meta { border-top: 1px solid var(--line); }
+.meta div { display: flex; gap: 24px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.meta dt { flex: 0 0 6em; color: var(--muted); font-size: 14px; }
+.meta dd { font-weight: 400; }
+.meta .map-link { color: var(--apricot); border-bottom: 1px solid currentColor; }
+
+.actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
+.btn {
+  display: inline-block;
+  font: 500 15px var(--sans);
+  padding: 14px 30px;
+  background: var(--apricot); color: var(--bg);
+  border: 1px solid var(--apricot);
+  cursor: pointer; transition: background .2s, color .2s;
+}
+.btn:hover { background: transparent; color: var(--apricot); }
+
+@media (max-width: 860px) {
+  .show { grid-template-columns: 1fr; gap: 36px; }
+  .poster { max-width: 360px; width: 100%; margin: 0 auto; }
+}
