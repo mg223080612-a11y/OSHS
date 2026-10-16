@@ -18,9 +18,11 @@ document.querySelectorAll('.countdown').forEach((box) => {
   setInterval(tick, 1000);
 });
 
-// 스크롤하면 투명했던 상단바에 배경을 깔아 줍니다
+// 상단바 배경 : Home 은 처음엔 투명했다가 스크롤하면 깔리고,
+// 나머지 페이지는 처음부터 깔려 있습니다 (내용이 상단바 바로 밑에서 시작하므로)
 const header = document.querySelector('.site-header');
-const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 40);
+const isHome = document.body.dataset.page === 'home';
+const onScroll = () => header.classList.toggle('scrolled', !isHome || window.scrollY > 40);
 onScroll();
 window.addEventListener('scroll', onScroll, { passive: true });
 
@@ -43,31 +45,7 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && gnb.classList.contains('open')) { setMenu(false); toggle.focus(); }
 });
 
-// 지금 보고 있는 섹션에 맞춰 상단 메뉴 밑줄을 옮깁니다
-// (화면 위쪽 1/3 지점을 지나간 마지막 섹션이 '지금 섹션', 아무것도 안 지났으면 Home)
-const navLinks = [...document.querySelectorAll('.gnb a[href^="#"]')];
-const sections = navLinks
-  .map((a) => a.getAttribute('href'))
-  .filter((id) => id !== '#top')
-  .map((id) => document.querySelector(id))
-  .filter(Boolean);
-const markActive = () => {
-  const line = window.innerHeight / 3;
-  let current = '#top';
-  sections.forEach((sec) => { if (sec.getBoundingClientRect().top <= line) current = `#${sec.id}`; });
-  // 맨 아래까지 내리면 마지막 섹션 (History 가 짧아 위쪽 1/3 에 닿지 못하는 경우 대비)
-  if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
-    current = `#${sections[sections.length - 1].id}`;
-  }
-  navLinks.forEach((a) => {
-    const on = a.getAttribute('href') === current;
-    a.classList.toggle('active', on);
-    if (on) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current');
-  });
-};
-markActive();
-window.addEventListener('scroll', markActive, { passive: true });
-window.addEventListener('resize', markActive);
+// (상단 메뉴의 밑줄은 각 페이지 HTML 에 class="active" 로 직접 적혀 있습니다)
 
 // History 페이지 : 썸네일을 누르면 그 자리에서 유튜브 영상 재생
 // (처음부터 영상을 여러 개 띄우면 페이지가 무거워져서, 누를 때만 불러옵니다)

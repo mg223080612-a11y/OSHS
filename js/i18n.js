@@ -122,15 +122,32 @@ const TEXT = {
 
 // ----- 국기 (원 안에 들어가는 단순한 그림, 30×30) -----
 
-const star =(cx, cy, r, rot = 0) => {
+const star = (cx, cy, r, rot = 0, fill = '#ffde00') => {
   const pts = [];
   for (let i = 0; i < 10; i++) {
     const rr = i % 2 ? r * 0.382 : r;
     const a = (rot - 90 + i * 36) * Math.PI / 180;
     pts.push(`${(cx + rr * Math.cos(a)).toFixed(2)},${(cy + rr * Math.sin(a)).toFixed(2)}`);
   }
-  return `<polygon points="${pts.join(' ')}" fill="#ffde00"/>`;
+  return `<polygon points="${pts.join(' ')}" fill="${fill}"/>`;
 };
+
+// 미국 : 빨강·흰 줄 13개 + 왼쪽 위 파란 칸(줄 7개 높이)에 흰 별 50개 (6개 줄 5번 · 5개 줄 4번, 엇갈려 9줄)
+function usFlag() {
+  const STRIPE = 30 / 13, CW = 15, CH = STRIPE * 7;   // 파란 칸 : 가로 15 × 세로 줄 7개
+  let s = '<rect width="30" height="30" fill="#fff"/>';
+  for (let i = 0; i < 13; i += 2) s += `<rect y="${(i * STRIPE).toFixed(3)}" width="30" height="${STRIPE.toFixed(3)}" fill="#b22234"/>`;
+  s += `<rect width="${CW}" height="${CH.toFixed(3)}" fill="#3c3b6e"/>`;
+  for (let row = 0; row < 9; row++) {
+    const y = (row + 1) * CH / 10;
+    const count = row % 2 ? 5 : 6;
+    for (let j = 0; j < count; j++) {
+      const x = (row % 2 ? 2 * j + 2 : 2 * j + 1) * CW / 12;
+      s += star(x, y, 0.62, 0, '#fff');
+    }
+  }
+  return s;
+}
 
 function chinaStars() {
   const S = 1.6, X0 = 9, Y0 = 9.5;   // 격자 1칸 = 1.6, 큰 별 중심 = (9, 9.5)
@@ -145,15 +162,10 @@ function chinaStars() {
 }
 
 const FLAGS = {
-  // 태극기 : 받은 태극기 이미지를 태극 중심에 맞춰 정사각형으로 만든 것 (flag-ko.png)
-  ko: `<rect width="30" height="30" fill="#fff"/><image href="flag-ko.png" width="30" height="30"/>`,
-  // 영국 : 빨간 대각선은 흰 대각선 한가운데가 아니라 한쪽으로 치우쳐 있음 (바람개비처럼).
-  //        왼쪽 위·오른쪽 아래 칸에서는 대각선 아래·위, 오른쪽 위·왼쪽 아래 칸에서는 위·아래로.
-  en: `<rect width="30" height="30" fill="#012169"/>
-       <path d="M0 0L30 30M30 0L0 30" stroke="#fff" stroke-width="6"/>
-       <path d="M-.7 .7L14.3 15.7M30.7 29.3L15.7 14.3M29.3 -.7L14.3 14.3M.7 30.7L15.7 15.7" stroke="#c8102e" stroke-width="2"/>
-       <path d="M15 0V30M0 15H30" stroke="#fff" stroke-width="10"/>
-       <path d="M15 0V30M0 15H30" stroke="#c8102e" stroke-width="6"/>`,
+  // 태극기 : 받은 태극기 이미지를 태극 중심에 맞춰 정사각형으로 만든 것 (images/flag-ko.png)
+  ko: `<rect width="30" height="30" fill="#fff"/><image href="images/flag-ko.png" width="30" height="30"/>`,
+  // 영어 : 미국 국기
+  en: usFlag(),
   id: `<rect width="30" height="30" fill="#fff"/><rect width="30" height="15" fill="#ce1126"/>`,
   // 몽골 : 왼쪽 빨간 띠의 소욤보 문양. 94×192 칸에 실제 국기 비율로 그린 뒤 줄여서 띠 안에 넣음
   //        (위에서부터 불꽃 · 해 · 달 · 삼각형 · 막대 · 태극 · 막대 · 삼각형, 양옆 굵은 세로 막대)
@@ -209,13 +221,17 @@ const LANGS = [
 ];
 
 // ----- 화면에 적용 -----
-const KO_TITLE = document.title;   // 브라우저 탭 제목 (한국어 원문)
+// 브라우저 탭 제목 : 'Production | Our Story, His Story | 2026 청소년예술제' 처럼
+// 페이지 이름(body 의 data-page-title) + 언어별 기본 제목
+const KO_BASE = 'Our Story, His Story | 2026 청소년예술제';
+const PAGE_TITLE = document.body.dataset.pageTitle;
 const applyLang = (lang) => {
   document.querySelectorAll('[data-i18n]').forEach((el) => {
     if (el.dataset.ko === undefined) el.dataset.ko = el.innerHTML;   // 처음 한 번 한국어 원문 보관
     el.innerHTML = lang === 'ko' ? el.dataset.ko : (TEXT[lang]?.[el.dataset.i18n] ?? el.dataset.ko);
   });
-  document.title = (lang !== 'ko' && TEXT[lang]?.title) || KO_TITLE;
+  const base = (lang !== 'ko' && TEXT[lang]?.title) || KO_BASE;
+  document.title = PAGE_TITLE ? `${PAGE_TITLE} | ${base}` : base;
   document.documentElement.lang = lang;
   document.querySelectorAll('.lang-btn').forEach((b) => {
     b.classList.toggle('active', b.dataset.lang === lang);

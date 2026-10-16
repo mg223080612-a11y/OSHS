@@ -31,14 +31,18 @@ body {
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   word-break: keep-all;   /* 한글이 단어 중간에서 줄바뀜하지 않게 */
+  /* 내용이 짧은 페이지에서도 푸터가 화면 맨 아래에 붙도록 */
+  display: flex; flex-direction: column; min-height: 100vh; min-height: 100svh;
 }
-/* 글꼴 준비 전에는 내용만 숨기고 (배경색은 그대로), 준비되면 부드럽게 나타남 — index.html 의 글꼴 대기 스크립트 */
+main { flex: 1; }
+/* Home 이 아닌 페이지 : 내용이 고정된 상단바(64px) 밑에서 시작 */
+body:not([data-page="home"]) main { padding-top: 64px; }
+/* 글꼴 준비 전에는 내용만 숨기고 (배경색은 그대로), 준비되면 부드럽게 나타남 — js/fonts-wait.js */
 html { background: var(--bg); }
 body > * { transition: opacity .25s ease; }
 .fonts-wait body > * { opacity: 0; }
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; }
-section { scroll-margin-top: 72px; }
 
 .eyebrow {
   font-family: var(--brand);
@@ -233,16 +237,8 @@ section { scroll-margin-top: 72px; }
 }
 .pill:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(240, 196, 107, .4); }
 
-.scroll-down {
-  position: absolute; left: 50%; bottom: 28px; z-index: 1;
-  width: 40px; transform: translateX(-50%);
-  animation: bob 2s ease-in-out infinite;
-}
-.scroll-down svg { display: block; width: 40px; height: 20px; fill: none; stroke: var(--text); stroke-width: 2; }
-@keyframes bob { 50% { transform: translate(-50%, 8px); } }
-
-/* ===== 페이지 제목 ===== */
-.page-title { text-align: center; padding: 90px 20px 30px; }
+/* ===== Production 페이지 제목 ===== */
+.page-title { text-align: center; padding: 70px 20px 30px; }
 .page-title .page-h {
   font-family: var(--display);
   font-weight: 500;
@@ -319,16 +315,13 @@ section { scroll-margin-top: 72px; }
     radial-gradient(ellipse at 50% 0%, var(--plum), transparent 70%),
     var(--bg-soft);
   text-align: center;
-  padding: 110px 20px;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  padding: 80px 20px 110px;
 }
-.story h2 {
+.story h1 {
   font-family: var(--display); font-weight: 600;
   font-size: clamp(34px, 4.5vw, 52px);
   margin: 10px 0 48px;
 }
-.story h2 span { color: var(--apricot); }
 .synopsis { max-width: 620px; margin: 0 auto; font-size: 17px; line-height: 2.1; }
 .synopsis p { margin-bottom: 28px; text-wrap: balance; }   /* 가운데 정렬 문단이 마지막 줄에 한 단어만 남지 않게 */
 .synopsis em { font-style: normal; font-weight: 700; color: var(--apricot); }
@@ -410,9 +403,7 @@ section { scroll-margin-top: 72px; }
   .dday-full { font-size: 18px; }
   .hero .countdown b { font-size: 32px; }
   .hero .countdown span { font-size: 10px; letter-spacing: .08em; }
-  .scroll-down { display: none; }
-
-  .page-title { padding-top: 60px; }
+  .page-title { padding-top: 50px; }
   .show { grid-template-columns: 1fr; gap: 36px; }
   .poster { max-width: 360px; width: 100%; margin: 0 auto; }
   .synopsis { font-size: 15px; }
@@ -421,8 +412,7 @@ section { scroll-margin-top: 72px; }
 /* ===== History 페이지 ===== */
 .history-head {
   text-align: center;
-  padding: 110px 20px 60px;
-  border-top: 1px solid var(--line);
+  padding: 80px 20px 60px;
   background:
     radial-gradient(ellipse 40% 70% at 50% 0%, rgba(255, 214, 150, .18), transparent 70%),
     radial-gradient(ellipse 80% 80% at 50% 0%, var(--plum), transparent 70%);

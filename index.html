@@ -11,10 +11,10 @@
   <meta property="og:url" content="https://story.gvcs.kr/" />
   <meta property="og:title" content="Our Story, His Story | 2026 청소년예술제" />
   <meta property="og:description" content="2026.11.21 (SAT) 5PM · GVCS Mungyeong Hulbert Hall" />
-  <meta property="og:image" content="https://story.gvcs.kr/hero.jpg" />
+  <meta property="og:image" content="https://story.gvcs.kr/images/hero.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="https://story.gvcs.kr/hero.jpg" />
-  <!-- 파비콘: 글로벌선진학교 로고 -->
+  <meta name="twitter:image" content="https://story.gvcs.kr/images/hero.jpg" />
+  <!-- 파비콘: 글로벌선진학교 로고 (브라우저가 맨 위 폴더에서 찾으므로 favicon 은 images 로 옮기지 않음) -->
   <link rel="icon" href="favicon.ico" sizes="any" />
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
@@ -23,42 +23,27 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <!-- 글꼴은 4가지만 씁니다. 한글 글꼴은 파일이 무거워서 하나(Noto Sans KR)로 통일했습니다 -->
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Noto+Sans+KR:wght@300;400;500;700&family=Playfair+Display:wght@500;600&family=Kaushan+Script&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-  <!-- 새로고침할 때 제목이 다른 글꼴로 잠깐 보였다가 바뀌는 것 막기 :
-       제목에 쓰는 글꼴이 준비될 때까지 화면을 잠깐 숨겼다가 한 번에 보여 줌.
-       인터넷이 느려도 최대 2초 뒤에는 무조건 보여 줍니다. -->
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/fonts-wait.js"></script>
+  <!-- 예전 한 페이지 시절 주소(#production · #story · #history)로 들어오면 새 페이지로 이동 -->
   <script>
-    (function () {
-      var root = document.documentElement;
-      if (!document.fonts || !document.fonts.load) return;   // 오래된 브라우저는 그냥 표시
-      root.classList.add('fonts-wait');
-      var show = function () { root.classList.remove('fonts-wait'); };
-      var KO = '줄거리 서로 다른 이야기가 만나 하나의 되다 청소년예술제';
-      var fonts = [
-        ['400 1em "Kaushan Script"', 'Our Story, His Story History'],
-        ['500 1em Oswald', 'PRODUCTION'], ['600 1em Oswald', 'Our Story, His Story'],
-        ['500 1em "Playfair Display"', 'D-DAY 11.21 Home'], ['600 1em "Playfair Display"', '11.21 2025'],
-        ['700 1em "Noto Sans KR"', KO], ['300 1em "Noto Sans KR"', KO]
-      ];
-      Promise.all(fonts.map(function (f) { return document.fonts.load(f[0], f[1]); })).then(show, show);
-      setTimeout(show, 2000);
-    })();
+    if (/^#(production|story|history)$/.test(location.hash)) location.replace(location.hash.slice(1) + '.html');
   </script>
 </head>
-<body>
+<body data-page="home">
 
-  <!-- ===== 상단 메뉴 (처음엔 투명, 스크롤하면 배경이 깔림) ===== -->
+  <!-- ===== 상단 메뉴 : 4개 페이지에 똑같이 들어 있습니다. 고칠 때는 4개 파일 모두 고치세요 ===== -->
   <header class="site-header">
     <div class="header-inner">
       <!-- 학교 가로형 CI (흰색, 배경 투명). 원본 : 문경캠퍼스 가로형 CI_white.png 를 여백만 잘라냄 -->
-      <a class="logo" href="#top">
-        <img src="logo-white.png" width="771" height="196" alt="GVCS 문경 글로벌선진학교 청소년예술제" />
+      <a class="logo" href="index.html">
+        <img src="images/logo-white.png" width="771" height="196" alt="GVCS 문경 글로벌선진학교 청소년예술제" />
       </a>
       <nav class="gnb">
-        <a href="#top" class="active">Home</a>
-        <a href="#production">Production</a>
-        <a href="#story">Story</a>
-        <a href="#history">History</a>
+        <a href="index.html" class="active" aria-current="page">Home</a>
+        <a href="production.html">Production</a>
+        <a href="story.html">Story</a>
+        <a href="history.html">History</a>
         <div class="lang-switch in-menu"></div>
       </nav>
       <div class="lang-switch in-header"></div>
@@ -68,7 +53,7 @@
     </div>
   </header>
 
-  <main id="top">
+  <main>
 
     <!-- ===== 메인 화면 : 무대 배경 + 문구 + D-DAY ===== -->
     <section class="hero">
@@ -107,126 +92,18 @@
             <div><b data-unit="m">--</b><span>MINUTES</span></div>
             <div><b data-unit="s">--</b><span>SECONDS</span></div>
           </div>
-          <a class="pill" href="#production"><span data-i18n="pill">공연 정보 보기</span> <span aria-hidden="true">→</span></a>
+          <a class="pill" href="production.html"><span data-i18n="pill">공연 정보 보기</span> <span aria-hidden="true">→</span></a>
         </div>
       </div>
-
-      <a class="scroll-down" href="#production" aria-label="아래로">
-        <svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 2 L20 18 L38 2" /></svg>
-      </a>
-    </section>
-
-    <!-- ===== Production : 공연에 오려면 알아야 할 정보 =====
-         (제목 · 날짜 · 카운트다운은 메인 화면과 포스터에 이미 있어서 여기서는 빼고,
-          장소 · 오시는 길처럼 '가려면 필요한 정보'만 모았습니다) -->
-    <section class="page-title" id="production">
-      <p class="eyebrow">GLOBAL VISION CHRISTIAN SCHOOL MG</p>
-      <h2 class="page-h">PRODUCTION</h2>
-      <div class="tabs">
-        <span class="tab active">2026 ON STAGE</span>
-      </div>
-    </section>
-
-    <section class="production">
-      <article class="show">
-        <figure class="poster">
-          <img src="poster.jpg" width="1000" height="1415" alt="2026 청소년예술제 Our Story His Story 포스터" />
-        </figure>
-
-        <div class="show-info">
-          <h3 class="show-title">Our Story,<br /><span>His Story</span></h3>
-          <dl class="meta">
-            <div><dt data-i18n="dtDate">일시</dt><dd>2026.11.21 (SAT) 5PM</dd></div>
-            <div><dt data-i18n="dtVenue">장소</dt><dd data-i18n="venue">글로벌선진학교 문경캠퍼스 헐버트홀</dd></div>
-            <div>
-              <dt data-i18n="dtMap">오시는 길</dt>
-              <dd><a class="map-link" href="https://map.naver.com/p/search/%EA%B8%80%EB%A1%9C%EB%B2%8C%EC%84%A0%EC%A7%84%ED%95%99%EA%B5%90%20%EB%AC%B8%EA%B2%BD%EC%BA%A0%ED%8D%BC%EC%8A%A4" target="_blank" rel="noopener" data-i18n="mapLink">지도에서 보기 ↗</a></dd>
-            </div>
-            <!-- 정해지면 주석을 풀고 내용을 채우세요 (다른 언어는 i18n.js 에 dtTime / dtAudience 추가)
-            <div><dt data-i18n="dtTime">러닝타임</dt><dd>약 90분</dd></div>
-            <div><dt data-i18n="dtAudience">관람 안내</dt><dd>전체 관람가 · 무료</dd></div>
-            -->
-          </dl>
-
-          <div class="actions">
-            <a class="btn" href="#story" data-i18n="btnStory">줄거리 보기</a>
-          </div>
-        </div>
-      </article>
-    </section>
-
-    <!-- ===== 시놉시스 ===== -->
-    <section class="story" id="story">
-      <p class="eyebrow">SYNOPSIS</p>
-      <h2 data-i18n="storyHead">줄거리</h2>
-      <div class="synopsis">
-        <p data-i18n="s1"><em>‘통일’</em>을 주제로 하나의 무대를 만들어야 하는 학생들.</p>
-        <p data-i18n="s2">서로 다른 생각을 가진 아이들이 모여 우리의 이야기(<b>Our Story</b>)를 만들어가기 시작하지만, 생각의 차이는 계속 충돌하고 완벽할 것 같았던 공연은 조금씩 흔들리기 시작한다.</p>
-        <p data-i18n="s3">그리고 그들 가운데 누구에게도 말하지 않은 이야기를 품고 있는 한 학생.</p>
-        <p data-i18n="s4">그 아이의 침묵 뒤에 숨겨진 이야기가 드러나면서, 아이들은 비로소 서로의 아픔과 다름을 이해하기 시작한다.</p>
-        <p data-i18n="s5">그렇게 서로를 이해하고 사랑하며 화해해 가는 과정 속에서, 자신들이 만들던 이야기가 단지 하나의 공연만은 아니었음을 깨닫게 된다. 우리의 이야기(<b>Our Story</b>) 속에 사랑과 화해를 이루어 가시는 그분의 이야기(<b>His Story</b>)가 스며들고 있었던 것.</p>
-        <p data-i18n="s6">그리고 서로 다른 이들이 함께 써 내려간 하나의 이야기는 마침내 한반도의 평화와 복음 통일을 꿈꾸는 새로운 역사(<b>History</b>)를 향해 나아간다.</p>
-        <p class="closing" data-i18n="invite">11월 21일, 청소년예술제에 여러분을 초대합니다</p>
-      </div>
-    </section>
-
-
-    <!-- ===== History : 지난 공연 영상 ===== -->
-    <section class="history-head" id="history">
-      <p class="eyebrow">GVCS YOUTH ARTS FESTIVAL</p>
-      <h2 class="history-h">History</h2>
-      <p class="history-lead" data-i18n="histLead">지난 무대들을 다시 만나보세요.</p>
-    </section>
-
-    <!-- ===== 연도별 공연 영상 =====
-         새 연도를 추가하려면 <article class="past"> 한 덩어리를 복사해서
-         연도 · 제목 · data-id(유튜브 주소의 v= 뒤 11글자)만 바꾸면 됩니다. -->
-    <section class="history-list">
-
-      <article class="past">
-        <div class="past-meta">
-          <p class="past-year">2025</p>
-          <p class="past-label">YOUTH ARTS FESTIVAL</p>
-          <h2 class="past-title">GIFT</h2>
-        </div>
-        <button class="video" type="button" data-id="xbVpOacHacA" aria-label="2025 청소년예술제 GIFT 영상 재생">
-          <img src="https://i.ytimg.com/vi/xbVpOacHacA/maxresdefault.jpg" alt="" loading="lazy" />
-          <span class="play" aria-hidden="true"></span>
-        </button>
-      </article>
-
-      <article class="past">
-        <div class="past-meta">
-          <p class="past-year">2024</p>
-          <p class="past-label">YOUTH ARTS FESTIVAL</p>
-          <h2 class="past-title">To the West</h2>
-        </div>
-        <button class="video" type="button" data-id="-N7dlrumGoM" aria-label="2024 청소년예술제 To the West 영상 재생">
-          <img src="https://i.ytimg.com/vi/-N7dlrumGoM/maxresdefault.jpg" alt="" loading="lazy" />
-          <span class="play" aria-hidden="true"></span>
-        </button>
-      </article>
-
-      <article class="past">
-        <div class="past-meta">
-          <p class="past-year">2023</p>
-          <p class="past-label">YOUTH ARTS FESTIVAL</p>
-          <h2 class="past-title">THE JOURNEY</h2>
-        </div>
-        <button class="video" type="button" data-id="s-Nyu5pvR7k" aria-label="2023 청소년예술제 THE JOURNEY 영상 재생">
-          <img src="https://i.ytimg.com/vi/s-Nyu5pvR7k/maxresdefault.jpg" alt="" loading="lazy" />
-          <span class="play" aria-hidden="true"></span>
-        </button>
-      </article>
 
     </section>
   </main>
 
+  <!-- ===== 푸터 : 4개 페이지에 똑같이 들어 있습니다 ===== -->
   <footer class="site-footer">
-    <!-- 로고에 학교 영문 이름이 들어 있어서 별도 영문 이름 줄은 뺐습니다 -->
     <!-- 왼쪽 : 학교 로고 / 오른쪽 : 정보 (휴대폰에서는 위아래로 쌓임) -->
     <div class="footer-inner">
-      <img class="footer-ci" src="logo-white.png" alt="GVCS 문경 글로벌선진학교" width="771" height="196" />
+      <img class="footer-ci" src="images/logo-white.png" alt="GVCS 문경 글로벌선진학교" width="771" height="196" />
       <div class="footer-info">
         <p data-i18n="footer">글로벌선진학교 문경캠퍼스 2026 청소년예술제</p>
         <p class="copy">© 2026 GVCS Mungyeong. All rights reserved.</p>
@@ -237,7 +114,7 @@
     </div>
   </footer>
 
-  <script src="i18n.js"></script>
-  <script src="main.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
