@@ -1,6 +1,6 @@
 /* =====================================================================
    Cast (pages/cast.html)
-   주연 · 조연 프로필 카드 + 그 밖의 배역
+   주연 · 조연 프로필 카드(사진 + 배역 이름) + 그 밖의 배역 이름
    ===================================================================== */
 
 /* ===== Cast 페이지 ===== */
@@ -20,9 +20,8 @@
 @media (max-width: 600px) {
   .cast-grid-lead { grid-template-columns: 1fr; }
   .cast-grid:not(.cast-grid-lead) { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-  .cast-grid:not(.cast-grid-lead) .cast-body { padding: 14px 14px 16px; }
+  .cast-grid:not(.cast-grid-lead) .cast-body { padding: 12px 10px 14px; }
   .cast-grid:not(.cast-grid-lead) .cast-name { font-size: 24px; }
-  .cast-grid:not(.cast-grid-lead) .cast-desc { font-size: 13px; }
 }
 .cast-card { background: var(--bg-soft); border: 1px solid var(--line); display: flex; flex-direction: column; }
 /* 사진 자리 : 세로 3:4. 사진(<img>)을 넣으면 칸에 꽉 차게 잘려서 들어감 */
@@ -34,13 +33,10 @@
 .cast-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .cast-ph svg { width: 34%; min-width: 64px; fill: none; stroke: rgba(246, 217, 160, .35); stroke-width: 1.2; display: block; margin: 0 auto; }
 .cast-ph { width: 100%; }
-.cast-body { padding: 20px 22px 24px; }
+/* 사진 아래에는 배역 이름만 가운데에 */
+.cast-body { padding: 16px 16px 18px; text-align: center; }
 .cast-name { font-family: var(--display); font-size: 30px; font-weight: 600; line-height: 1.2; }
 .cast-grid-lead .cast-name { font-size: 38px; }
-.cast-actor { font-weight: 500; color: var(--apricot-soft); margin-top: 2px; }
-.cast-desc { font-size: 14px; line-height: 1.75; color: var(--muted); margin-top: 12px; }
-/* 그 밖의 배역 : 이름만 2칸 표 */
-.cast-others { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); column-gap: 40px; }
-.cast-others div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
-.cast-others dt { color: var(--muted); }
-.cast-others dd { font-weight: 500; }
+/* 그 밖의 배역 : 배역 이름만 여러 칸으로 */
+.cast-others { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); column-gap: 32px; }
+.cast-others li { padding: 12px 0; border-bottom: 1px solid var(--line); font-weight: 400; }
