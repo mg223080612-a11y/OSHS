@@ -7,7 +7,7 @@ const TEXT = {
   en: {
     title: 'Our Story, His Story | 2026 Youth Arts Festival',
     heroDesc: 'Different stories meet and become one story',
-    dlPoster: 'Poster', dlInvite: 'Invitation', dlKakao: 'Profile image',
+    dlPoster: 'Poster', dlInvite: 'Invitation', dlKakao: 'Profile',
     dtDate: 'When', dtVenue: 'Venue',
     venue: 'Hulbert Hall, GVCS Mungyeong Campus',
     dtMap: 'Directions', mapLink: 'View on map ↗',
@@ -79,7 +79,7 @@ const TEXT = {
   mn: {
     title: 'Our Story, His Story | GVCS 2026 Залуучуудын урлагийн наадам',
     heroDesc: 'Өөр өөр түүхүүд нийлж, нэг түүх болно',
-    dlPoster: 'Зурагт хуудас', dlInvite: 'Урилга', dlKakao: 'Профайл зураг',
+    dlPoster: 'Зурагт хуудас', dlInvite: 'Урилга', dlKakao: 'Профайл',
     dtDate: 'Хэзээ', dtVenue: 'Хаана',
     venue: 'GVCS Мүнгёон кампус, Hulbert Hall',
     dtMap: 'Хаяг', mapLink: 'Газрын зураг ↗',
@@ -187,7 +187,7 @@ const TEXT = {
   es: {
     title: 'Our Story, His Story | Festival Juvenil de las Artes GVCS 2026',
     heroDesc: 'Historias distintas se encuentran y se convierten en una sola',
-    dlPoster: 'Póster', dlInvite: 'Invitación', dlKakao: 'Foto de perfil',
+    dlPoster: 'Póster', dlInvite: 'Invitación', dlKakao: 'Perfil',
     dtDate: 'Fecha', dtVenue: 'Lugar',
     venue: 'Hulbert Hall, campus GVCS Mungyeong',
     dtMap: 'Cómo llegar', mapLink: 'Ver mapa ↗',
