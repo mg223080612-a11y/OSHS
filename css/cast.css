@@ -13,15 +13,26 @@
   border-bottom: 1px solid var(--line);
 }
 .cast-group:first-child { margin-top: 20px; }
-/* 주연 2명은 크게 2칸, 조연은 4칸 (좁은 화면에서는 자동으로 줄어듦) */
+/* 조연은 한 줄에 4칸 (좁은 화면에서는 자동으로 줄어듦) */
 .cast-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 28px; }
-.cast-grid-lead { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px; max-width: 760px; margin: 0 auto; }
-/* 휴대폰 : 주연은 1칸, 조연은 2칸씩 (1칸이면 사진 때문에 너무 길어짐) */
+/* 주연 5명은 한 줄에 3칸, 남는 카드는 가운데로 (3 + 2) */
+.cast-grid-lead {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 32px; max-width: 960px; margin: 0 auto;
+}
+.cast-grid-lead .cast-card { flex: 0 0 calc((100% - 64px) / 3); }
+/* 태블릿 : 주연 2칸 */
+@media (max-width: 860px) {
+  .cast-grid-lead { gap: 20px; }
+  .cast-grid-lead .cast-card { flex-basis: calc((100% - 20px) / 2); }
+}
+/* 휴대폰 : 주연 · 조연 모두 2칸씩 (1칸이면 사진 때문에 너무 길어짐) */
 @media (max-width: 600px) {
-  .cast-grid-lead { grid-template-columns: 1fr; }
+  .cast-grid-lead { gap: 14px; }
+  .cast-grid-lead .cast-card { flex-basis: calc((100% - 14px) / 2); }
   .cast-grid:not(.cast-grid-lead) { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-  .cast-grid:not(.cast-grid-lead) .cast-body { padding: 12px 10px 14px; }
-  .cast-grid:not(.cast-grid-lead) .cast-name { font-size: 24px; }
+  .cast-grid .cast-body { padding: 12px 10px 14px; }
+  .cast .cast-grid .cast-name { font-size: 24px; }
 }
 .cast-card { background: var(--bg-soft); border: 1px solid var(--line); display: flex; flex-direction: column; }
 /* 사진 자리 : 세로 3:4. 사진(<img>)을 넣으면 칸에 꽉 차게 잘려서 들어감 */
@@ -37,6 +48,6 @@
 .cast-body { padding: 16px 16px 18px; text-align: center; }
 .cast-name { font-family: var(--display); font-size: 30px; font-weight: 600; line-height: 1.2; }
 .cast-grid-lead .cast-name { font-size: 38px; }
-/* 그 밖의 배역 : 배역 이름만 여러 칸으로 */
+/* 앙상블 : 배역 이름만 여러 칸으로 */
 .cast-others { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); column-gap: 32px; }
 .cast-others li { padding: 12px 0; border-bottom: 1px solid var(--line); font-weight: 400; }
