@@ -78,6 +78,9 @@
   transition: width .35s ease;
 }
 .cast-card:hover .cast-name::after { width: 48px; }
+/* 배역 이름 아래 학생 이름 */
+.cast-actor { margin-top: 8px; font-size: 14px; font-weight: 500; letter-spacing: .08em; color: var(--apricot-soft); }
+.cast-grid-lead .cast-actor { font-size: 15px; }
 
 /* ----- 주연 카드 : 누르면 배역 설명 (js/cast.js) ----- */
 .cast-body { z-index: 2; }                       /* 설명이 떠도 배역 이름은 보이게 */
@@ -127,6 +130,7 @@
   .cast-grid .cast-card, .cast-grid-lead .cast-card { flex-basis: calc((100% - 12px) / 2); }
   .cast-body { padding: 40px 8px 14px; }
   .cast .cast-grid .cast-name { font-size: 22px; }
+  .cast-actor, .cast-grid-lead .cast-actor { font-size: 12.5px; margin-top: 6px; }
   .cast-photo::after { inset: 6px; }
   /* 카드가 작아서, 설명이 열리면 이름은 잠깐 숨기고 카드 전체를 설명에 씀 */
   .cast-desc { padding: 14px 12px; }
