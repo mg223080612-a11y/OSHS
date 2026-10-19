@@ -121,19 +121,19 @@
   .cast-grid .cast-card { flex-basis: calc((100% - 40px) / 3); }
   .cast-grid-lead .cast-card { flex-basis: calc((100% - 20px) / 2); }
 }
-/* ----- 휴대폰 : 조연은 2칸씩, 주연은 설명을 읽을 수 있게 1칸씩 크게 ----- */
+/* ----- 휴대폰 : 주연 · 조연 모두 2칸씩 (설우 · 도운은 항상 같은 줄) ----- */
 @media (max-width: 600px) {
   .cast-group { font-size: 17px; letter-spacing: .22em; }
   .cast-grid { gap: 12px; }
-  .cast-grid .cast-card { flex-basis: calc((100% - 12px) / 2); }
-  .cast-grid-lead { gap: 20px; }
-  .cast-grid-lead .cast-card { flex-basis: 100%; max-width: 300px; }
-  .cast-grid:not(.cast-grid-lead) .cast-body { padding: 40px 8px 14px; }
-  .cast .cast-grid:not(.cast-grid-lead) .cast-name { font-size: 20px; }
-  .cast .cast-grid-lead .cast-name { font-size: 30px; }
+  .cast-grid .cast-card, .cast-grid-lead .cast-card { flex-basis: calc((100% - 12px) / 2); }
+  .cast-body { padding: 40px 8px 14px; }
+  .cast .cast-grid .cast-name { font-size: 22px; }
   .cast-photo::after { inset: 6px; }
-  .cast-desc { padding: 40px 22px 110px; }
-  .cast-desc p { font-size: 14.5px; line-height: 1.8; }
+  /* 카드가 작아서, 설명이 열리면 이름은 잠깐 숨기고 카드 전체를 설명에 씀 */
+  .cast-desc { padding: 14px 12px; }
+  .cast-desc p { font-size: 12px; line-height: 1.65; }
+  .cast-card.open .cast-body { opacity: 0; }
+  .cast-body { transition: opacity .3s ease; }
   /* 휴대폰은 한 줄에 다 안 들어가서 · 대신 가운데 정렬 2칸 (줄 맨 앞에 · 가 오는 것 방지) */
   .cast-others { display: grid; grid-template-columns: 1fr 1fr; row-gap: 12px; text-align: center; }
   .cast-others li { font-size: 15px; }
