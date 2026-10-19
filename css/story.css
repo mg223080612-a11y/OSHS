@@ -16,6 +16,15 @@
   text-align: center;
   padding: 80px 20px 110px;
 }
+/* 줄거리 위 작품 제목 (필기체 Great Vibes, 너무 크지 않게) */
+.story-title {
+  font-family: 'Great Vibes', cursive; font-weight: 400;
+  font-size: clamp(42px, 5vw, 60px); line-height: 1.25;
+  margin: 0 0 40px;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, .45);
+}
+.story-title span { color: var(--apricot-soft); }
+
 .synopsis { max-width: 620px; margin: 0 auto; font-size: 17px; line-height: 2.1; }
 .synopsis p { margin-bottom: 28px; text-wrap: balance; }   /* 가운데 정렬 문단이 마지막 줄에 한 단어만 남지 않게 */
 .synopsis em { font-style: normal; font-weight: 700; color: var(--apricot); }
@@ -25,4 +34,9 @@
 
 @media (max-width: 860px) {
   .synopsis { font-size: 15px; }
+}
+/* 휴대폰 : 제목이 어중간하게 줄바꿈되지 않게 "Our Story," / "His Story" 두 줄로 */
+@media (max-width: 600px) {
+  .story-title { font-size: 46px; line-height: 1.1; margin-bottom: 32px; }
+  .story-title span { display: block; }
 }

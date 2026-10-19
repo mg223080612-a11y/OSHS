@@ -10,6 +10,7 @@
   var KO = '줄거리 서로 다른 이야기가 만나 하나의 되다 청소년예술제';
   var fonts = [
     ['400 1em "Kaushan Script"', 'Our Story, His Story History'],
+    ['400 1em "Great Vibes"', 'Our Story, His Story'],   // Story 페이지 제목 (다른 페이지에서는 바로 넘어감)
     ['500 1em Oswald', 'PRODUCTION'], ['600 1em Oswald', 'Our Story, His Story'],
     ['500 1em "Playfair Display"', 'D-DAY 11.21 Home'], ['600 1em "Playfair Display"', '11.21 2025'],
     ['700 1em "Noto Sans KR"', KO], ['300 1em "Noto Sans KR"', KO]
