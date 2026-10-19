@@ -80,20 +80,34 @@
 }
 .cast-card:hover .cast-name::after { width: 48px; }
 
-/* ----- 앙상블 : 둥근 이름표를 가운데로 ----- */
+/* ----- 주연 카드 : 누르면 배역 설명 (js/cast.js) ----- */
+.cast-body { z-index: 2; }                       /* 설명이 떠도 배역 이름은 보이게 */
+/* 카드 전체를 덮는 투명 버튼 (어디를 눌러도 열리고 닫힘) */
+.cast-toggle {
+  position: absolute; inset: 0; z-index: 3;
+  background: none; border: 0; padding: 0; cursor: pointer;
+}
+.cast-toggle:focus-visible { outline: 2px solid var(--apricot); outline-offset: -4px; }
+/* 배역 설명 : 사진 위에 어둡게 깔리며 나타남 (아래쪽은 배역 이름 자리라 비워 둠) */
+.cast-desc {
+  position: absolute; inset: 0; z-index: 1;
+  display: flex; align-items: center; justify-content: center;
+  padding: 60px 34px 120px; text-align: center;
+  background: rgba(12, 9, 21, .88);
+  opacity: 0; visibility: hidden;
+  transition: opacity .35s ease, visibility .35s;
+}
+.cast-desc p { font-size: 16px; line-height: 1.9; text-wrap: balance; }
+.cast-card.open .cast-desc { opacity: 1; visibility: visible; }
+
+/* ----- 앙상블 : 배역 이름만 글자로, 가운데에 · 로 구분 ----- */
 .cast-others {
   list-style: none;
-  display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;
+  display: flex; flex-wrap: wrap; justify-content: center; row-gap: 10px;
   max-width: 820px; margin: 0 auto;
 }
-.cast-others li {
-  padding: 11px 24px; border-radius: 999px;
-  border: 1px solid rgba(240, 196, 107, .28);
-  background: rgba(255, 255, 255, .03);
-  font-weight: 400; font-size: 15px; letter-spacing: .02em;
-  transition: border-color .2s, background .2s;
-}
-.cast-others li:hover { border-color: rgba(240, 196, 107, .7); background: rgba(240, 196, 107, .08); }
+.cast-others li { font-weight: 400; font-size: 17px; letter-spacing: .02em; white-space: nowrap; }
+.cast-others li + li::before { content: '·'; margin: 0 18px; color: var(--apricot); }
 
 /* '동작 줄이기'를 켠 기기 : 카드가 떠오르거나 사진이 커지지 않게 */
 @media (prefers-reduced-motion: reduce) {
@@ -107,13 +121,22 @@
   .cast-grid .cast-card { flex-basis: calc((100% - 40px) / 3); }
   .cast-grid-lead .cast-card { flex-basis: calc((100% - 20px) / 2); }
 }
-/* ----- 휴대폰 : 주연 · 조연 모두 2칸씩 (1칸이면 사진 때문에 너무 길어짐) ----- */
+/* ----- 휴대폰 : 조연은 2칸씩, 주연은 설명을 읽을 수 있게 1칸씩 크게 ----- */
 @media (max-width: 600px) {
   .cast-group { font-size: 17px; letter-spacing: .22em; }
   .cast-grid { gap: 12px; }
-  .cast-grid .cast-card, .cast-grid-lead .cast-card { flex-basis: calc((100% - 12px) / 2); }
-  .cast-body { padding: 40px 8px 14px; }
-  .cast .cast-grid .cast-name { font-size: 20px; }
+  .cast-grid .cast-card { flex-basis: calc((100% - 12px) / 2); }
+  .cast-grid-lead { gap: 20px; }
+  .cast-grid-lead .cast-card { flex-basis: 100%; max-width: 300px; }
+  .cast-grid:not(.cast-grid-lead) .cast-body { padding: 40px 8px 14px; }
+  .cast .cast-grid:not(.cast-grid-lead) .cast-name { font-size: 20px; }
+  .cast .cast-grid-lead .cast-name { font-size: 30px; }
   .cast-photo::after { inset: 6px; }
-  .cast-others li { padding: 9px 18px; font-size: 14px; }
+  .cast-desc { padding: 40px 22px 110px; }
+  .cast-desc p { font-size: 14.5px; line-height: 1.8; }
+  /* 휴대폰은 한 줄에 다 안 들어가서 · 대신 가운데 정렬 2칸 (줄 맨 앞에 · 가 오는 것 방지) */
+  .cast-others { display: grid; grid-template-columns: 1fr 1fr; row-gap: 12px; text-align: center; }
+  .cast-others li { font-size: 15px; }
+  .cast-others li + li::before { content: none; }
+  .cast-others li:last-child:nth-child(odd) { grid-column: 1 / -1; }   /* 마지막 하나가 남으면 가운데로 */
 }

@@ -13,7 +13,7 @@
 | Home | `index.html` | `css/home.css` | `js/home.js` (카운트다운) | story.gvcs.kr |
 | Production | `pages/production.html` | `css/production.css` | | /pages/production |
 | Story | `pages/story.html` | `css/story.css` | | /pages/story |
-| Cast | `pages/cast.html` | `css/cast.css` | | /pages/cast |
+| Cast | `pages/cast.html` | `css/cast.css` | `js/cast.js` (주연 카드 누르면 배역 설명) | /pages/cast |
 | History | `pages/history.html` | `css/history.css` | `js/history.js` (영상 재생) | /pages/history |
 
 모든 페이지가 함께 쓰는 파일:
