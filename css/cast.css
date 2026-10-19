@@ -138,7 +138,7 @@
   .cast-card.open .cast-body { opacity: 0; }
   .cast-body { transition: opacity .3s ease; }
   /* 휴대폰은 한 줄에 다 안 들어가서 · 대신 가운데 정렬 2칸 (줄 맨 앞에 · 가 오는 것 방지) */
-  .cast-others { display: grid; grid-template-columns: 1fr 1fr; row-gap: 10px; column-gap: 8px; max-width: 240px; text-align: center; }   /* 화면 전체로 퍼지지 않게 가운데로 좁게 */
+  .cast-others { display: grid; grid-template-columns: auto auto; justify-content: center; row-gap: 10px; column-gap: 32px; max-width: 260px; text-align: center; }   /* 칸 너비를 이름 길이만큼만 → 두 이름 사이가 가깝게 */
   .cast-others li { font-size: 15px; white-space: normal; }   /* 긴 번역은 줄바꿈 */
   .cast-others li + li::before { content: none; }
   .cast-others li:last-child:nth-child(odd) { grid-column: 1 / -1; }   /* 마지막 하나가 남으면 가운데로 */
