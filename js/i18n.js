@@ -7,7 +7,7 @@ const TEXT = {
   en: {
     title: 'Our Story, His Story | 2026 Youth Arts Festival',
     heroDesc: 'Different stories meet and become one story',
-    pill: 'View show info',
+    dlPoster: 'Poster', dlInvite: 'Invitation', dlKakao: 'Profile image',
     dtDate: 'When', dtVenue: 'Venue',
     venue: 'Hulbert Hall, GVCS Mungyeong Campus',
     dtMap: 'Directions', mapLink: 'View on map ↗',
@@ -43,7 +43,7 @@ const TEXT = {
   id: {
     title: 'Our Story, His Story | Festival Seni Remaja GVCS 2026',
     heroDesc: 'Kisah-kisah yang berbeda bertemu dan menjadi satu kisah',
-    pill: 'Lihat info pertunjukan',
+    dlPoster: 'Poster', dlInvite: 'Undangan', dlKakao: 'Foto profil',
     dtDate: 'Waktu', dtVenue: 'Tempat',
     venue: 'Hulbert Hall, Kampus GVCS Mungyeong',
     dtMap: 'Rute', mapLink: 'Lihat peta ↗',
@@ -79,7 +79,7 @@ const TEXT = {
   mn: {
     title: 'Our Story, His Story | GVCS 2026 Залуучуудын урлагийн наадам',
     heroDesc: 'Өөр өөр түүхүүд нийлж, нэг түүх болно',
-    pill: 'Тоглолтын мэдээлэл',
+    dlPoster: 'Зурагт хуудас', dlInvite: 'Урилга', dlKakao: 'Профайл зураг',
     dtDate: 'Хэзээ', dtVenue: 'Хаана',
     venue: 'GVCS Мүнгёон кампус, Hulbert Hall',
     dtMap: 'Хаяг', mapLink: 'Газрын зураг ↗',
@@ -115,7 +115,7 @@ const TEXT = {
   zh: {
     title: 'Our Story, His Story | GVCS 2026 青少年艺术节',
     heroDesc: '不同的故事相遇，成为同一个故事',
-    pill: '查看演出信息',
+    dlPoster: '海报', dlInvite: '邀请函', dlKakao: '头像图片',
     dtDate: '时间', dtVenue: '地点',
     venue: 'GVCS 闻庆校区 Hulbert Hall',
     dtMap: '交通', mapLink: '查看地图 ↗',
@@ -151,7 +151,7 @@ const TEXT = {
   de: {
     title: 'Our Story, His Story | GVCS Jugendkunstfestival 2026',
     heroDesc: 'Verschiedene Geschichten begegnen sich und werden zu einer',
-    pill: 'Zur Aufführung',
+    dlPoster: 'Plakat', dlInvite: 'Einladung', dlKakao: 'Profilbild',
     dtDate: 'Termin', dtVenue: 'Ort',
     venue: 'Hulbert Hall, GVCS Campus Mungyeong',
     dtMap: 'Anfahrt', mapLink: 'Karte öffnen ↗',
@@ -187,7 +187,7 @@ const TEXT = {
   es: {
     title: 'Our Story, His Story | Festival Juvenil de las Artes GVCS 2026',
     heroDesc: 'Historias distintas se encuentran y se convierten en una sola',
-    pill: 'Ver información',
+    dlPoster: 'Póster', dlInvite: 'Invitación', dlKakao: 'Foto de perfil',
     dtDate: 'Fecha', dtVenue: 'Lugar',
     venue: 'Hulbert Hall, campus GVCS Mungyeong',
     dtMap: 'Cómo llegar', mapLink: 'Ver mapa ↗',

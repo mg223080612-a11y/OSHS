@@ -140,15 +140,19 @@
 .hero .countdown div { flex: 1; max-width: none; border: 0; background: none; padding: 0; }
 .hero .countdown b { font-family: var(--serif); font-weight: 500; font-size: 42px; color: var(--text); }
 .hero .countdown span { font-family: var(--serif); font-size: 12px; letter-spacing: .14em; color: var(--text); opacity: .85; }
-.pill {
-  display: inline-flex; align-items: center; gap: 18px;
-  font-family: var(--serif-ko); font-size: 16px; font-weight: 500;
+/* 다운로드 버튼 3개 (포스터 · 초대장 · 카톡 프로필) */
+.downloads { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.dl-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  font-family: var(--sans); font-size: 15px; font-weight: 500; white-space: nowrap;
   color: #2a1a10; background: var(--apricot-soft);
-  padding: 13px 36px; border-radius: 999px;
-  box-shadow: 0 8px 30px rgba(240, 196, 107, .25);
-  transition: transform .2s, box-shadow .2s;
+  padding: 12px 18px; border-radius: 999px;
+  box-shadow: 0 8px 26px rgba(240, 196, 107, .22);
+  transition: transform .2s, box-shadow .2s, background .2s;
 }
-.pill:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(240, 196, 107, .4); }
+.dl-btn svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.dl-btn:hover { transform: translateY(-2px); background: #fbe4b4; box-shadow: 0 12px 30px rgba(240, 196, 107, .38); }
+.dl-btn:focus-visible { outline: 2px solid var(--apricot); outline-offset: 3px; }
 
 /* 카운트다운 칸 기본 모양 (위 .hero .countdown 이 Home 에 맞게 덮어씀) */
 .countdown { display: flex; gap: 10px; margin: 32px 0; }
@@ -161,6 +165,7 @@
 .countdown span { font-family: var(--display); font-size: 11px; letter-spacing: .2em; color: var(--muted); }
 
 @media (max-width: 860px) {
+  .dl-btn { font-size: 14px; padding: 11px 14px; gap: 5px; }
   /* 휴대폰 : 위아래로 쌓고 가운데 정렬 */
   /* 휴대폰 : 위아래로 쌓고 가운데 정렬 */
   .hero-inner { grid-template-columns: 1fr; gap: 56px; padding: 110px calc(var(--curtain-w) + 6px) 100px; text-align: center; }
@@ -176,4 +181,14 @@
   .dday-full { font-size: 18px; }
   .hero .countdown b { font-size: 32px; }
   .hero .countdown span { font-size: 10px; letter-spacing: .08em; }
+}
+
+/* 휴대폰 : 버튼 3개를 같은 너비로 한 줄에, 아이콘은 글자 위로 (긴 번역은 버튼 안에서 줄바꿈) */
+@media (max-width: 600px) {
+  .downloads { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .dl-btn {
+    flex-direction: column; gap: 4px;
+    white-space: normal; text-align: center; line-height: 1.25;
+    padding: 10px 6px; border-radius: 16px; font-size: 13px;
+  }
 }

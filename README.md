@@ -24,6 +24,7 @@ js/fonts-wait.js   글꼴이 준비될 때까지 화면을 잠깐 숨김 (새로
 js/i18n.js         7개 언어 번역 · 국기 그림 · 언어 버튼
 js/main.js         상단바 배경 · 메뉴 열기/닫기
 images/            poster.jpg · hero.jpg(공유 미리보기) · logo-white.png · flag-ko.png
+downloads/         Home 다운로드 버튼 파일 : poster.jpg · invitation.jpg(앞·안쪽 한 장) · kakao-profile.jpg (같은 이름으로 덮어쓰면 교체)
 _redirects         예전 주소(/story, /production.html 등) → 새 주소로 이동 (Cloudflare Pages 규칙)
 favicon.ico · favicon-16/32.png · apple-touch-icon.png   (브라우저가 맨 위 폴더에서 찾으므로 여기 둠)
 ```

@@ -215,5 +215,5 @@ img { max-width: 100%; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .underline { stroke-dashoffset: 0; }   /* 그려지는 밑줄은 처음부터 다 그려진 상태로 */
-  .video:hover img, .video:hover .play, .pill:hover, .lang-btn:hover { transform: none; }
+  .video:hover img, .video:hover .play, .dl-btn:hover, .lang-btn:hover { transform: none; }
 }
