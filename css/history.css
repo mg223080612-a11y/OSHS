@@ -3,24 +3,7 @@
    지난 공연 영상 (썸네일을 누르면 그 자리에서 재생)
    ===================================================================== */
 
-/* ===== History 페이지 ===== */
-.history-head {
-  text-align: center;
-  padding: 80px 20px 60px;
-  background:
-    radial-gradient(ellipse 40% 70% at 50% 0%, rgba(255, 214, 150, .18), transparent 70%),
-    radial-gradient(ellipse 80% 80% at 50% 0%, var(--plum), transparent 70%);
-}
-.history-head .history-h {
-  font-family: var(--hand); font-weight: 400;
-  font-size: clamp(64px, 9vw, 130px); line-height: 1.35;
-  color: var(--apricot-soft);
-  /* 붓글씨체는 y 꼬리가 아래로 길게 내려와서, 아래 문장과 겹치지 않게 글자 크기에 비례해 띄움 */
-  margin: 0 0 .2em;
-}
-.history-lead { font-family: var(--serif-ko); color: var(--muted); }
-
-.history-list { max-width: var(--max); margin: 0 auto; padding: 20px 20px 90px; }
+.history-list { max-width: var(--max); margin: 0 auto; padding: 40px 20px 90px; }   /* 위쪽 큰 제목을 없애서 영상 목록이 바로 시작 */
 .past {
   display: grid; grid-template-columns: 260px 1fr; gap: 48px; align-items: center;
   padding: 56px 0;
@@ -58,7 +41,6 @@
 .video:focus-visible { outline: 2px solid var(--apricot); outline-offset: 4px; }
 
 @media (max-width: 860px) {
-  .history-head { padding: 70px 20px 40px; }
   .past { grid-template-columns: 1fr; gap: 20px; padding: 40px 0; text-align: center; }
   .past-year { font-size: 48px; }
   .past-title { font-size: 26px; }

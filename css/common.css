@@ -95,23 +95,12 @@ img { max-width: 100%; }
 }
 .menu-toggle span { display: block; width: 26px; height: 1.5px; background: var(--text); margin: 6px 0; }
 
-/* ===== 페이지 제목 (Production · Cast 위쪽의 큰 제목) ===== */
-.page-title { text-align: center; padding: 70px 20px 30px; }
-.page-title .page-h {
-  font-family: var(--display);
-  font-weight: 500;
-  font-size: clamp(48px, 8vw, 88px);
-  letter-spacing: .1em;
-  line-height: 1.1;
-  margin: 12px 0 36px;
+/* ===== 화면에는 안 보이는 글자 (각 페이지의 제목 h1) =====
+   화면 낭독기와 검색엔진은 읽을 수 있도록 지우지 않고 숨기기만 함 */
+.sr-only {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
-.tabs { display: inline-flex; border-bottom: 1px solid var(--line); }
-.tab {
-  font-family: var(--display); font-size: 15px; letter-spacing: .12em;
-  padding: 12px 22px; color: var(--muted);
-  border-bottom: 2px solid transparent; margin-bottom: -1px;
-}
-.tab.active { color: var(--text); border-color: var(--apricot); }
 
 /* ===== 푸터 ===== */
 .site-footer {
@@ -172,7 +161,6 @@ img { max-width: 100%; }
   .logo img, .scrolled .logo img { height: 38px; }
   .gnb { display: none; }
   .menu-toggle { border-left: 0; }
-  .page-title { padding-top: 50px; }
 }
 
 /* ===== 하단 제작 표기 : made by Sync (저작권 줄 바로 밑, 같은 글씨) ===== */

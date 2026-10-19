@@ -4,8 +4,7 @@
    주연 2명 · 조연 7명은 카드, 앙상블은 이름표(둥근 칩)
    ===================================================================== */
 
-.page-lead { font-family: var(--serif-ko); color: var(--muted); margin-top: -18px; }
-.cast { max-width: var(--max); margin: 0 auto; padding: 20px 20px 120px; }
+.cast { max-width: var(--max); margin: 0 auto; padding: 30px 20px 120px; }
 
 /* ----- 묶음 제목 (주연 · 조연 · 앙상블) : 가운데 + 양옆에 가는 선 (Home 의 D-DAY 와 같은 모양) ----- */
 .cast-group {

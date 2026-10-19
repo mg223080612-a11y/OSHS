@@ -4,7 +4,7 @@
    ===================================================================== */
 
 /* ===== 작품 목록 ===== */
-.production { max-width: var(--max); margin: 0 auto; padding: 30px 20px 110px; }
+.production { max-width: var(--max); margin: 0 auto; padding: 70px 20px 110px; }
 .show {
   display: grid;
   grid-template-columns: minmax(240px, 380px) 1fr;

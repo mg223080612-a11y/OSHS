@@ -21,7 +21,6 @@ const TEXT = {
     s6: 'And the single story written together by people so different finally moves toward a new history (<b>History</b>) that dreams of peace on the Korean Peninsula and reunification through the Gospel.',
     invite: 'On November 21, we invite you to the Youth Arts Festival',
     // ----- Cast 페이지 -----
-    castIntro: 'The people who bring the stage to life',
     castLead: 'Lead',
     castSupport: 'Supporting',
     castOthers: 'Ensemble',
@@ -39,7 +38,6 @@ const TEXT = {
     ch_arin: 'Arin',
     ch_seoyeon: 'Seoyeon',
     ch_jian: 'Jian',
-    histLead: 'Revisit the stages of past years.',
     footer: 'Global Vision Christian School, Mungyeong Campus · 2026 Youth Arts Festival',
   },
   id: {
@@ -59,7 +57,6 @@ const TEXT = {
     s6: 'Dan satu kisah yang ditulis bersama oleh orang-orang yang berbeda akhirnya melangkah menuju sejarah baru (<b>History</b>) yang memimpikan perdamaian di Semenanjung Korea dan penyatuan melalui Injil.',
     invite: 'Pada 21 November, kami mengundang Anda ke Festival Seni Remaja',
     // ----- Cast 페이지 -----
-    castIntro: 'Mereka yang menghidupkan panggung',
     castLead: 'Pemeran utama',
     castSupport: 'Pemeran pendukung',
     castOthers: 'Ansambel',
@@ -77,7 +74,6 @@ const TEXT = {
     ch_arin: 'Arin',
     ch_seoyeon: 'Seoyeon',
     ch_jian: 'Jian',
-    histLead: 'Saksikan kembali panggung-panggung tahun sebelumnya.',
     footer: 'Global Vision Christian School, Kampus Mungyeong · Festival Seni Remaja 2026',
   },
   mn: {
@@ -97,7 +93,6 @@ const TEXT = {
     s6: 'Өөр өөр хүмүүсийн хамтдаа бичсэн нэгэн түүх эцэст нь Солонгосын хойгийн энх тайван, сайн мэдээгээр нэгдэхийг мөрөөдсөн шинэ түүх (<b>History</b>) рүү алхана.',
     invite: '11-р сарын 21-нд Залуучуудын урлагийн наадамд таныг урьж байна',
     // ----- Cast 페이지 -----
-    castIntro: 'Тайзыг амилуулагчид',
     castLead: 'Гол дүр',
     castSupport: 'Туслах дүр',
     castOthers: 'Ансамбль',
@@ -115,7 +110,6 @@ const TEXT = {
     ch_arin: 'Arin',
     ch_seoyeon: 'Seoyeon',
     ch_jian: 'Jian',
-    histLead: 'Өмнөх жилүүдийн тоглолтыг дахин үзээрэй.',
     footer: 'Global Vision Christian School, Мүнгёон кампус · 2026 Залуучуудын урлагийн наадам',
   },
   zh: {
@@ -135,7 +129,6 @@ const TEXT = {
     s6: '由不同的人共同写下的这个故事，最终迈向梦想朝鲜半岛和平与福音统一的新历史（<b>History</b>）。',
     invite: '11月21日，诚邀您来到青少年艺术节',
     // ----- Cast 페이지 -----
-    castIntro: '共同创造舞台的人们',
     castLead: '主演',
     castSupport: '配角',
     castOthers: '群演',
@@ -153,7 +146,6 @@ const TEXT = {
     ch_arin: 'Arin',
     ch_seoyeon: 'Seoyeon',
     ch_jian: 'Jian',
-    histLead: '重温往届的舞台。',
     footer: 'Global Vision Christian School 闻庆校区 · 2026 青少年艺术节',
   },
   de: {
@@ -173,7 +165,6 @@ const TEXT = {
     s6: 'Und die eine Geschichte, die so verschiedene Menschen gemeinsam geschrieben haben, bewegt sich schließlich auf eine neue Geschichte (<b>History</b>) zu, die vom Frieden auf der koreanischen Halbinsel und der Wiedervereinigung durch das Evangelium träumt.',
     invite: 'Am 21. November laden wir Sie herzlich zum Jugendkunstfestival ein',
     // ----- Cast 페이지 -----
-    castIntro: 'Die Menschen, die die Bühne lebendig machen',
     castLead: 'Hauptrollen',
     castSupport: 'Nebenrollen',
     castOthers: 'Ensemble',
@@ -191,7 +182,6 @@ const TEXT = {
     ch_arin: 'Arin',
     ch_seoyeon: 'Seoyeon',
     ch_jian: 'Jian',
-    histLead: 'Erleben Sie die Bühnen der vergangenen Jahre noch einmal.',
     footer: 'Global Vision Christian School, Campus Mungyeong · Jugendkunstfestival 2026',
   },
   es: {
@@ -211,7 +201,6 @@ const TEXT = {
     s6: 'Y la historia que escribieron juntos personas tan distintas avanza, por fin, hacia una nueva historia (<b>History</b>) que sueña con la paz en la península coreana y la reunificación a través del Evangelio.',
     invite: 'El 21 de noviembre, te invitamos al Festival Juvenil de las Artes',
     // ----- Cast 페이지 -----
-    castIntro: 'Quienes dan vida al escenario',
     castLead: 'Protagonistas',
     castSupport: 'Reparto',
     castOthers: 'Ensamble',
@@ -229,7 +218,6 @@ const TEXT = {
     ch_arin: 'Arin',
     ch_seoyeon: 'Seoyeon',
     ch_jian: 'Jian',
-    histLead: 'Revive los escenarios de años anteriores.',
     footer: 'Global Vision Christian School, campus Mungyeong · Festival Juvenil de las Artes 2026',
   },
 };
