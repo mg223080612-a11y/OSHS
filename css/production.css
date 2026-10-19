@@ -4,7 +4,14 @@
    ===================================================================== */
 
 /* ===== 작품 목록 ===== */
-.production { max-width: var(--max); margin: 0 auto; padding: 70px 20px 110px; }
+.production { max-width: var(--max); margin: 0 auto; padding: 50px 20px 110px; }
+/* 맨 위 "2026 ON STAGE" + 노란 밑줄 (가운데) */
+.tabs { display: flex; justify-content: center; margin-bottom: 56px; }
+.tab {
+  font-family: var(--display); font-size: 17px; letter-spacing: .12em;
+  padding: 12px 34px; color: var(--text);
+  border-bottom: 2px solid var(--apricot);
+}
 .show {
   display: grid;
   grid-template-columns: minmax(240px, 380px) 1fr;
