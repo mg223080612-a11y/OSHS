@@ -1,7 +1,7 @@
 /* =====================================================================
    Cast (pages/cast.html)
    공연 프로그램북 느낌 : 무대 조명이 비추는 사진 칸 + 금색 안쪽 테두리 + 사진 위 배역 이름
-   주연 5명 · 조연 4명은 카드, 앙상블은 이름표(둥근 칩)
+   주연 2명 · 조연 7명은 카드, 앙상블은 이름표(둥근 칩)
    ===================================================================== */
 
 .page-lead { font-family: var(--serif-ko); color: var(--muted); margin-top: -18px; }
@@ -22,14 +22,12 @@
 .cast-group:first-child { margin-top: 36px; }
 
 /* ----- 카드 배치 (순서 중요 : 주연 규칙이 아래에 있어야 위의 공통 규칙을 덮어씀) ----- */
-/* 조연 4명 : 한 줄에 4칸 (좁은 화면에서는 자동으로 줄어듦) */
-.cast-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 24px; }
-/* 주연 5명 : 한 줄에 3칸, 남는 카드는 가운데로 (3 + 2) */
-.cast-grid-lead {
-  display: flex; flex-wrap: wrap; justify-content: center;
-  gap: 32px; max-width: 980px; margin: 0 auto;
-}
-.cast-grid-lead .cast-card { flex: 0 0 calc((100% - 64px) / 3); }
+/* 조연 7명 : 한 줄에 4칸, 남는 카드는 가운데로 (4 + 3) */
+.cast-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; }
+.cast-grid .cast-card { flex: 0 0 calc((100% - 72px) / 4); }
+/* 주연 2명 : 크게 2칸 */
+.cast-grid-lead { gap: 32px; max-width: 680px; margin: 0 auto; }
+.cast-grid-lead .cast-card { flex-basis: calc((100% - 32px) / 2); }
 
 /* ----- 카드 : 사진 칸 위에 배역 이름을 겹쳐 올림 ----- */
 .cast-card {
@@ -73,7 +71,7 @@
   font-size: 26px; letter-spacing: .04em;
   text-shadow: 0 2px 14px rgba(0, 0, 0, .6);
 }
-.cast-grid-lead .cast-name { font-size: 32px; }
+.cast-grid-lead .cast-name { font-size: 36px; }
 /* 이름 아래 짧은 금색 줄 */
 .cast-name::after {
   content: ''; display: block; width: 26px; height: 2px; margin: 10px auto 0;
@@ -102,18 +100,18 @@
   .cast-card:hover, .cast-card:hover .cast-photo img { transform: none; }
 }
 
-/* ----- 태블릿 : 주연 2칸 ----- */
+/* ----- 태블릿 : 주연 2칸 · 조연 3칸 ----- */
 @media (max-width: 860px) {
   .cast-group { margin: 64px 0 28px; gap: 14px; }
-  .cast-grid-lead { gap: 20px; }
+  .cast-grid { gap: 20px; }
+  .cast-grid .cast-card { flex-basis: calc((100% - 40px) / 3); }
   .cast-grid-lead .cast-card { flex-basis: calc((100% - 20px) / 2); }
 }
 /* ----- 휴대폰 : 주연 · 조연 모두 2칸씩 (1칸이면 사진 때문에 너무 길어짐) ----- */
 @media (max-width: 600px) {
   .cast-group { font-size: 17px; letter-spacing: .22em; }
-  .cast-grid-lead { gap: 12px; }
-  .cast-grid-lead .cast-card { flex-basis: calc((100% - 12px) / 2); }
-  .cast-grid:not(.cast-grid-lead) { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .cast-grid { gap: 12px; }
+  .cast-grid .cast-card, .cast-grid-lead .cast-card { flex-basis: calc((100% - 12px) / 2); }
   .cast-body { padding: 40px 8px 14px; }
   .cast .cast-grid .cast-name { font-size: 20px; }
   .cast-photo::after { inset: 6px; }
