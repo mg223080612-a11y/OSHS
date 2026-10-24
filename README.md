@@ -26,11 +26,14 @@ js/main.js         상단바 배경 · 메뉴 열기/닫기 · 휴대폰에서 �
 images/            poster.jpg · hero.jpg(공유 미리보기) · logo-white.png · flag-ko.png
 downloads/         Home 다운로드 버튼 파일 : poster.jpg · invitation.jpg(앞·안쪽 한 장) · kakao-profile.jpg (같은 이름으로 덮어쓰면 교체)
 _redirects         예전 주소(/story, /production.html 등) → 새 주소로 이동 (Cloudflare Pages 규칙)
+_headers           보안 헤더 (HTTPS 강제 · CSP 등). 새 외부 서비스(스크립트 · 이미지 · 영상)를 붙이면 여기 CSP 에 주소 추가
+.assetsignore      Cloudflare 에 올리지 않을 파일 (.git · README 등 — 사이트 주소로 열리면 안 되는 것)
 favicon.ico · favicon-16/32.png · apple-touch-icon.png   (브라우저가 맨 위 폴더에서 찾으므로 여기 둠)
 ```
 
 ## 고칠 때 알아둘 것
 
+- **HTML 안에 <script> 를 직접 쓰지 마세요.** 보안 설정(CSP) 때문에 막힙니다. 스크립트는 js/ 에 파일로 만들어 <script src> 로 넣으세요.
 - **상단 메뉴 · 푸터는 5개 페이지에 똑같이 들어 있습니다.** 고칠 때는 5개 파일을 모두 고치세요.
   (지금 보고 있는 탭은 각 페이지의 메뉴 링크에 `class="active"` 로 표시)
 - **새 페이지 추가**: `pages/` 에 HTML(기존 페이지 복사) + `css/새페이지.css` 를 만들고, 5개 페이지 메뉴에 링크를 넣으세요.

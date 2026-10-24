@@ -1,0 +1,6 @@
+# Cloudflare 에 올릴 때 빼는 파일 (사이트 주소로 열리면 안 되는 것들)
+# 이게 없으면 .git 폴더가 그대로 올라가서 story.gvcs.kr/.git/config 처럼 저장소 전체를 내려받을 수 있음
+.git
+.gitignore
+.assetsignore
+README.md

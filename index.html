@@ -26,10 +26,9 @@
   <link rel="stylesheet" href="css/common.css" />
   <link rel="stylesheet" href="css/home.css" />
   <script src="js/fonts-wait.js"></script>
-  <!-- 예전 한 페이지 시절 주소(#production · #story · #history)로 들어오면 새 페이지로 이동 -->
-  <script>
-    if (/^#(production|story|history)$/.test(location.hash)) location.replace('pages/' + location.hash.slice(1) + '.html');
-  </script>
+  <!-- 예전 한 페이지 시절 주소(#production · #story · #history)로 들어오면 새 페이지로 이동
+       (보안 설정(CSP) 때문에 HTML 안에 직접 쓰는 스크립트는 막혀 있어서 파일로 분리) -->
+  <script src="js/legacy-redirect.js"></script>
 </head>
 <body data-page="home">
 
