@@ -44,6 +44,17 @@ document.addEventListener('keydown', (e) => {
     bar.appendChild(b);
   });
   document.body.appendChild(bar);
+
+  // 평소에는 숨어 있다가, 화면에 손가락을 대면 올라옴 → 손을 떼고 잠시 뒤 다시 내려감
+  const HIDE_AFTER = 2500;   // 손을 뗀 뒤 숨기까지 (ms)
+  let timer;
+  const show = () => { clearTimeout(timer); bar.classList.add('show'); };
+  const hideLater = () => { clearTimeout(timer); timer = setTimeout(() => bar.classList.remove('show'), HIDE_AFTER); };
+  window.addEventListener('touchstart', show, { passive: true });
+  window.addEventListener('touchend', hideLater, { passive: true });
+  window.addEventListener('touchcancel', hideLater, { passive: true });
+  bar.addEventListener('focusin', show);          // 키보드로 바에 들어오면 보이게
+  bar.addEventListener('focusout', hideLater);
 })();
 
 // ===== 휴대폰 : 맨 아래에서 한 번 더 당기면 다음 페이지로 (Home → Production → Story → Cast → History) =====

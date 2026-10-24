@@ -244,7 +244,11 @@ img { max-width: 100%; }
     background: rgba(19, 14, 39, .96); backdrop-filter: blur(10px);
     border-top: 1px solid var(--line);
     padding-bottom: env(safe-area-inset-bottom);   /* 아이폰 홈 막대 자리 */
+    /* 평소에는 화면 아래로 숨김, 손가락을 대면(.show) 올라옴 */
+    transform: translateY(100%); visibility: hidden;
+    transition: transform .3s ease, visibility .3s;
   }
+  .bottom-nav.show { transform: none; visibility: visible; }
   .bottom-nav a {
     position: relative; height: 56px;
     display: flex; align-items: center; justify-content: center;
