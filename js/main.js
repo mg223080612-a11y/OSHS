@@ -29,3 +29,46 @@ document.addEventListener('keydown', (e) => {
 });
 
 // (상단 메뉴의 밑줄은 각 페이지 HTML 에 class="active" 로 직접 적혀 있습니다)
+
+// ===== 휴대폰 : 맨 아래에서 한 번 더 당기면 다음 페이지로 (Home → Production → Story → Cast → History) =====
+// 화면이 860px 이하일 때만 작동. 맨 아래에 '다음 페이지' 안내가 생기고,
+// 끝까지 내린 상태에서 손가락으로 더 끌어올리면 막대가 차오르다가, 다 차면 다음 페이지로 넘어갑니다.
+(() => {
+  const mobile = window.matchMedia('(max-width: 860px)');
+  const links = [...document.querySelectorAll('.gnb > a')];
+  const current = links.findIndex((a) => a.classList.contains('active'));
+  const next = links[current + 1];
+  if (!next) return;                                   // 마지막 페이지(History)는 다음이 없음
+
+  // 맨 아래 안내 (푸터 아래)
+  const hint = document.createElement('a');
+  hint.className = 'next-page';
+  hint.href = next.getAttribute('href');
+  hint.innerHTML = `<span class="np-label" data-i18n="nextHint">더 당겨서 다음 페이지로</span>
+    <span class="np-name">${next.textContent} <span aria-hidden="true">↓</span></span>
+    <span class="np-bar" aria-hidden="true"><i></i></span>`;
+  document.body.appendChild(hint);
+  if (document.documentElement.lang !== 'ko' && typeof applyLang === 'function') applyLang(document.documentElement.lang);
+  const fill = hint.querySelector('.np-bar i');
+
+  const PULL = 120;                                    // 이만큼(px) 더 끌어올리면 넘어감
+  const atBottom = () => window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+  let startY = null, progress = 0, going = false;
+  const setProgress = (p) => { progress = p; fill.style.transform = `scaleX(${p})`; hint.classList.toggle('ready', p >= 1); };
+  const go = () => { going = true; document.body.classList.add('page-leaving'); setTimeout(() => { location.href = hint.href; }, 250); };
+
+  window.addEventListener('touchstart', (e) => {
+    startY = (mobile.matches && !going && atBottom()) ? e.touches[0].clientY : null;
+  }, { passive: true });
+  window.addEventListener('touchmove', (e) => {
+    if (startY === null) return;
+    if (!atBottom()) { startY = null; setProgress(0); return; }
+    setProgress(Math.max(0, Math.min(1, (startY - e.touches[0].clientY) / PULL)));
+  }, { passive: true });
+  // 뒤로가기로 돌아왔을 때 흐려진 상태 그대로 남지 않게
+  window.addEventListener('pageshow', () => { going = false; document.body.classList.remove('page-leaving'); setProgress(0); });
+  window.addEventListener('touchend', () => {
+    if (startY !== null && progress >= 1) go(); else setProgress(0);
+    startY = null;
+  });
+})();

@@ -217,3 +217,21 @@ img { max-width: 100%; }
   .underline { stroke-dashoffset: 0; }   /* 그려지는 밑줄은 처음부터 다 그려진 상태로 */
   .video:hover img, .video:hover .play, .dl-btn:hover, .lang-btn:hover { transform: none; }
 }
+
+/* ===== 휴대폰 : 맨 아래 "다음 페이지" 안내 (js/main.js) ===== */
+.next-page { display: none; }
+@media (max-width: 860px) {
+  .next-page {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 22px 20px 40px; text-align: center;
+    background: var(--bg); border-top: 1px solid var(--line);
+  }
+  .np-label { font-size: 12px; color: var(--muted); letter-spacing: .04em; }
+  .np-name { font-family: var(--display); font-size: 22px; letter-spacing: .12em; color: var(--apricot-soft); }
+  .np-bar { width: 120px; height: 2px; margin-top: 6px; background: var(--line); overflow: hidden; }
+  .np-bar i { display: block; height: 100%; background: var(--apricot); transform: scaleX(0); transform-origin: left; transition: transform .08s linear; }
+  .next-page.ready .np-name { color: var(--apricot); }
+  /* 넘어갈 때 화면이 살짝 흐려짐 */
+  body > * { transition: opacity .25s ease; }
+  .page-leaving > * { opacity: 0; }
+}
