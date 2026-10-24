@@ -30,32 +30,6 @@ document.addEventListener('keydown', (e) => {
 
 // (상단 메뉴의 밑줄은 각 페이지 HTML 에 class="active" 로 직접 적혀 있습니다)
 
-// ===== 휴대폰 : 화면 아래에 늘 떠 있는 페이지 이동 바 (Home · Production · Story · Cast · History) =====
-// 상단 메뉴 링크를 그대로 복사해서 만듭니다. 그래서 메뉴를 고치면 이 바도 같이 바뀝니다. (860px 이하에서만 보임)
-(() => {
-  const bar = document.createElement('nav');
-  bar.className = 'bottom-nav';
-  bar.setAttribute('aria-label', '페이지 이동');
-  document.querySelectorAll('.gnb > a').forEach((a) => {
-    const b = document.createElement('a');
-    b.href = a.getAttribute('href');
-    b.textContent = a.textContent;
-    if (a.classList.contains('active')) { b.className = 'active'; b.setAttribute('aria-current', 'page'); }
-    bar.appendChild(b);
-  });
-  document.body.appendChild(bar);
-
-  // 평소에는 숨어 있다가, 화면에 손가락을 대면 올라옴 → 손을 떼고 잠시 뒤 다시 내려감
-  const HIDE_AFTER = 2500;   // 손을 뗀 뒤 숨기까지 (ms)
-  let timer;
-  const show = () => { clearTimeout(timer); bar.classList.add('show'); };
-  const hideLater = () => { clearTimeout(timer); timer = setTimeout(() => bar.classList.remove('show'), HIDE_AFTER); };
-  window.addEventListener('touchstart', show, { passive: true });
-  window.addEventListener('touchend', hideLater, { passive: true });
-  window.addEventListener('touchcancel', hideLater, { passive: true });
-  bar.addEventListener('focusin', show);          // 키보드로 바에 들어오면 보이게
-  bar.addEventListener('focusout', hideLater);
-})();
 
 // ===== 휴대폰 : 맨 아래에서 한 번 더 당기면 다음 페이지로 (Home → Production → Story → Cast → History) =====
 // 화면이 860px 이하일 때만 작동. 맨 아래에 '다음 페이지' 안내가 생기고,

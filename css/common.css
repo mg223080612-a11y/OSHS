@@ -234,33 +234,3 @@ img { max-width: 100%; }
   body > * { transition: opacity .25s ease; }
   .page-leaving > * { opacity: 0; }
 }
-
-/* ===== 휴대폰 : 화면 아래 페이지 이동 바 (js/main.js) ===== */
-.bottom-nav { display: none; }
-@media (max-width: 860px) {
-  .bottom-nav {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
-    display: grid; grid-template-columns: repeat(5, 1fr);
-    background: rgba(19, 14, 39, .96); backdrop-filter: blur(10px);
-    border-top: 1px solid var(--line);
-    padding-bottom: env(safe-area-inset-bottom);   /* 아이폰 홈 막대 자리 */
-    /* 평소에는 화면 아래로 숨김, 손가락을 대면(.show) 올라옴 */
-    transform: translateY(100%); visibility: hidden;
-    transition: transform .3s ease, visibility .3s;
-  }
-  .bottom-nav.show { transform: none; visibility: visible; }
-  .bottom-nav a {
-    position: relative; height: 56px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--serif); font-size: 12.5px; letter-spacing: .02em;
-    color: var(--muted);
-  }
-  .bottom-nav a.active { color: var(--apricot-soft); }
-  /* 지금 페이지 : 위쪽에 짧은 금색 줄 */
-  .bottom-nav a.active::before {
-    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-    width: 26px; height: 2px; background: var(--apricot);
-  }
-  /* 바가 맨 아래 내용(푸터 · 다음 페이지 안내)을 가리지 않게 */
-  body { padding-bottom: calc(56px + env(safe-area-inset-bottom)); }
-}
