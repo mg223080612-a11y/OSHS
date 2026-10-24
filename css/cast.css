@@ -102,14 +102,11 @@
 .cast-desc p { font-size: 16px; line-height: 1.9; text-wrap: balance; }
 .cast-card.open .cast-desc { opacity: 1; visibility: visible; }
 
-/* ----- 앙상블 : 배역 이름만 글자로, 가운데에 · 로 구분 ----- */
-.cast-others {
-  list-style: none;
-  display: flex; flex-wrap: wrap; justify-content: center; row-gap: 10px;
-  max-width: 820px; margin: 0 auto;
-}
-.cast-others li { font-weight: 400; font-size: 17px; letter-spacing: .02em; white-space: nowrap; }
-.cast-others li + li::before { content: '·'; margin: 0 18px; color: var(--apricot); }
+/* ----- 앙상블 7명 : 조연보다 조금 작은 카드, 한 줄에 4칸 (4 + 3) ----- */
+.cast-grid-ens { max-width: 860px; margin: 0 auto; gap: 20px; }
+.cast-grid-ens .cast-card { flex-basis: calc((100% - 60px) / 4); }
+.cast .cast-grid-ens .cast-name { font-size: 22px; }
+.cast-grid-ens .cast-actor { font-size: 13px; }
 
 /* '동작 줄이기'를 켠 기기 : 카드가 떠오르거나 사진이 커지지 않게 */
 @media (prefers-reduced-motion: reduce) {
@@ -137,9 +134,10 @@
   .cast-desc p { font-size: 12px; line-height: 1.65; }
   .cast-card.open .cast-body { opacity: 0; }
   .cast-body { transition: opacity .3s ease; }
-  /* 휴대폰은 한 줄에 다 안 들어가서 · 대신 가운데 정렬 2칸 (줄 맨 앞에 · 가 오는 것 방지) */
-  .cast-others { display: grid; grid-template-columns: auto auto; justify-content: center; row-gap: 10px; column-gap: 32px; max-width: 260px; text-align: center; }   /* 칸 너비를 이름 길이만큼만 → 두 이름 사이가 가깝게 */
-  .cast-others li { font-size: 15px; white-space: normal; }   /* 긴 번역은 줄바꿈 */
-  .cast-others li + li::before { content: none; }
-  .cast-others li:last-child:nth-child(odd) { grid-column: 1 / -1; }   /* 마지막 하나가 남으면 가운데로 */
+  /* 앙상블은 3칸씩 작게 */
+  .cast-grid-ens { gap: 8px; }
+  .cast-grid-ens .cast-card { flex-basis: calc((100% - 16px) / 3); }
+  .cast .cast-grid-ens .cast-name { font-size: 16px; overflow-wrap: anywhere; }   /* 긴 번역도 카드 안에서 줄바꿈 */
+  .cast-grid-ens .cast-actor { font-size: 11.5px; margin-top: 4px; }
+  .cast-grid-ens .cast-body { padding: 30px 4px 10px; }
 }
