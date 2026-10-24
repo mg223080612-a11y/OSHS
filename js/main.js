@@ -30,6 +30,22 @@ document.addEventListener('keydown', (e) => {
 
 // (상단 메뉴의 밑줄은 각 페이지 HTML 에 class="active" 로 직접 적혀 있습니다)
 
+// ===== 휴대폰 : 화면 아래에 늘 떠 있는 페이지 이동 바 (Home · Production · Story · Cast · History) =====
+// 상단 메뉴 링크를 그대로 복사해서 만듭니다. 그래서 메뉴를 고치면 이 바도 같이 바뀝니다. (860px 이하에서만 보임)
+(() => {
+  const bar = document.createElement('nav');
+  bar.className = 'bottom-nav';
+  bar.setAttribute('aria-label', '페이지 이동');
+  document.querySelectorAll('.gnb > a').forEach((a) => {
+    const b = document.createElement('a');
+    b.href = a.getAttribute('href');
+    b.textContent = a.textContent;
+    if (a.classList.contains('active')) { b.className = 'active'; b.setAttribute('aria-current', 'page'); }
+    bar.appendChild(b);
+  });
+  document.body.appendChild(bar);
+})();
+
 // ===== 휴대폰 : 맨 아래에서 한 번 더 당기면 다음 페이지로 (Home → Production → Story → Cast → History) =====
 // 화면이 860px 이하일 때만 작동. 맨 아래에 '다음 페이지' 안내가 생기고,
 // 끝까지 내린 상태에서 손가락으로 더 끌어올리면 막대가 차오르다가, 다 차면 다음 페이지로 넘어갑니다.
@@ -44,11 +60,9 @@ document.addEventListener('keydown', (e) => {
   const hint = document.createElement('a');
   hint.className = 'next-page';
   hint.href = next.getAttribute('href');
-  hint.innerHTML = `<span class="np-label" data-i18n="nextHint">더 당겨서 다음 페이지로</span>
-    <span class="np-name">${next.textContent} <span aria-hidden="true">↓</span></span>
+  hint.innerHTML = `<span class="np-name">${next.textContent} <span aria-hidden="true">↓</span></span>
     <span class="np-bar" aria-hidden="true"><i></i></span>`;
   document.body.appendChild(hint);
-  if (document.documentElement.lang !== 'ko' && typeof applyLang === 'function') applyLang(document.documentElement.lang);
   const fill = hint.querySelector('.np-bar i');
 
   const PULL = 120;                                    // 이만큼(px) 더 끌어올리면 넘어감

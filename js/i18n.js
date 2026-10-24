@@ -20,7 +20,6 @@ const TEXT = {
     s5: 'Through understanding, loving, and reconciling with one another, they come to realize that what they were creating was more than just a show. Into their story (<b>Our Story</b>) had been flowing His story (<b>His Story</b>), the One who brings about love and reconciliation.',
     s6: 'And the single story written together by people so different finally moves toward a new history (<b>History</b>) that dreams of peace on the Korean Peninsula and reunification through the Gospel.',
     invite: 'On November 21, we invite you to the Youth Arts Festival',
-    nextHint: 'Pull up for the next page',
     // ----- Cast 페이지 -----
     castLead: 'Lead',
     castSupport: 'Supporting',
@@ -57,7 +56,6 @@ const TEXT = {
     s5: 'Dalam proses saling memahami, mengasihi, dan berdamai, mereka menyadari bahwa yang mereka ciptakan bukan sekadar sebuah pertunjukan. Ke dalam kisah mereka (<b>Our Story</b>) telah meresap kisah-Nya (<b>His Story</b>), Dia yang mewujudkan kasih dan pendamaian.',
     s6: 'Dan satu kisah yang ditulis bersama oleh orang-orang yang berbeda akhirnya melangkah menuju sejarah baru (<b>History</b>) yang memimpikan perdamaian di Semenanjung Korea dan penyatuan melalui Injil.',
     invite: 'Pada 21 November, kami mengundang Anda ke Festival Seni Remaja',
-    nextHint: 'Tarik ke atas untuk halaman berikutnya',
     // ----- Cast 페이지 -----
     castLead: 'Pemeran utama',
     castSupport: 'Pemeran pendukung',
@@ -94,7 +92,6 @@ const TEXT = {
     s5: 'Ингэж бие биенээ ойлгож, хайрлаж, эвлэрэх явцдаа тэд өөрсдийн бүтээж буй зүйл зүгээр нэг тоглолт биш байсныг ухаарна. Тэдний түүхэнд (<b>Our Story</b>) хайр ба эвлэрлийг бүтээгч Түүний түүх (<b>His Story</b>) шингэж байсан юм.',
     s6: 'Өөр өөр хүмүүсийн хамтдаа бичсэн нэгэн түүх эцэст нь Солонгосын хойгийн энх тайван, сайн мэдээгээр нэгдэхийг мөрөөдсөн шинэ түүх (<b>History</b>) рүү алхана.',
     invite: '11-р сарын 21-нд Залуучуудын урлагийн наадамд таныг урьж байна',
-    nextHint: 'Дараагийн хуудас руу дээш татна уу',
     // ----- Cast 페이지 -----
     castLead: 'Гол дүр',
     castSupport: 'Туслах дүр',
@@ -131,7 +128,6 @@ const TEXT = {
     s5: '在彼此理解、相爱、和好的过程中，他们渐渐明白，自己所创作的并不只是一场演出。在我们的故事（<b>Our Story</b>）里，成就爱与和好的祂的故事（<b>His Story</b>）早已悄然渗透其中。',
     s6: '由不同的人共同写下的这个故事，最终迈向梦想朝鲜半岛和平与福音统一的新历史（<b>History</b>）。',
     invite: '11月21日，诚邀您来到青少年艺术节',
-    nextHint: '继续上滑进入下一页',
     // ----- Cast 페이지 -----
     castLead: '主演',
     castSupport: '配角',
@@ -168,7 +164,6 @@ const TEXT = {
     s5: 'Indem sie einander verstehen, lieben und sich versöhnen, erkennen sie, dass das, was sie erschaffen, mehr ist als nur eine Aufführung. In ihre Geschichte (<b>Our Story</b>) war längst Seine Geschichte (<b>His Story</b>) eingeflossen – die Geschichte dessen, der Liebe und Versöhnung wirkt.',
     s6: 'Und die eine Geschichte, die so verschiedene Menschen gemeinsam geschrieben haben, bewegt sich schließlich auf eine neue Geschichte (<b>History</b>) zu, die vom Frieden auf der koreanischen Halbinsel und der Wiedervereinigung durch das Evangelium träumt.',
     invite: 'Am 21. November laden wir Sie herzlich zum Jugendkunstfestival ein',
-    nextHint: 'Weiter nach oben ziehen für die nächste Seite',
     // ----- Cast 페이지 -----
     castLead: 'Hauptrollen',
     castSupport: 'Nebenrollen',
@@ -205,7 +200,6 @@ const TEXT = {
     s5: 'Al comprenderse, amarse y reconciliarse, descubren que lo que estaban creando era mucho más que una obra. En su historia (<b>Our Story</b>) se había ido filtrando Su historia (<b>His Story</b>), la de Aquel que obra el amor y la reconciliación.',
     s6: 'Y la historia que escribieron juntos personas tan distintas avanza, por fin, hacia una nueva historia (<b>History</b>) que sueña con la paz en la península coreana y la reunificación a través del Evangelio.',
     invite: 'El 21 de noviembre, te invitamos al Festival Juvenil de las Artes',
-    nextHint: 'Desliza hacia arriba para la página siguiente',
     // ----- Cast 페이지 -----
     castLead: 'Protagonistas',
     castSupport: 'Reparto',
