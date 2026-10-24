@@ -20,13 +20,24 @@
     radial-gradient(ellipse 80% 60% at 20% 60%, rgba(59, 37, 88, .55), transparent 70%),
     linear-gradient(180deg, #0c0915 0%, #140d1c 55%, #1a1020 75%, var(--bg) 100%);
 }
-/* 위에서 비스듬히 떨어지는 조명 */
+/* 위에서 떨어지는 조명
+   모양(사다리꼴)을 먼저 자른 뒤(::before) 바깥 .spot 에서 흐리게 해야 가장자리가 부드럽게 퍼짐
+   (같은 요소에서 흐림 → 자르기 순서가 되면 가장자리가 칼로 자른 듯 딱딱해짐) */
 .spot {
-  background: linear-gradient(180deg, rgba(255, 214, 150, .55), rgba(240, 180, 100, .12) 55%, transparent 85%);
-  clip-path: polygon(46% 0, 54% 0, 72% 100%, 28% 100%);  /* 무대 가운데 조명 */
   filter: blur(28px);
   mix-blend-mode: screen;
   animation: flicker 6s ease-in-out infinite;
+}
+.spot::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(255, 214, 150, .55), rgba(240, 180, 100, .14) 50%, transparent 82%);
+  clip-path: polygon(46% 0, 54% 0, 72% 100%, 28% 100%);  /* 무대 가운데 조명 */
+}
+/* 조명이 시작되는 곳의 은은한 빛 번짐 */
+.spot::after {
+  content: ''; position: absolute; left: 50%; top: -80px;
+  width: 360px; height: 200px; transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(255, 222, 175, .5), transparent 70%);
 }
 @keyframes flicker { 50% { opacity: .8; } }
 /* 양쪽 보라색 막 (오른쪽 기준으로 그리고, 왼쪽은 좌우 반전) */
@@ -193,4 +204,16 @@
     white-space: normal; text-align: center; line-height: 1.25;
     padding: 11px 6px; font-size: 13px; letter-spacing: .04em;
   }
+}
+
+/* ----- 휴대폰 : 양옆 보라색 커튼 없애고, 조명은 넓고 은은하게 ----- */
+@media (max-width: 600px) {
+  .stage .curtain { display: none; }
+  .hero-inner { padding-left: 20px; padding-right: 20px; }   /* 커튼 자리만큼 비워 두던 여백 없앰 */
+  .spot { filter: blur(36px); }
+  .spot::before {
+    clip-path: polygon(36% 0, 64% 0, 100% 100%, 0 100%);   /* 세로 화면이라 빛을 아래로 넓게 퍼뜨림 */
+    background: linear-gradient(180deg, rgba(255, 214, 150, .42), rgba(240, 180, 100, .12) 45%, transparent 78%);
+  }
+  .spot::after { width: 280px; height: 170px; top: -70px; }
 }
