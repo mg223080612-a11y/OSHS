@@ -105,3 +105,30 @@
   .lu-sub { grid-template-columns: 64px 1fr; gap: 8px; }
   .lu-sub .lu-names { font-size: 13px; }
 }
+
+/* =====================================================================
+   Special Thanks to : 영화 엔딩 크레딧처럼 가운데 선을 기준으로 왼쪽 맡은 일 · 오른쪽 이름
+   ===================================================================== */
+.thanks { max-width: 760px; margin: 0 auto; padding: 40px 20px 130px; text-align: center; }
+.thanks-head {
+  margin: 0 0 44px;
+  font-family: 'Kaushan Script', cursive; font-weight: 400;
+  font-size: clamp(32px, 4vw, 42px); color: var(--apricot-soft);
+}
+.th-list { margin: 0; }
+.th-row { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; padding: 9px 0; align-items: baseline; }
+.th-row dt { text-align: right; font-size: 13.5px; letter-spacing: .04em; color: var(--apricot-soft); opacity: .85; }
+.th-row dd { text-align: left; margin: 0; font-size: 16px; font-weight: 500; }
+.th-row dd > span { display: inline-block; margin-right: 14px; }
+.th-row dd > span:last-child { margin-right: 0; }
+.th-row dd small { margin-left: 5px; font-size: 11.5px; font-weight: 400; color: var(--apricot-soft); opacity: .8; }
+
+/* 휴대폰 : 맡은 일 위, 이름 아래 (가운데 정렬) */
+@media (max-width: 600px) {
+  .thanks { padding: 24px 16px 100px; }
+  .thanks-head { margin-bottom: 32px; }
+  .th-row { grid-template-columns: 1fr; gap: 2px; padding: 10px 0; }
+  .th-row dt, .th-row dd { text-align: center; }
+  .th-row dt { font-size: 12.5px; }
+  .th-row dd { font-size: 15px; }
+}

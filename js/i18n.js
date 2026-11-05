@@ -26,6 +26,9 @@ const TEXT = {
     castOthers: 'Ensemble',
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: 'Full Lineup', pActor: 'Actors', luStage: 'Stage', luMedia: 'Media & Promotion', luExhibit: 'Exhibition',
+    // Crew 페이지 Special Thanks to (맡은 일)
+    thMusical: 'Musical', thBackdrop: 'Stage Backdrop', thBudget: 'Budget & Accounting', thDesign: 'Poster & Promotional Design', thOutreach: 'Community Outreach', thSchedule: 'Scheduling',
+    thSongs: 'Lyrics & Music', thScript: 'Script', thDirect: 'Director', thGeneral: 'Executive Producer', thG12: 'Grade 12',
     // Scenes 페이지 (장면 이름)
     tkdTeam: 'Taekwondo Demo Team',
     scOp: 'Opening', sc1: 'A New Day', sc2: 'The Transfer Student', sc3: 'The First Meeting', sc4: 'Haven’t We Met Before?', sc5: 'We Need People', sc6: 'Recruiting', sc7: 'The First Rehearsal', sc8: 'Where I Live', sc9: 'The Second Rehearsal',
@@ -69,6 +72,9 @@ const TEXT = {
     castOthers: 'Ansambel',
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: 'Daftar Lengkap', pActor: 'Pemeran', luStage: 'Panggung', luMedia: 'Media & Promosi', luExhibit: 'Pameran',
+    // Crew 페이지 Special Thanks to (맡은 일)
+    thMusical: 'Musikal', thBackdrop: 'Latar Panggung', thBudget: 'Anggaran & Akuntansi', thDesign: 'Desain Poster & Promosi', thOutreach: 'Promosi Luar Sekolah', thSchedule: 'Pengelolaan Jadwal',
+    thSongs: 'Lirik & Musik', thScript: 'Naskah', thDirect: 'Sutradara', thGeneral: 'Penanggung Jawab Umum', thG12: 'Kelas 12',
     // Scenes 페이지 (장면 이름)
     tkdTeam: 'Tim Demonstrasi Taekwondo',
     scOp: 'Pembukaan', sc1: 'Hari Baru', sc2: 'Murid Pindahan', sc3: 'Rapat Pertama', sc4: 'Pernah Bertemu?', sc5: 'Butuh Orang', sc6: 'Merekrut', sc7: 'Latihan Pertama', sc8: 'Tempat Tinggalku', sc9: 'Latihan Kedua',
@@ -112,6 +118,9 @@ const TEXT = {
     castOthers: 'Ансамбль',
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: 'Бүх оролцогчид', pActor: 'Жүжигчид', luStage: 'Тайз', luMedia: 'Медиа ба сурталчилгаа', luExhibit: 'Үзэсгэлэн',
+    // Crew 페이지 Special Thanks to (맡은 일)
+    thMusical: 'Мюзикл', thBackdrop: 'Тайзны чимэглэл', thBudget: 'Төсөв, санхүү', thDesign: 'Зурагт хуудас, сурталчилгааны дизайн', thOutreach: 'Сургуулийн гаднах сурталчилгаа', thSchedule: 'Хуваарь зохион байгуулалт',
+    thSongs: 'Үг, ая', thScript: 'Зохиол', thDirect: 'Найруулагч', thGeneral: 'Ерөнхий удирдагч', thG12: '12-р анги',
     // Scenes 페이지 (장면 이름)
     tkdTeam: 'Таеквондогийн үзүүлэх баг',
     scOp: 'Нээлт', sc1: 'Шинэ өдөр', sc2: 'Шилжиж ирсэн сурагч', sc3: 'Анхны хурал', sc4: 'Бид уулзаж байсан уу?', sc5: 'Хүн хэрэгтэй', sc6: 'Урилга', sc7: 'Анхны бэлтгэл', sc8: 'Миний амьдардаг газар', sc9: 'Хоёр дахь бэлтгэл',
@@ -155,6 +164,9 @@ const TEXT = {
     castOthers: '群演',
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: '全体阵容', pActor: '演员', luStage: '舞台', luMedia: '媒体与宣传', luExhibit: '展览',
+    // Crew 페이지 Special Thanks to (맡은 일)
+    thMusical: '音乐剧', thBackdrop: '舞台背景', thBudget: '预算与会计', thDesign: '海报与宣传品设计', thOutreach: '校外宣传', thSchedule: '日程管理',
+    thSongs: '作词 · 作曲', thScript: '剧本', thDirect: '导演', thGeneral: '总负责', thG12: '12年级',
     // Scenes 페이지 (장면 이름)
     tkdTeam: '跆拳道表演队',
     scOp: '序幕', sc1: '新的一天', sc2: '转学生', sc3: '第一次会议', sc4: '原来见过？', sc5: '需要人手', sc6: '邀请', sc7: '第一次彩排', sc8: '我住的地方', sc9: '第二次彩排',
@@ -198,6 +210,9 @@ const TEXT = {
     castOthers: 'Ensemble',
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: 'Alle Mitwirkenden', pActor: 'Darsteller', luStage: 'Bühne', luMedia: 'Medien & Werbung', luExhibit: 'Ausstellung',
+    // Crew 페이지 Special Thanks to (맡은 일)
+    thMusical: 'Musical', thBackdrop: 'Bühnenbild', thBudget: 'Budget & Buchhaltung', thDesign: 'Plakat- & Werbedesign', thOutreach: 'Öffentlichkeitsarbeit', thSchedule: 'Terminplanung',
+    thSongs: 'Text & Musik', thScript: 'Drehbuch', thDirect: 'Regie', thGeneral: 'Gesamtleitung', thG12: '12. Klasse',
     // Scenes 페이지 (장면 이름)
     tkdTeam: 'Taekwondo-Showteam',
     scOp: 'Eröffnung', sc1: 'Ein neuer Tag', sc2: 'Neu an der Schule', sc3: 'Das erste Treffen', sc4: 'Kennen wir uns nicht?', sc5: 'Wir brauchen Leute', sc6: 'Anwerbung', sc7: 'Die erste Probe', sc8: 'Wo ich lebe', sc9: 'Die zweite Probe',
@@ -241,6 +256,9 @@ const TEXT = {
     castOthers: 'Ensamble',
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: 'Elenco completo', pActor: 'Actores', luStage: 'Escenario', luMedia: 'Medios y promoción', luExhibit: 'Exposición',
+    // Crew 페이지 Special Thanks to (맡은 일)
+    thMusical: 'Musical', thBackdrop: 'Escenografía de fondo', thBudget: 'Presupuesto y contabilidad', thDesign: 'Diseño de cartel y material promocional', thOutreach: 'Promoción externa', thSchedule: 'Gestión del calendario',
+    thSongs: 'Letra y música', thScript: 'Guion', thDirect: 'Dirección', thGeneral: 'Dirección general', thG12: '12.º grado',
     // Scenes 페이지 (장면 이름)
     tkdTeam: 'Equipo de exhibición de taekwondo',
     scOp: 'Apertura', sc1: 'Un nuevo día', sc2: 'Recién llegado', sc3: 'La primera reunión', sc4: '¿Ya nos conocíamos?', sc5: 'Necesitamos gente', sc6: 'Reclutamiento', sc7: 'El primer ensayo', sc8: 'Donde vivo', sc9: 'El segundo ensayo',
