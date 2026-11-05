@@ -5,6 +5,7 @@
 #   - 스크립트 · 스타일 · 이미지 : 이 사이트 자신('self')
 #   - 글꼴 : Google Fonts (fonts.googleapis.com · fonts.gstatic.com)
 #   - 영상 : 유튜브 (youtube-nocookie.com), 썸네일 (i.ytimg.com)
+#   - 방문자 통계 : Cloudflare Web Analytics (cloudflareinsights.com) — Cloudflare 가 페이지에 자동으로 넣는 스크립트
 #   새 외부 서비스를 붙이면 여기에 주소를 추가해야 동작합니다.
 #   ※ HTML 안에 <script> 를 직접 쓰면 막힙니다. 스크립트는 js/ 파일로 만드세요.
 
@@ -16,4 +17,4 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Resource-Policy: same-origin
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://i.ytimg.com; frame-src https://www.youtube-nocookie.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://i.ytimg.com; frame-src https://www.youtube-nocookie.com; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
