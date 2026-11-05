@@ -27,7 +27,7 @@ const TEXT = {
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: 'Full Lineup', pActor: 'Actors', luStage: 'Stage', luMedia: 'Media & Promotion', luExhibit: 'Exhibition',
     pBand: 'Band', pOrch: 'Orchestra', pVocal: 'Vocal Ensemble', pChoir: 'Choir', pTkd: 'Taekwondo', pDance: 'Dance', pBuild: 'Set Construction', pProps: 'Props', pCostume: 'Costumes', pMakeup: 'Makeup', pCrew: 'Stage Crew', pVideo: 'Video & Photo', pPromo: 'Promotion Team', pOnline: 'Online Promotion', pVisual: 'Visuals & Subtitles', pExhibit: 'Art Exhibition',
-    iVn: 'Violin', iVa: 'Viola', iOb: 'Oboe', iVc: 'Cello', iCl: 'Clarinet', iFl: 'Flute', iPf: 'Piano',
+    oConcert: 'Concertmaster', oPrincipal: 'Principal',
     rYoung: 'Young Seolwoo',
     rFather: 'Seolwoo’s father',
     rMother: 'Seolwoo’s mother',
@@ -67,7 +67,7 @@ const TEXT = {
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: 'Daftar Lengkap', pActor: 'Pemeran', luStage: 'Panggung', luMedia: 'Media & Promosi', luExhibit: 'Pameran',
     pBand: 'Band', pOrch: 'Orkestra', pVocal: 'Grup Vokal', pChoir: 'Paduan Suara', pTkd: 'Taekwondo', pDance: 'Tari', pBuild: 'Konstruksi Panggung', pProps: 'Properti', pCostume: 'Kostum', pMakeup: 'Tata Rias', pCrew: 'Kru Panggung', pVideo: 'Video & Foto', pPromo: 'Tim Promosi', pOnline: 'Promosi Daring', pVisual: 'Visual & Subtitel', pExhibit: 'Pameran Karya',
-    iVn: 'Biola', iVa: 'Viola', iOb: 'Obo', iVc: 'Selo', iCl: 'Klarinet', iFl: 'Flute', iPf: 'Piano',
+    oConcert: 'Concertmaster', oPrincipal: 'Prinsipal',
     rYoung: 'Seolwoo kecil',
     rFather: 'Ayah Seolwoo',
     rMother: 'Ibu Seolwoo',
@@ -107,7 +107,7 @@ const TEXT = {
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: 'Бүх оролцогчид', pActor: 'Жүжигчид', luStage: 'Тайз', luMedia: 'Медиа ба сурталчилгаа', luExhibit: 'Үзэсгэлэн',
     pBand: 'Хамтлаг', pOrch: 'Оркестр', pVocal: 'Дуучдын чуулга', pChoir: 'Найрал дуу', pTkd: 'Таеквондо', pDance: 'Бүжиг', pBuild: 'Тайзны угсралт', pProps: 'Тайзны эд зүйлс', pCostume: 'Хувцас', pMakeup: 'Будалт', pCrew: 'Тайзны баг', pVideo: 'Видео ба зураг', pPromo: 'Сурталчилгааны баг', pOnline: 'Онлайн сурталчилгаа', pVisual: 'Дэлгэцийн зураг ба хадмал', pExhibit: 'Бүтээлийн үзэсгэлэн',
-    iVn: 'Хийл', iVa: 'Альт', iOb: 'Гобой', iVc: 'Виолончель', iCl: 'Кларнет', iFl: 'Лимбэ', iPf: 'Төгөлдөр хуур',
+    oConcert: 'Концертмейстер', oPrincipal: 'Ахлах',
     rYoung: 'Бага насны Seolwoo',
     rFather: 'Seolwoo-гийн аав',
     rMother: 'Seolwoo-гийн ээж',
@@ -147,7 +147,7 @@ const TEXT = {
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: '全体阵容', pActor: '演员', luStage: '舞台', luMedia: '媒体与宣传', luExhibit: '展览',
     pBand: '乐队', pOrch: '管弦乐团', pVocal: '重唱', pChoir: '合唱', pTkd: '跆拳道', pDance: '舞蹈', pBuild: '舞台制作', pProps: '舞台道具', pCostume: '服装', pMakeup: '化妆', pCrew: '舞台工作人员', pVideo: '摄影摄像', pPromo: '宣传组', pOnline: '线上宣传', pVisual: '背景影像与字幕', pExhibit: '作品展览',
-    iVn: '小提琴', iVa: '中提琴', iOb: '双簧管', iVc: '大提琴', iCl: '单簧管', iFl: '长笛', iPf: '钢琴',
+    oConcert: '首席', oPrincipal: '声部首席',
     rYoung: '小时候的 Seolwoo',
     rFather: 'Seolwoo 的父亲',
     rMother: 'Seolwoo 的母亲',
@@ -187,7 +187,7 @@ const TEXT = {
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: 'Alle Mitwirkenden', pActor: 'Darsteller', luStage: 'Bühne', luMedia: 'Medien & Werbung', luExhibit: 'Ausstellung',
     pBand: 'Band', pOrch: 'Orchester', pVocal: 'Vokalensemble', pChoir: 'Chor', pTkd: 'Taekwondo', pDance: 'Tanz', pBuild: 'Bühnenbau', pProps: 'Requisite', pCostume: 'Kostüme', pMakeup: 'Maske', pCrew: 'Bühnencrew', pVideo: 'Video & Foto', pPromo: 'Werbeteam', pOnline: 'Online-Werbung', pVisual: 'Videohintergrund & Untertitel', pExhibit: 'Werkausstellung',
-    iVn: 'Violine', iVa: 'Bratsche', iOb: 'Oboe', iVc: 'Cello', iCl: 'Klarinette', iFl: 'Flöte', iPf: 'Klavier',
+    oConcert: 'Konzertmeister', oPrincipal: 'Stimmführer',
     rYoung: 'Seolwoo als Kind',
     rFather: 'Seolwoos Vater',
     rMother: 'Seolwoos Mutter',
@@ -227,7 +227,7 @@ const TEXT = {
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: 'Elenco completo', pActor: 'Actores', luStage: 'Escenario', luMedia: 'Medios y promoción', luExhibit: 'Exposición',
     pBand: 'Banda', pOrch: 'Orquesta', pVocal: 'Conjunto vocal', pChoir: 'Coro', pTkd: 'Taekwondo', pDance: 'Danza', pBuild: 'Construcción de escenografía', pProps: 'Utilería', pCostume: 'Vestuario', pMakeup: 'Maquillaje', pCrew: 'Equipo de escena', pVideo: 'Vídeo y foto', pPromo: 'Equipo de promoción', pOnline: 'Promoción en línea', pVisual: 'Fondos visuales y subtítulos', pExhibit: 'Exposición de obras',
-    iVn: 'Violín', iVa: 'Viola', iOb: 'Oboe', iVc: 'Violonchelo', iCl: 'Clarinete', iFl: 'Flauta', iPf: 'Piano',
+    oConcert: 'Concertino', oPrincipal: 'Principal',
     rYoung: 'Seolwoo de pequeño',
     rFather: 'Padre de Seolwoo',
     rMother: 'Madre de Seolwoo',

@@ -206,6 +206,8 @@
 .lu-sub { display: grid; grid-template-columns: 76px 1fr; gap: 12px; align-items: baseline; margin-top: 10px; }
 .lu-sub-name { font-size: 12.5px; font-weight: 500; letter-spacing: .06em; color: var(--apricot-soft); }
 .lu-sub .lu-names { font-size: 14px; }
+/* 악장 · 수석 표시 */
+.lu-sub small { margin-left: 3px; font-size: 11.5px; color: var(--apricot-soft); opacity: .85; }
 /* 합창 (193명) : 이름이 많아서 사진 위 · 이름 아래로 넓게 */
 .lu-part.lu-wide { grid-template-columns: 1fr; gap: 28px; }
 .lu-part.lu-wide .lu-photo { order: 0; width: 100%; max-width: 820px; margin: 0 auto; }
