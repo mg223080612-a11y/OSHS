@@ -60,16 +60,23 @@
 /* ===== 시놉시스 ===== */
 .story {
   scroll-margin-top: 70px;   /* 줄거리 보기 버튼으로 내려왔을 때 상단바에 가리지 않게 */
-  /* 포스터의 물감 튄 느낌을 은은하게 */
-  background:
-    radial-gradient(circle at 8% 20%, rgba(240, 196, 107, .14) 0 3px, transparent 4px),
-    radial-gradient(circle at 14% 70%, rgba(240, 196, 107, .12) 0 5px, transparent 6px),
-    radial-gradient(circle at 88% 30%, rgba(240, 196, 107, .12) 0 4px, transparent 5px),
-    radial-gradient(circle at 92% 80%, rgba(240, 196, 107, .1) 0 6px, transparent 7px),
-    radial-gradient(ellipse at 50% 0%, var(--plum), transparent 70%),
-    var(--bg-soft);
+  position: relative; isolation: isolate;
   text-align: center;
-  padding: 80px 20px 110px;
+  padding: 60px 20px 110px;
+}
+/* 배경 : 포스터의 물감 튄 느낌을 은은하게.
+   위쪽은 점점 투명해지게 해서 위 공연 정보 부분과 끊기지 않고 이어짐 */
+.story::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(circle at 8% 30%, rgba(240, 196, 107, .14) 0 3px, transparent 4px),
+    radial-gradient(circle at 14% 72%, rgba(240, 196, 107, .12) 0 5px, transparent 6px),
+    radial-gradient(circle at 88% 36%, rgba(240, 196, 107, .12) 0 4px, transparent 5px),
+    radial-gradient(circle at 92% 82%, rgba(240, 196, 107, .1) 0 6px, transparent 7px),
+    radial-gradient(ellipse 70% 55% at 50% 22%, var(--plum), transparent 70%),
+    var(--bg-soft);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 260px);
+          mask-image: linear-gradient(180deg, transparent, #000 260px);
 }
 /* 줄거리 제목 : 위쪽 "2026 ON STAGE" 와 같은 모양 (가운데 + 노란 밑줄) */
 .story-head {
