@@ -192,16 +192,12 @@
   background: var(--apricot); opacity: .8;
 }
 .lu-part.no-photo .lu-name::after { margin-left: auto; margin-right: auto; }
-.lu-count { font-size: 15px; font-weight: 500; color: var(--apricot-soft); letter-spacing: .06em; margin-left: 4px; }
-.lu-count::after { content: ''; }
 
-/* 이름 목록 : 가운뎃점으로 이어지는 한 문단처럼 */
-.lu-names { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 0; font-size: 15px; line-height: 1.6; color: rgba(255, 255, 255, .86); }
+/* 이름 목록 : 이름 사이를 넓게 띄워 나열 */
+.lu-names { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 15px; line-height: 1.6; color: rgba(255, 255, 255, .86); }
 .lu-names li { white-space: nowrap; }
-.lu-names li:not(:last-child)::after { content: '·'; margin: 0 9px; color: rgba(240, 196, 107, .55); }
 /* 밴드 : 이름 아래 맡은 악기 */
 .lu-roles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 20px; }
-.lu-roles li::after { display: none; }
 .lu-roles small { display: block; font-size: 12px; letter-spacing: .08em; color: var(--apricot-soft); opacity: .85; }
 /* 오케스트라 : 악기별 */
 .lu-sub { display: grid; grid-template-columns: 76px 1fr; gap: 12px; align-items: baseline; margin-top: 10px; }
@@ -233,7 +229,7 @@
   .lineup { padding: 0 16px 100px; }
   .lu-name { font-size: 23px; margin-bottom: 14px; }
   .lu-names { font-size: 14px; }
-  .lu-names li:not(:last-child)::after { margin: 0 7px; }
+  .lu-names { column-gap: 16px; }
   .lu-photo::after { inset: 6px; }
   .lu-sub { grid-template-columns: 64px 1fr; gap: 8px; }
   .lu-sub .lu-names, .lu-more .lu-names { font-size: 13px; }
