@@ -31,7 +31,7 @@ document.addEventListener('keydown', (e) => {
 // (상단 메뉴의 밑줄은 각 페이지 HTML 에 class="active" 로 직접 적혀 있습니다)
 
 
-// ===== 휴대폰 : 맨 아래에서 한 번 더 당기면 다음 페이지로 (Home → Production → Story → Cast → History) =====
+// ===== 휴대폰 : 맨 아래에서 한 번 더 당기면 다음 페이지로 (Home → Production → Story → Cast → Crew → History) =====
 // 화면이 860px 이하일 때만 작동. 맨 아래에 '다음 페이지' 안내가 생기고,
 // 끝까지 내린 상태에서 손가락으로 더 끌어올리면 막대가 차오르다가, 다 차면 다음 페이지로 넘어갑니다.
 (() => {
