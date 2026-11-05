@@ -1,3 +1,9 @@
+// http:// 로 들어오면 https:// 로 바로 옮김 (주소창에 http 로 쳤을 때 암호화 안 된 화면이 보이지 않게)
+// (Cloudflare 설정의 Always Use HTTPS 를 켜면 서버에서 먼저 옮겨 주지만, 꺼져 있어도 여기서 한 번 더 막음)
+if (location.protocol === 'http:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+  location.replace('https:' + location.href.slice(5));
+}
+
 // 새로고침할 때 제목이 다른 글꼴로 잠깐 보였다가 바뀌는 것 막기
 // 제목에 쓰는 글꼴이 준비될 때까지 화면 내용을 잠깐 숨겼다가 한 번에 보여 줍니다.
 // 인터넷이 느려도 최대 2초 뒤에는 무조건 보여 줍니다.
