@@ -27,7 +27,7 @@ const TEXT = {
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: 'Full Lineup', pActor: 'Actors', luStage: 'Stage', luMedia: 'Media & Promotion', luExhibit: 'Exhibition',
     // Scenes 페이지 (장면 이름)
-    scenesHead: 'Scenes & Musical Numbers', tkdTeam: 'Taekwondo Demo Team',
+    tkdTeam: 'Taekwondo Demo Team',
     scOp: 'Opening', sc1: 'A New Day', sc2: 'The Transfer Student', sc3: 'The First Meeting', sc4: 'Haven’t We Met Before?', sc5: 'We Need People', sc6: 'Recruiting', sc7: 'The First Rehearsal', sc8: 'Where I Live', sc9: 'The Second Rehearsal',
     sc10: 'Cracks', sc11: 'Escape', sc12: 'Help', sc13: 'Parting Ways', sc15: 'The Hidden Story', sc16: 'Our Unification', sc17: 'Our Stage', sc18: 'I Won’t Hide Anymore', sc19: 'The Day We Meet Again',
     pBand: 'Band', pOrch: 'Orchestra', pVocal: 'Vocal Ensemble', pChoir: 'Choir', pTkd: 'Taekwondo', pDance: 'Dance', pBuild: 'Set Construction', pProps: 'Props', pCostume: 'Costumes', pMakeup: 'Makeup', pCrew: 'Stage Crew', pVideo: 'Video & Photo', pPromo: 'Promotion Team', pOnline: 'Online Promotion', pVisual: 'Visuals & Subtitles', pExhibit: 'Art Exhibition',
@@ -70,7 +70,7 @@ const TEXT = {
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: 'Daftar Lengkap', pActor: 'Pemeran', luStage: 'Panggung', luMedia: 'Media & Promosi', luExhibit: 'Pameran',
     // Scenes 페이지 (장면 이름)
-    scenesHead: 'Adegan & Lagu', tkdTeam: 'Tim Demonstrasi Taekwondo',
+    tkdTeam: 'Tim Demonstrasi Taekwondo',
     scOp: 'Pembukaan', sc1: 'Hari Baru', sc2: 'Murid Pindahan', sc3: 'Rapat Pertama', sc4: 'Pernah Bertemu?', sc5: 'Butuh Orang', sc6: 'Merekrut', sc7: 'Latihan Pertama', sc8: 'Tempat Tinggalku', sc9: 'Latihan Kedua',
     sc10: 'Retak', sc11: 'Pelarian', sc12: 'Pertolongan', sc13: 'Perpisahan', sc15: 'Kisah Tersembunyi', sc16: 'Penyatuan Kita', sc17: 'Panggung Kita', sc18: 'Aku Tak Akan Bersembunyi Lagi', sc19: 'Hari Kita Bertemu Lagi',
     pBand: 'Band', pOrch: 'Orkestra', pVocal: 'Grup Vokal', pChoir: 'Paduan Suara', pTkd: 'Taekwondo', pDance: 'Tari', pBuild: 'Konstruksi Panggung', pProps: 'Properti', pCostume: 'Kostum', pMakeup: 'Tata Rias', pCrew: 'Kru Panggung', pVideo: 'Video & Foto', pPromo: 'Tim Promosi', pOnline: 'Promosi Daring', pVisual: 'Visual & Subtitel', pExhibit: 'Pameran Karya',
@@ -113,7 +113,7 @@ const TEXT = {
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: 'Бүх оролцогчид', pActor: 'Жүжигчид', luStage: 'Тайз', luMedia: 'Медиа ба сурталчилгаа', luExhibit: 'Үзэсгэлэн',
     // Scenes 페이지 (장면 이름)
-    scenesHead: 'Үзэгдэл ба дуунууд', tkdTeam: 'Таеквондогийн үзүүлэх баг',
+    tkdTeam: 'Таеквондогийн үзүүлэх баг',
     scOp: 'Нээлт', sc1: 'Шинэ өдөр', sc2: 'Шилжиж ирсэн сурагч', sc3: 'Анхны хурал', sc4: 'Бид уулзаж байсан уу?', sc5: 'Хүн хэрэгтэй', sc6: 'Урилга', sc7: 'Анхны бэлтгэл', sc8: 'Миний амьдардаг газар', sc9: 'Хоёр дахь бэлтгэл',
     sc10: 'Хагарал', sc11: 'Зугтаалт', sc12: 'Тусламж', sc13: 'Салалт', sc15: 'Нуугдмал түүх', sc16: 'Бидний нэгдэл', sc17: 'Бидний тайз', sc18: 'Би дахиж нуугдахгүй', sc19: 'Дахин уулзах өдөр',
     pBand: 'Хамтлаг', pOrch: 'Оркестр', pVocal: 'Дуучдын чуулга', pChoir: 'Найрал дуу', pTkd: 'Таеквондо', pDance: 'Бүжиг', pBuild: 'Тайзны угсралт', pProps: 'Тайзны эд зүйлс', pCostume: 'Хувцас', pMakeup: 'Будалт', pCrew: 'Тайзны баг', pVideo: 'Видео ба зураг', pPromo: 'Сурталчилгааны баг', pOnline: 'Онлайн сурталчилгаа', pVisual: 'Дэлгэцийн зураг ба хадмал', pExhibit: 'Бүтээлийн үзэсгэлэн',
@@ -156,7 +156,7 @@ const TEXT = {
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: '全体阵容', pActor: '演员', luStage: '舞台', luMedia: '媒体与宣传', luExhibit: '展览',
     // Scenes 페이지 (장면 이름)
-    scenesHead: '场景与音乐剧曲目', tkdTeam: '跆拳道表演队',
+    tkdTeam: '跆拳道表演队',
     scOp: '序幕', sc1: '新的一天', sc2: '转学生', sc3: '第一次会议', sc4: '原来见过？', sc5: '需要人手', sc6: '邀请', sc7: '第一次彩排', sc8: '我住的地方', sc9: '第二次彩排',
     sc10: '裂痕', sc11: '逃离', sc12: '帮助', sc13: '决裂', sc15: '隐藏的故事', sc16: '我们的统一', sc17: '我们的舞台', sc18: '我不再躲藏', sc19: '重逢之日',
     pBand: '乐队', pOrch: '管弦乐团', pVocal: '重唱', pChoir: '合唱', pTkd: '跆拳道', pDance: '舞蹈', pBuild: '舞台制作', pProps: '舞台道具', pCostume: '服装', pMakeup: '化妆', pCrew: '舞台工作人员', pVideo: '摄影摄像', pPromo: '宣传组', pOnline: '线上宣传', pVisual: '背景影像与字幕', pExhibit: '作品展览',
@@ -199,7 +199,7 @@ const TEXT = {
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: 'Alle Mitwirkenden', pActor: 'Darsteller', luStage: 'Bühne', luMedia: 'Medien & Werbung', luExhibit: 'Ausstellung',
     // Scenes 페이지 (장면 이름)
-    scenesHead: 'Szenen & Musiknummern', tkdTeam: 'Taekwondo-Showteam',
+    tkdTeam: 'Taekwondo-Showteam',
     scOp: 'Eröffnung', sc1: 'Ein neuer Tag', sc2: 'Neu an der Schule', sc3: 'Das erste Treffen', sc4: 'Kennen wir uns nicht?', sc5: 'Wir brauchen Leute', sc6: 'Anwerbung', sc7: 'Die erste Probe', sc8: 'Wo ich lebe', sc9: 'Die zweite Probe',
     sc10: 'Risse', sc11: 'Flucht', sc12: 'Hilfe', sc13: 'Trennung', sc15: 'Die verborgene Geschichte', sc16: 'Unsere Wiedervereinigung', sc17: 'Unsere Bühne', sc18: 'Ich verstecke mich nicht mehr', sc19: 'Der Tag des Wiedersehens',
     pBand: 'Band', pOrch: 'Orchester', pVocal: 'Vokalensemble', pChoir: 'Chor', pTkd: 'Taekwondo', pDance: 'Tanz', pBuild: 'Bühnenbau', pProps: 'Requisite', pCostume: 'Kostüme', pMakeup: 'Maske', pCrew: 'Bühnencrew', pVideo: 'Video & Foto', pPromo: 'Werbeteam', pOnline: 'Online-Werbung', pVisual: 'Videohintergrund & Untertitel', pExhibit: 'Werkausstellung',
@@ -242,7 +242,7 @@ const TEXT = {
     // Cast 아래 전체 라인업 (파트 · 악기 이름)
     lineup: 'Elenco completo', pActor: 'Actores', luStage: 'Escenario', luMedia: 'Medios y promoción', luExhibit: 'Exposición',
     // Scenes 페이지 (장면 이름)
-    scenesHead: 'Escenas y números musicales', tkdTeam: 'Equipo de exhibición de taekwondo',
+    tkdTeam: 'Equipo de exhibición de taekwondo',
     scOp: 'Apertura', sc1: 'Un nuevo día', sc2: 'Recién llegado', sc3: 'La primera reunión', sc4: '¿Ya nos conocíamos?', sc5: 'Necesitamos gente', sc6: 'Reclutamiento', sc7: 'El primer ensayo', sc8: 'Donde vivo', sc9: 'El segundo ensayo',
     sc10: 'Grietas', sc11: 'La huida', sc12: 'Ayuda', sc13: 'La ruptura', sc15: 'La historia oculta', sc16: 'Nuestra reunificación', sc17: 'Nuestro escenario', sc18: 'Ya no me esconderé', sc19: 'El día en que nos volvamos a ver',
     pBand: 'Banda', pOrch: 'Orquesta', pVocal: 'Conjunto vocal', pChoir: 'Coro', pTkd: 'Taekwondo', pDance: 'Danza', pBuild: 'Construcción de escenografía', pProps: 'Utilería', pCostume: 'Vestuario', pMakeup: 'Maquillaje', pCrew: 'Equipo de escena', pVideo: 'Vídeo y foto', pPromo: 'Equipo de promoción', pOnline: 'Promoción en línea', pVisual: 'Fondos visuales y subtítulos', pExhibit: 'Exposición de obras',
