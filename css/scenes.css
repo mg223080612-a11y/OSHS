@@ -18,22 +18,16 @@
 }
 .scenes-head::after { transform: scaleX(-1); }
 
-/* 목록 : 어두운 판 위에 한 줄씩 */
-.nb-list {
-  list-style: none; margin: 0; padding: 14px 28px;
-  background: rgba(255, 255, 255, .035);
-  border: 1px solid var(--line);
-}
+/* 목록 : 상자 · 구분선 없이 한 줄씩 */
+.nb-list { list-style: none; margin: 0; padding: 0; }
 .nb-list li {
   display: flex; align-items: baseline; gap: 10px;
-  padding: 13px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, .06);
+  padding: 9px 0;
 }
-.nb-list li:last-child { border-bottom: 0; }
 
 /* 번호 : M01. */
 .nb-no {
-  flex: 0 0 3.4em;
+  flex: 0 0 52px;
   font-family: var(--display); font-weight: 500; letter-spacing: .04em;
   color: var(--apricot);
 }
@@ -49,9 +43,8 @@
 @media (max-width: 600px) {
   .scenes { padding: 30px 16px 100px; }
   .scenes-head { font-size: 17px; letter-spacing: .22em; gap: 14px; margin-bottom: 28px; }
-  .nb-list { padding: 6px 16px; }
-  .nb-list li { flex-wrap: wrap; row-gap: 2px; padding: 12px 0; }
+  .nb-list li { flex-wrap: wrap; row-gap: 2px; padding: 8px 0; }
   .nb-title { font-size: 15.5px; }
-  .nb-who { flex-basis: 100%; max-width: none; text-align: left; padding-left: calc(3.4em + 10px); font-size: 13px; }
+  .nb-who { flex-basis: 100%; max-width: none; text-align: left; padding-left: 62px; font-size: 13px; }
   .nb-who:empty { display: none; }
 }
