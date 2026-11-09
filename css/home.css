@@ -217,3 +217,37 @@
   }
   .spot::after { width: 280px; height: 170px; top: -70px; }
 }
+
+
+/* ===== 줄거리 (Home 맨 아래, 예전 Synopsis 페이지에서 옮겨 옴) ===== */
+.story {
+  scroll-margin-top: 70px;   /* 예전 주소(#story)로 들어왔을 때 상단바에 가리지 않게 */
+  position: relative; isolation: isolate;
+  text-align: center;
+  padding: 60px 20px 110px;
+}
+/* 배경 : 포스터의 물감 튄 느낌을 은은하게.
+   위쪽은 점점 투명해지게 해서 위 메인 화면과 끊기지 않고 이어짐 */
+.story::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(circle at 8% 30%, rgba(240, 196, 107, .14) 0 3px, transparent 4px),
+    radial-gradient(circle at 14% 72%, rgba(240, 196, 107, .12) 0 5px, transparent 6px),
+    radial-gradient(circle at 88% 36%, rgba(240, 196, 107, .12) 0 4px, transparent 5px),
+    radial-gradient(circle at 92% 82%, rgba(240, 196, 107, .1) 0 6px, transparent 7px),
+    radial-gradient(ellipse 70% 55% at 50% 22%, var(--plum), transparent 70%),
+    var(--bg-soft);
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 260px);
+          mask-image: linear-gradient(180deg, transparent, #000 260px);
+}
+
+.synopsis { max-width: 620px; margin: 0 auto; font-size: 17px; line-height: 2.1; }
+.synopsis p { margin-bottom: 28px; text-wrap: balance; }   /* 가운데 정렬 문단이 마지막 줄에 한 단어만 남지 않게 */
+.synopsis em { font-style: normal; font-weight: 700; color: var(--apricot); }
+.synopsis .closing { font-weight: 500; color: var(--apricot-soft); margin: 44px 0 0; }
+/* Our Story · His Story · History 강조 : 줄거리의 ‘통일’과 같은 모양 */
+.synopsis b { font-weight: 700; color: var(--apricot); }
+
+@media (max-width: 860px) {
+  .synopsis { font-size: 15px; }
+}

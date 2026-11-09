@@ -1,14 +1,17 @@
 # Cloudflare Pages 주소 이동 규칙 (이전 주소 → 새 주소)
 # 페이지 파일을 pages/ 폴더로 옮기기 전의 주소로 들어와도 새 페이지가 열리게 합니다.
-/synopsis         /pages/synopsis    301
-/production       /pages/synopsis    301
-/production.html  /pages/synopsis    301
-/story            /pages/synopsis    301
-/story.html       /pages/synopsis    301
-/pages/production       /pages/synopsis  301
-/pages/production.html  /pages/synopsis  301
-/pages/story            /pages/synopsis  301
-/pages/story.html       /pages/synopsis  301
+# 줄거리(Synopsis · Production · Story)는 Home 맨 아래로 합쳐짐 → Home 으로 보냄
+/synopsis               /   301
+/pages/synopsis         /   301
+/pages/synopsis.html    /   301
+/production             /   301
+/production.html        /   301
+/pages/production       /   301
+/pages/production.html  /   301
+/story                  /   301
+/story.html             /   301
+/pages/story            /   301
+/pages/story.html       /   301
 /history          /pages/history     301
 /history.html     /pages/history     301
 /cast             /pages/cast        301

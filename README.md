@@ -10,8 +10,7 @@
 
 | 탭 | HTML | CSS | JS | 주소 |
 |---|---|---|---|---|
-| Home | `index.html` | `css/home.css` | `js/home.js` (카운트다운) | story.gvcs.kr |
-| Synopsis | `pages/synopsis.html` | `css/synopsis.css` | | /pages/synopsis (공연 정보 + 줄거리) |
+| Home | `index.html` | `css/home.css` | `js/home.js` (카운트다운) | story.gvcs.kr (메인 화면 + 줄거리) |
 | Scenes | `pages/scenes.html` | `css/scenes.css` | | /pages/scenes (장면 · 뮤지컬 넘버) |
 | Cast | `pages/cast.html` | `css/cast.css` | `js/cast.js` (주연 카드 누르면 배역 설명) | /pages/cast |
 | Crew | `pages/crew.html` | `css/crew.css` | | /pages/crew (파트별 단체 사진 + 이름. 사진 : images/lineup/) |
@@ -35,12 +34,11 @@ favicon.ico · favicon-16/32.png · apple-touch-icon.png   (브라우저가 맨 
 ## 고칠 때 알아둘 것
 
 - **HTML 안에 <script> 를 직접 쓰지 마세요.** 보안 설정(CSP) 때문에 막힙니다. 스크립트는 js/ 에 파일로 만들어 <script src> 로 넣으세요.
-- **상단 메뉴 · 푸터는 6개 페이지에 똑같이 들어 있습니다.** 고칠 때는 6개 파일을 모두 고치세요.
+- **상단 메뉴 · 푸터는 5개 페이지에 똑같이 들어 있습니다.** 고칠 때는 5개 파일을 모두 고치세요.
   (지금 보고 있는 탭은 각 페이지의 메뉴 링크에 `class="active"` 로 표시)
 - **새 페이지 추가**: `pages/` 에 HTML(기존 페이지 복사) + `css/새페이지.css` 를 만들고, 6개 페이지 메뉴에 링크를 넣으세요.
 - **한국어 문장**은 각 페이지 HTML 에서, **다른 언어**는 `js/i18n.js` 에서 같은 이름(`data-i18n="s1"` → `s1`)을 찾아 고칩니다.
 - **Cast 사진**: `images/cast/` 에 사진(세로 3:4 권장)을 올리고, `pages/cast.html` 의 각 카드 주석에 적힌 대로
   `<span class="cast-ph">` 줄을 `<img src="../images/cast/(이름).jpg">` 로 바꾸면 됩니다.
 - **History 영상 추가**: `pages/history.html` 의 `<article class="past">` 한 덩어리를 복사해 연도 · 제목 · `data-id`(유튜브 주소 `v=` 뒤 11글자)만 바꾸면 됩니다.
-- **러닝타임 · 관람 안내**가 정해지면 `pages/synopsis.html` 의 주석을 풀어 채우세요.
 - 페이지마다 역할이 하나씩입니다. 같은 정보를 여러 페이지에 반복하지 마세요. (카운트다운은 Home 에만)
