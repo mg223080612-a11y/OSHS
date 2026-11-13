@@ -116,6 +116,11 @@
   font-family: 'Kaushan Script', cursive; font-weight: 400;
   font-size: clamp(32px, 4vw, 42px); color: var(--apricot-soft);
 }
+/* 지도 선생님 단체 사진 : 라인업 사진과 같은 금색 액자. 아래 크레딧을 사진 폭에 맞춰 두 단으로 (왼쪽 단 위→아래, 다음 오른쪽 단) */
+.thanks:has(.th-photo) { max-width: 1000px; }
+.th-photo { margin: 0 0 52px; }
+.th-photo + .th-list { columns: 2; column-gap: 48px; }
+.th-photo + .th-list .th-row { break-inside: avoid; grid-template-columns: 4fr 5fr; gap: 22px; }
 .th-list { margin: 0; }
 .th-row { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; padding: 9px 0; align-items: baseline; }
 .th-row dt { text-align: right; font-size: 13.5px; letter-spacing: .04em; color: var(--apricot-soft); opacity: .85; }
@@ -124,8 +129,17 @@
 .th-row dd > span:last-child { margin-right: 0; }
 .th-row dd small { margin-left: 5px; font-size: 11.5px; font-weight: 400; color: var(--apricot-soft); opacity: .8; }
 
+/* 태블릿 : 크레딧을 다시 한 단으로 */
+@media (max-width: 860px) {
+  .th-photo { margin-bottom: 40px; }
+  .th-photo + .th-list { columns: 1; }
+  .th-photo + .th-list .th-row { grid-template-columns: 1fr 1fr; gap: 28px; }
+}
+
 /* 휴대폰 : 맡은 일 위, 이름 아래 (가운데 정렬) */
 @media (max-width: 600px) {
+  .th-photo { margin-bottom: 28px; }
+  .th-photo + .th-list .th-row { grid-template-columns: 1fr; gap: 2px; }
   .thanks { padding: 24px 16px 100px; }
   .thanks-head { margin-bottom: 32px; }
   .th-row { grid-template-columns: 1fr; gap: 2px; padding: 10px 0; }
