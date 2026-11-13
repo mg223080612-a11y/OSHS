@@ -68,6 +68,10 @@
 /* 이름 목록 : 이름 사이를 넓게 띄워 나열 */
 .lu-names { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 15px; line-height: 1.6; color: rgba(255, 255, 255, .86); }
 .lu-names li { white-space: nowrap; }
+/* 이름만 있는 목록 : 세 글자 이름 폭의 칸에 맞춰 세움 → 두 글자 이름(박현 등)이 섞여도 아래 줄과 열이 맞음.
+   세 글자보다 긴 이름(영문 · 네 글자)은 <li class="wide"> 로 두 칸을 씀 */
+.lu-names:not(.lu-roles) { display: grid; grid-template-columns: repeat(auto-fill, 2.9em); justify-content: start; }
+.lu-names li.wide { grid-column: span 2; }
 /* 밴드 : 이름 아래 맡은 악기 */
 .lu-roles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 20px; }
 .lu-roles small { display: block; font-size: 12px; letter-spacing: .08em; color: var(--apricot-soft); opacity: .85; }
