@@ -6,9 +6,12 @@ if (location.protocol === 'http:' && location.hostname !== 'localhost' && locati
 
 // 새로고침할 때 제목이 다른 글꼴로 잠깐 보였다가 바뀌는 것 막기
 // 제목에 쓰는 글꼴이 준비될 때까지 화면 내용을 잠깐 숨겼다가 한 번에 보여 줍니다.
-// 인터넷이 느려도 최대 2초 뒤에는 무조건 보여 줍니다.
-// (모든 페이지의 <head> 에서 styles.css 바로 다음에 불러옵니다)
+// 인터넷이 느려도 최대 0.5초 뒤에는 무조건 보여 줍니다.
+// (2초였을 때 휴대폰 첫 방문에서 제목이 늦게 떠서 줄임 — 2026-11-13 측정 : 느린 4G 첫 방문은 매번 2초를 다 기다렸음.
+//  0.5초 안에 글꼴이 안 오면 제목이 잠깐 기본 글꼴로 보였다가 바뀜)
+// (모든 페이지의 <head> 에서 css 바로 다음에 불러옵니다)
 (function () {
+  var MAX_WAIT_MS = 500;
   var root = document.documentElement;
   if (!document.fonts || !document.fonts.load) return;   // 오래된 브라우저는 그냥 표시
   root.classList.add('fonts-wait');
@@ -21,5 +24,5 @@ if (location.protocol === 'http:' && location.hostname !== 'localhost' && locati
     ['700 1em "Noto Sans KR"', KO], ['300 1em "Noto Sans KR"', KO]
   ];
   Promise.all(fonts.map(function (f) { return document.fonts.load(f[0], f[1]); })).then(show, show);
-  setTimeout(show, 2000);
+  setTimeout(show, MAX_WAIT_MS);
 })();
