@@ -20,9 +20,11 @@
 
 ```
 css/common.css     색 · 글꼴(맨 위 :root) · 상단바 · 메뉴 · 언어 버튼 · 페이지 제목 · 푸터
+css/fonts.css      제목 글꼴 3개(Kaushan Script · Oswald · Playfair Display)를 fonts/ 에서 불러오는 설정
 js/fonts-wait.js   글꼴이 준비될 때까지 화면을 잠깐 숨김 (새로고침 때 글꼴 바뀜 방지)
 js/i18n.js         7개 언어 번역 · 국기 그림 · 언어 버튼
 js/main.js         상단바 배경 · 메뉴 열기/닫기 · 휴대폰에서 맨 아래 더 당기면 다음 페이지로 (순서는 상단 메뉴 순서)
+fonts/             제목 글꼴 파일(woff2, 언어별 조각) + 라이선스(OFL). 각 페이지 <head> 에서 latin 조각 3개를 preload
 images/            poster.jpg · hero.jpg(공유 미리보기) · logo-white.png · flag-ko.png
 downloads/         Home 다운로드 버튼 파일 : poster.jpg · invitation.jpg(앞·안쪽 한 장) · kakao-profile.jpg (같은 이름으로 덮어쓰면 교체)
 _redirects         예전 주소(/story, /production.html 등) → 새 주소로 이동 (Cloudflare Pages 규칙)
