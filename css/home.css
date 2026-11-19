@@ -149,9 +149,8 @@
 .countdown b { display: block; font-family: var(--display); font-size: 36px; font-weight: 500; line-height: 1.1; color: var(--apricot); }
 .countdown span { font-family: var(--display); font-size: 11px; letter-spacing: .2em; color: var(--muted); }
 
-/* --- 영상 : 스케치 영상(제목 바로 아래, 크게 · 자동 재생) + 인터뷰(D-DAY 칸 맨 아래) --- */
+/* --- 영상 : 스케치 영상 (제목 바로 아래, 크게 · 자동 재생) --- */
 .clip.hero-feature { width: clamp(380px, 44vw, 660px); margin: 4px 0 0; }
-.clip.hero-interview { margin-top: 28px; }
 
 @media (max-width: 860px) {
   .dl-btn { gap: 6px; }
@@ -162,7 +161,6 @@
   .hero-script .his { margin-left: 0; transform-origin: center; }
   .dday { width: 100%; max-width: 440px; justify-self: center; }
   .clip.hero-feature { width: 100%; max-width: 560px; margin: 0 auto; }   /* 휴대폰 : 화면 폭 가득 */
-  .clip.hero-interview { max-width: 440px; margin: 28px auto 0; }
   .hero-eyebrow { font-size: 12px; letter-spacing: .2em; }
   .hero-script { margin-bottom: 40px; }
   .dday-label { font-size: 22px; }

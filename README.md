@@ -10,11 +10,11 @@
 
 | 탭 | HTML | CSS | JS | 주소 |
 |---|---|---|---|---|
-| Home | `index.html` | `css/home.css` | `js/home.js` (카운트다운) | story.gvcs.kr (메인 화면 + 영상 2개 + 줄거리) |
+| Home | `index.html` | `css/home.css` | `js/home.js` (카운트다운) | story.gvcs.kr (메인 화면 + 스케치 영상 자동 재생 + 줄거리) |
 | Number | `pages/scenes.html` | `css/scenes.css` | | /pages/scenes (뮤지컬 넘버 목록) |
 | Cast | `pages/cast.html` | `css/cast.css` | `js/cast.js` (주연 카드 누르면 배역 설명) | /pages/cast |
 | Crew | `pages/crew.html` | `css/crew.css` | | /pages/crew (파트별 단체 사진 + 이름. 사진 : images/lineup/) |
-| History | `pages/history.html` | `css/history.css` | `js/video.js` (영상 재생, Home 과 같이 씀) | /pages/history |
+| History | `pages/history.html` | `css/history.css` | `js/video.js` (영상 재생) | /pages/history |
 
 모든 페이지가 함께 쓰는 파일:
 
