@@ -1,84 +1,51 @@
 /* =====================================================================
    Home (index.html)
-   무대 배경 · 제목 · D-DAY · 카운트다운 · 다운로드 · 영상 두 개 / 아래 줄거리
+   포스터 느낌 배경 · 제목 · 영상 두 개 · D-DAY · 지도 · 카운트다운 · 다운로드 / 아래 줄거리
    ===================================================================== */
 
 /* ===== 메인 화면 ===== */
 .hero {
+  --band-w: clamp(46px, 7vw, 120px);   /* 왼쪽 금색 물감 띠 너비 */
   position: relative; overflow: hidden;
   min-height: 100vh; min-height: 100svh;
   display: flex; align-items: center;
   background: #0c0915;
 }
 
-/* --- 무대 배경 (모두 CSS) --- */
-.stage, .stage span { position: absolute; inset: 0; pointer-events: none; }
-.stage {
-  /* 객석 쪽 어둠 + 아래로 갈수록 본문 색과 이어지게 */
-  background:
-    radial-gradient(ellipse 60% 50% at 62% 30%, rgba(120, 70, 40, .35), transparent 70%),
-    radial-gradient(ellipse 80% 60% at 20% 60%, rgba(59, 37, 88, .55), transparent 70%),
-    linear-gradient(180deg, #0c0915 0%, #140d1c 55%, #1a1020 75%, var(--bg) 100%);
+/* --- 배경 : 포스터 느낌 (흐린 보라 책장 + 왼쪽 금색 물감 띠 + 물감 방울) --- */
+.poster-bg, .poster-bg span { position: absolute; inset: 0; pointer-events: none; }
+/* 포스터 그림을 아주 흐리게 깔아서 보라 책장 색만 남김 (글씨는 안 보일 만큼) */
+.poster-bg .shelf {
+  inset: -60px;
+  background: url(../images/poster.jpg) 100% 35% / cover no-repeat;   /* 포스터 오른쪽(책장) 부분 */
+  filter: blur(22px) saturate(1.25) brightness(.62);
 }
-/* 위에서 떨어지는 조명
-   모양(사다리꼴)을 먼저 자른 뒤(::before) 바깥 .spot 에서 흐리게 해야 가장자리가 부드럽게 퍼짐
-   (같은 요소에서 흐림 → 자르기 순서가 되면 가장자리가 칼로 자른 듯 딱딱해짐) */
-.spot {
-  filter: blur(28px);
-  mix-blend-mode: screen;
-  animation: flicker 6s ease-in-out infinite;
-}
-.spot::before {
+/* 위는 책장 보라, 아래로 갈수록 본문 색과 이어지게 */
+.poster-bg::after {
   content: ''; position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(255, 214, 150, .55), rgba(240, 180, 100, .14) 50%, transparent 82%);
-  clip-path: polygon(46% 0, 54% 0, 72% 100%, 28% 100%);  /* 무대 가운데 조명 */
-}
-/* 조명이 시작되는 곳의 은은한 빛 번짐 */
-.spot::after {
-  content: ''; position: absolute; left: 50%; top: -80px;
-  width: 360px; height: 200px; transform: translateX(-50%);
-  background: radial-gradient(ellipse at center, rgba(255, 222, 175, .5), transparent 70%);
-}
-@keyframes flicker { 50% { opacity: .8; } }
-/* 양쪽 보라색 막 (오른쪽 기준으로 그리고, 왼쪽은 좌우 반전) */
-.stage .curtain {
-  left: auto; width: var(--curtain-w);
   background:
-    linear-gradient(90deg, rgba(0, 0, 0, .75), transparent 30%),
-    repeating-linear-gradient(90deg,
-      #1c0f33 0, var(--curtain) 22px, #6d4a9c 34px, var(--curtain) 46px, #1c0f33 68px);
-  box-shadow: inset 30px 0 60px rgba(0, 0, 0, .6);
-  opacity: .9;
+    radial-gradient(ellipse 55% 60% at 70% 30%, rgba(160, 70, 120, .22), transparent 70%),
+    linear-gradient(rgba(42, 22, 78, .38), rgba(42, 22, 78, .38)),   /* 포스터처럼 보랏빛을 더 */
+    linear-gradient(180deg, rgba(19, 14, 39, .35) 0%, rgba(19, 14, 39, .2) 45%, rgba(19, 14, 39, .75) 82%, var(--bg) 100%);
 }
-.stage .curtain-left { left: 0; right: auto; transform: scaleX(-1); }
-/* 반짝이는 무대 바닥 + 조명 반사 */
-.stage .floor {
-  top: auto; height: 34%;
-  background:
-    radial-gradient(ellipse 18% 70% at 34% 100%, rgba(255, 190, 110, .28), transparent 70%),
-    radial-gradient(ellipse 10% 80% at 60% 100%, rgba(255, 200, 130, .2), transparent 70%),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, .025) 0 2px, transparent 2px 90px),
-    linear-gradient(180deg, transparent, rgba(80, 45, 25, .35) 40%, var(--bg) 100%);
-  transform: perspective(500px) rotateX(35deg);
-  transform-origin: bottom;
+/* 왼쪽 금색 물감 띠 (포스터 왼쪽 가장자리) */
+.poster-bg .band {
+  right: auto; width: var(--band-w); z-index: 1;
+  background: url(../images/paint-band.svg) 0 0 / 100% 100% no-repeat;
+  opacity: .92;
 }
-/* 조명 속 먼지 */
-.dust {
-  background-image:
-    radial-gradient(circle, rgba(255, 230, 190, .8) 0 1px, transparent 1.5px),
-    radial-gradient(circle, rgba(255, 230, 190, .5) 0 1px, transparent 1.5px);
-  background-size: 140px 160px, 90px 110px;
-  background-position: 0 0, 40px 60px;
-  -webkit-mask-image: radial-gradient(ellipse 22% 60% at 50% 35%, #000, transparent);
-  mask-image: radial-gradient(ellipse 22% 60% at 50% 35%, #000, transparent);
-  animation: drift 30s linear infinite;
-  opacity: .7;
+/* 흩뿌린 물감 방울 : 왼쪽 위에 많고 오른쪽 아래로 갈수록 드묾 */
+.poster-bg .splat {
+  z-index: 1;
+  background: url(../images/splatter.svg) 0 0 / cover no-repeat;
+  opacity: .8;
+  -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent 95%);
+          mask-image: linear-gradient(180deg, #000 60%, transparent 95%);
 }
-@keyframes drift { to { background-position: 140px 320px, 130px 280px; } }
 /* 가장자리 어둡게 */
 .hero::after {
   content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(ellipse 90% 80% at 50% 45%, transparent 55%, rgba(0, 0, 0, .65));
+  background: radial-gradient(ellipse 90% 80% at 55% 45%, transparent 55%, rgba(0, 0, 0, .55));
 }
 
 /* --- 문구 + D-DAY --- */
@@ -86,7 +53,7 @@
   position: relative; z-index: 1;
   width: 100%;
   /* 양쪽 막 안쪽에서, 제목과 D-DAY 가 가운데로 모이게 */
-  padding: 120px calc(var(--curtain-w) + 2vw) 100px;
+  padding: 120px calc(var(--band-w) + 3vw) 90px;
   display: grid; grid-template-columns: auto auto; justify-content: center;  /* 두 덩어리를 묶어서 화면 가운데에 */
   gap: clamp(40px, 6vw, 110px); align-items: center;
 }
@@ -103,27 +70,33 @@
   animation: pulse 2.4s ease-in-out infinite;
 }
 @keyframes pulse { 50% { opacity: .6; } }
+/* 제목 : 포스터처럼 "Our Story," 는 금색 종이 위 검은 글씨, "His Story" 는 그 위에 겹친 흰 붓글씨 */
 .hero-script {
-  position: relative;
-  font-family: var(--hand); font-weight: 400;
-  font-size: clamp(64px, 9vw, 160px);
-  white-space: nowrap;
-  line-height: 1.05;
-  transform: rotate(-4deg);
-  transform-origin: left;
-  text-shadow: 0 4px 24px rgba(0, 0, 0, .5);
-  margin-bottom: 48px;
+  position: relative; margin: 0 0 36px;
+  white-space: nowrap; line-height: 1;
 }
 .hero-script span { display: block; }
-.hero-script .indent { padding-left: .9em; color: var(--apricot-soft); }
-.underline {
-  position: absolute; left: 22%; bottom: -34px;
-  width: 78%; height: 46px;
-  fill: none; stroke: var(--text); stroke-width: 2.5; stroke-linecap: round;
-  stroke-dasharray: 520; stroke-dashoffset: 520;
-  animation: draw 1.4s .6s ease-out forwards;
+.hero-script .our {
+  display: inline-block;
+  font-family: var(--serif); font-weight: 600;
+  font-size: clamp(40px, 5.2vw, 84px); letter-spacing: -.01em;
+  color: #1a1020;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 13px, rgba(26, 16, 32, .07) 13px 14px),
+    repeating-linear-gradient(90deg, transparent 0 13px, rgba(26, 16, 32, .07) 13px 14px),
+    var(--apricot-soft);
+  padding: .1em .32em .16em;
+  transform: rotate(-2deg);
+  box-shadow: 6px 8px 0 rgba(0, 0, 0, .35);
 }
-@keyframes draw { to { stroke-dashoffset: 0; } }
+.hero-script .his {
+  font-family: var(--hand); font-weight: 400;
+  font-size: clamp(70px, 9vw, 150px);
+  color: #fff;
+  margin: -.06em 0 0 .45em;
+  transform: rotate(-6deg); transform-origin: left;
+  text-shadow: 0 6px 0 rgba(0, 0, 0, .35), 0 10px 30px rgba(0, 0, 0, .5);
+}
 .hero-desc { font-family: var(--serif-ko); font-size: clamp(16px, 1.5vw, 20px); line-height: 1.8; text-wrap: balance; }  /* 줄바꿈 시 한 단어만 남지 않게 */
 .hero-desc b { font-family: var(--serif); font-weight: 500; color: var(--apricot-soft); }
 
@@ -142,12 +115,20 @@
 }
 .dday-date i { font-style: normal; margin: 0 .12em; }
 .dday-full {
-  font-family: var(--serif); font-size: 24px; letter-spacing: .04em;
-  padding-bottom: 18px; border-bottom: 1px solid rgba(255, 255, 255, .35);
+  font-family: var(--display); font-weight: 500; font-size: 26px; letter-spacing: .03em;   /* 포스터의 NOVEMBER 21 SAT. 5PM 글씨 */
+  padding-bottom: 0;
 }
 /* 시간 바로 아래 줄에 장소를 작고 넓게 */
 .dday-full .hall { display: block; margin-top: 4px; font-size: .62em; letter-spacing: .28em; opacity: .85; }
-.hero .countdown { justify-content: space-between; margin: 26px 0 36px; gap: 0; }
+/* 장소 아래 : 지도 링크 (네이버 지도) */
+.hero .map-link {
+  display: inline-block; margin-top: 14px;
+  font-size: 14px; letter-spacing: .04em; color: var(--apricot-soft);
+  border-bottom: 1px solid rgba(246, 217, 160, .5); padding-bottom: 2px;
+  transition: color .2s, border-color .2s;
+}
+.hero .map-link:hover { color: var(--apricot); border-color: var(--apricot); }
+.hero .countdown { justify-content: space-between; margin: 22px 0 32px; gap: 0; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, .35); }
 .hero .countdown div { flex: 1; max-width: none; border: 0; background: none; padding: 0; }
 .hero .countdown b { font-family: var(--serif); font-weight: 500; font-size: 42px; color: var(--text); }
 .hero .countdown span { font-family: var(--serif); font-size: 12px; letter-spacing: .14em; color: var(--text); opacity: .85; }
@@ -187,16 +168,13 @@
   .dl-btn { gap: 6px; }
   /* 휴대폰 : 위아래로 쌓고 가운데 정렬 */
   /* 휴대폰 : 위아래로 쌓고 가운데 정렬 */
-  .hero-inner { grid-template-columns: 1fr; gap: 56px; padding: 110px calc(var(--curtain-w) + 6px) 100px; text-align: center; }
+  .hero-inner { grid-template-columns: 1fr; gap: 56px; padding: 110px calc(var(--band-w) + 14px) 90px; text-align: center; }
   .hero-eyebrow { justify-content: center; }
-  .hero-script { transform: rotate(-4deg); transform-origin: center; }
-  .hero-script .indent { padding-left: 0; }
-  .underline { left: 15%; width: 70%; }
+  .hero-script .his { margin-left: 0; transform-origin: center; }
   .dday { width: 100%; max-width: 440px; justify-self: center; }
   .hero-videos { margin: 28px auto 0; max-width: 440px; }
   .hero-eyebrow { font-size: 12px; letter-spacing: .2em; }
-  .hero-script { margin-bottom: 64px; }
-  .stage .curtain { opacity: .6; }
+  .hero-script { margin-bottom: 40px; }
   .dday-label { font-size: 22px; }
   .dday-full { font-size: 18px; }
   .hero .countdown b { font-size: 32px; }
@@ -215,14 +193,9 @@
 
 /* ----- 휴대폰 : 양옆 보라색 커튼 없애고, 조명은 넓고 은은하게 ----- */
 @media (max-width: 600px) {
-  .stage .curtain { display: none; }
-  .hero-inner { padding-left: 20px; padding-right: 20px; }   /* 커튼 자리만큼 비워 두던 여백 없앰 */
-  .spot { filter: blur(36px); }
-  .spot::before {
-    clip-path: polygon(36% 0, 64% 0, 100% 100%, 0 100%);   /* 세로 화면이라 빛을 아래로 넓게 퍼뜨림 */
-    background: linear-gradient(180deg, rgba(255, 214, 150, .42), rgba(240, 180, 100, .12) 45%, transparent 78%);
-  }
-  .spot::after { width: 280px; height: 170px; top: -70px; }
+  .hero { --band-w: 30px; }
+  .hero-inner { padding-left: 44px; padding-right: 18px; }
+  .poster-bg .splat { opacity: .5; background-size: 900px auto; background-repeat: repeat-y; }   /* 세로 화면에서 방울이 너무 커지지 않게 */
 }
 
 

@@ -63,26 +63,22 @@
 
   <main>
 
-    <!-- ===== 메인 화면 : 무대 배경 + 문구 + D-DAY ===== -->
+    <!-- ===== 메인 화면 : 포스터 느낌 배경 + 문구 + 영상 + D-DAY ===== -->
     <section class="hero">
-      <!-- 무대 배경은 이미지 없이 CSS 로 그렸습니다 (조명 · 막 · 바닥 · 먼지) -->
-      <div class="stage" aria-hidden="true">
-        <span class="spot"></span>
-        <span class="curtain curtain-left"></span>
-        <span class="curtain"></span>
-        <span class="floor"></span>
-        <span class="dust"></span>
+      <!-- 배경 : 포스터를 아주 흐리게 깐 보라 책장 + 왼쪽 금색 물감 띠 + 흩뿌린 물감 방울
+           (물감 모양은 images/paint-band.svg · images/splatter.svg) -->
+      <div class="poster-bg" aria-hidden="true">
+        <span class="shelf"></span>
+        <span class="band"></span>
+        <span class="splat"></span>
       </div>
 
       <div class="hero-inner">
         <div class="hero-copy">
           <p class="hero-eyebrow"><span class="soon">COMING SOON</span>GVCS YOUTH ARTS FESTIVAL 2026</p>
           <h1 class="hero-script">
-            <span>Our Story,</span>
-            <span class="indent">His Story</span>
-            <svg class="underline" viewBox="0 0 460 60" preserveAspectRatio="none" aria-hidden="true">
-              <path d="M6 54 C 120 30, 300 10, 456 4" />
-            </svg>
+            <span class="our">Our Story,</span>
+            <span class="his">His Story</span>
           </h1>
           <p class="hero-desc">
             <span data-i18n="heroDesc">서로 다른 이야기가 만나, 하나의 이야기가 되다</span><br />
@@ -113,6 +109,7 @@
           <p class="dday-label"><span>D-DAY</span></p>
           <p class="dday-date">11<i>.</i>21</p>
           <p class="dday-full">2026.11.21 SAT. 5PM <span class="hall">HULBERT HALL</span></p>
+          <a class="map-link" href="https://map.naver.com/p/search/%EA%B8%80%EB%A1%9C%EB%B2%8C%EC%84%A0%EC%A7%84%ED%95%99%EA%B5%90%20%EB%AC%B8%EA%B2%BD%EC%BA%A0%ED%8D%BC%EC%8A%A4" target="_blank" rel="noopener" data-i18n="mapLink">지도에서 보기 ↗</a>
           <div class="countdown" data-target="2026-11-21T17:00:00+09:00" aria-live="off">
             <div><b data-unit="d">--</b><span>DAYS</span></div>
             <div><b data-unit="h">--</b><span>HOURS</span></div>
