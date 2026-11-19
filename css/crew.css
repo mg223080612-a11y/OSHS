@@ -72,9 +72,10 @@
    세 글자보다 긴 이름(영문 · 네 글자)은 <li class="wide"> 로 두 칸을 씀 */
 .lu-names:not(.lu-roles) { display: grid; grid-template-columns: repeat(auto-fill, 2.9em); justify-content: start; }
 .lu-names li.wide { grid-column: span 2; }
-/* 영문 이름만 모은 마지막 줄 : 칸에 맞추지 않고 이름 길이대로 (시작 위치는 한글 이름 첫 칸과 같음) */
-.lu-names li.lu-free { grid-column: 1 / -1; display: flex; flex-wrap: wrap; column-gap: 18px; row-gap: 6px; white-space: normal; }
-.lu-names li.lu-free span { white-space: nowrap; }
+/* 합창처럼 영문 이름이 섞인 긴 목록 : 한글 이름은 같은 폭 칸(줄이 맞음), 영문 이름은 이름 길이대로 이어서 */
+.lu-names.lu-flow, .lu-wide .lu-names.lu-flow { display: flex; flex-wrap: wrap; justify-content: flex-start; column-gap: 18px; }
+.lu-names.lu-flow li { width: 2.9em; }
+.lu-names.lu-flow li.en { width: auto; }
 /* 밴드 : 이름 아래 맡은 악기 */
 .lu-roles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 20px; }
 .lu-roles small { display: block; font-size: 12px; letter-spacing: .08em; color: var(--apricot-soft); opacity: .85; }
