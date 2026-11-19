@@ -1,6 +1,6 @@
 /* =====================================================================
    Home (index.html)
-   무대 배경 · 제목 · D-DAY · 카운트다운 · 공연 정보 보기 버튼
+   무대 배경 · 제목 · D-DAY · 카운트다운 · 다운로드 · 영상 두 개 / 아래 줄거리
    ===================================================================== */
 
 /* ===== 메인 화면 ===== */
@@ -177,6 +177,12 @@
 .countdown b { display: block; font-family: var(--display); font-size: 36px; font-weight: 500; line-height: 1.1; color: var(--apricot); }
 .countdown span { font-family: var(--display); font-size: 11px; letter-spacing: .2em; color: var(--muted); }
 
+/* --- 영상 두 개 : 제목 · 문구 바로 아래 (왼쪽 칸 안) --- */
+.hero-videos {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 1.6vw, 22px);
+  max-width: 540px; margin-top: 32px;
+}
+
 @media (max-width: 860px) {
   .dl-btn { gap: 6px; }
   /* 휴대폰 : 위아래로 쌓고 가운데 정렬 */
@@ -187,6 +193,7 @@
   .hero-script .indent { padding-left: 0; }
   .underline { left: 15%; width: 70%; }
   .dday { width: 100%; max-width: 440px; justify-self: center; }
+  .hero-videos { margin: 28px auto 0; max-width: 440px; }
   .hero-eyebrow { font-size: 12px; letter-spacing: .2em; }
   .hero-script { margin-bottom: 64px; }
   .stage .curtain { opacity: .6; }
@@ -250,4 +257,9 @@
 
 @media (max-width: 860px) {
   .synopsis { font-size: 15px; }
+}
+
+/* 휴대폰 : 영상 두 개 사이 간격만 좁게 (재생 버튼 · 글자 크기는 css/video.css) */
+@media (max-width: 600px) {
+  .hero-videos { gap: 12px; }
 }

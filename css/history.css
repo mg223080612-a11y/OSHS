@@ -13,35 +13,13 @@
 .past-label { font-family: var(--brand); font-size: 11px; font-weight: 700; letter-spacing: .2em; color: var(--muted); margin-top: 14px; }
 .past-title { font-family: var(--display); font-size: 34px; font-weight: 500; letter-spacing: .04em; margin-top: 4px; }
 
-.video {
-  position: relative; display: block; width: 100%;
-  aspect-ratio: 16 / 9; overflow: hidden;
-  border: 0; padding: 0; background: #000; cursor: pointer;
-  box-shadow: 0 24px 50px rgba(0, 0, 0, .5);
-}
-.video img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s, opacity .3s; opacity: .85; }
-.video:hover img { transform: scale(1.04); opacity: 1; }
-.video iframe { width: 100%; height: 100%; border: 0; display: block; }
-.play {
-  position: absolute; left: 50%; top: 50%;
-  width: 76px; height: 76px; margin: -38px 0 0 -38px;
-  border-radius: 50%;
-  background: rgba(19, 14, 39, .6);
-  border: 2px solid var(--apricot-soft);
-  backdrop-filter: blur(4px);
-  transition: background .2s, transform .2s;
-}
-.play::after {
-  content: ''; position: absolute; left: 30px; top: 23px;
-  border-style: solid; border-width: 15px 0 15px 24px;
-  border-color: transparent transparent transparent var(--apricot-soft);
-}
-.video:hover .play { background: var(--apricot); transform: scale(1.08); }
-.video:hover .play::after { border-left-color: var(--bg); }
-.video:focus-visible { outline: 2px solid var(--apricot); outline-offset: 4px; }
+/* 영상 칸 : 공연 영상(크게) + 아래 작은 영상 두 개 (인터뷰 · 준비 스케치) */
+.past-videos { display: grid; gap: 22px; min-width: 0; }
+.past-extras { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(12px, 2vw, 22px); }
 
 @media (max-width: 860px) {
   .past { grid-template-columns: 1fr; gap: 20px; padding: 40px 0; text-align: center; }
   .past-year { font-size: 48px; }
   .past-title { font-size: 26px; }
+  .past-extras { gap: 12px; }
 }

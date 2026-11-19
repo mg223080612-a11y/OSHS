@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="../css/fonts.css" />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/common.css" />
+  <link rel="stylesheet" href="../css/video.css" />
   <link rel="stylesheet" href="../css/history.css" />
   <script src="../js/fonts-wait.js"></script>
 </head>
@@ -64,8 +65,35 @@
 
     <!-- ===== 연도별 공연 영상 =====
          새 연도를 추가하려면 <article class="past"> 한 덩어리를 복사해서
-         연도 · 제목 · data-id(유튜브 주소의 v= 뒤 11글자)만 바꾸면 됩니다. -->
+         연도 · 제목 · data-id(유튜브 주소의 v= 뒤 11글자)만 바꾸면 됩니다.
+         공연 영상 아래 작은 영상(인터뷰 · 준비 스케치)은 <div class="past-extras"> 안의 <figure class="clip"> 하나씩. -->
     <section class="history-list">
+
+      <article class="past">
+        <div class="past-meta">
+          <p class="past-year">2026</p>
+          <p class="past-label">YOUTH ARTS FESTIVAL</p>
+          <h2 class="past-title">Our Story,<br />His Story</h2>
+        </div>
+        <div class="past-videos">
+          <div class="past-extras">
+            <figure class="clip">
+              <button class="video" type="button" data-id="JrOu2xMo8-Y" aria-label="2026 청소년예술제 Our Story, His Story 인터뷰 영상 재생">
+                <img src="https://i.ytimg.com/vi/JrOu2xMo8-Y/maxresdefault.jpg" alt="" loading="lazy" />
+                <span class="play" aria-hidden="true"></span>
+              </button>
+              <figcaption data-i18n="vidInterview">인터뷰</figcaption>
+            </figure>
+            <figure class="clip">
+              <button class="video" type="button" data-id="1zKIKNlS_kg" aria-label="2026 청소년예술제 Our Story, His Story 준비 스케치 영상 재생">
+                <img src="https://i.ytimg.com/vi/1zKIKNlS_kg/maxresdefault.jpg" alt="" loading="lazy" />
+                <span class="play" aria-hidden="true"></span>
+              </button>
+              <figcaption data-i18n="vidSketch">준비 스케치</figcaption>
+            </figure>
+          </div>
+        </div>
+      </article>
 
       <article class="past">
         <div class="past-meta">
@@ -73,10 +101,28 @@
           <p class="past-label">YOUTH ARTS FESTIVAL</p>
           <h2 class="past-title">GIFT</h2>
         </div>
-        <button class="video" type="button" data-id="xbVpOacHacA" aria-label="2025 청소년예술제 GIFT 영상 재생">
-          <img src="https://i.ytimg.com/vi/xbVpOacHacA/maxresdefault.jpg" alt="" loading="lazy" />
-          <span class="play" aria-hidden="true"></span>
-        </button>
+        <div class="past-videos">
+          <button class="video" type="button" data-id="xbVpOacHacA" aria-label="2025 청소년예술제 GIFT 영상 재생">
+            <img src="https://i.ytimg.com/vi/xbVpOacHacA/maxresdefault.jpg" alt="" loading="lazy" />
+            <span class="play" aria-hidden="true"></span>
+          </button>
+          <div class="past-extras">
+            <figure class="clip">
+              <button class="video" type="button" data-id="RIc4j0jCzd8" aria-label="2025 청소년예술제 GIFT 인터뷰 영상 재생">
+                <img src="https://i.ytimg.com/vi/RIc4j0jCzd8/maxresdefault.jpg" alt="" loading="lazy" />
+                <span class="play" aria-hidden="true"></span>
+              </button>
+              <figcaption data-i18n="vidInterview">인터뷰</figcaption>
+            </figure>
+            <figure class="clip">
+              <button class="video" type="button" data-id="H8isVHzpdKI" aria-label="2025 청소년예술제 GIFT 준비 스케치 영상 재생">
+                <img src="https://i.ytimg.com/vi/H8isVHzpdKI/maxresdefault.jpg" alt="" loading="lazy" />
+                <span class="play" aria-hidden="true"></span>
+              </button>
+              <figcaption data-i18n="vidSketch">준비 스케치</figcaption>
+            </figure>
+          </div>
+        </div>
       </article>
 
       <article class="past">
@@ -123,6 +169,6 @@
 
   <script src="../js/i18n.js"></script>
   <script src="../js/main.js"></script>
-  <script src="../js/history.js"></script>
+  <script src="../js/video.js"></script>
 </body>
 </html>

@@ -1,0 +1,47 @@
+/* =====================================================================
+   유튜브 영상 상자 (History 페이지 · Home 의 Behind the Stage 에서 같이 씀)
+   썸네일 + 가운데 재생 버튼. 누르면 js/video.js 가 그 자리에 영상을 띄움
+   ===================================================================== */
+
+.video {
+  position: relative; display: block; width: 100%;
+  aspect-ratio: 16 / 9; overflow: hidden;
+  border: 0; padding: 0; background: #000; cursor: pointer;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, .5);
+}
+.video img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s, opacity .3s; opacity: .85; }
+.video:hover img { transform: scale(1.04); opacity: 1; }
+.video iframe { width: 100%; height: 100%; border: 0; display: block; }
+.play {
+  position: absolute; left: 50%; top: 50%;
+  width: 76px; height: 76px; margin: -38px 0 0 -38px;
+  border-radius: 50%;
+  background: rgba(19, 14, 39, .6);
+  border: 2px solid var(--apricot-soft);
+  backdrop-filter: blur(4px);
+  transition: background .2s, transform .2s;
+}
+.play::after {
+  content: ''; position: absolute; left: 30px; top: 23px;
+  border-style: solid; border-width: 15px 0 15px 24px;
+  border-color: transparent transparent transparent var(--apricot-soft);
+}
+.video:hover .play { background: var(--apricot); transform: scale(1.08); }
+.video:hover .play::after { border-left-color: var(--bg); }
+.video:focus-visible { outline: 2px solid var(--apricot); outline-offset: 4px; }
+
+/* ----- 작은 영상 + 아래 이름 (Home 첫 화면 · History 의 인터뷰 · 준비 스케치) ----- */
+.clip { margin: 0; }
+.clip .video { box-shadow: 0 18px 40px rgba(0, 0, 0, .55); }
+.clip .play { width: 60px; height: 60px; margin: -30px 0 0 -30px; }
+.clip .play::after { left: 23px; top: 17px; border-width: 12px 0 12px 19px; }
+.clip figcaption {
+  margin-top: 12px; text-align: center;
+  font-family: var(--display); font-size: 15px; letter-spacing: .12em;
+  color: var(--apricot-soft);
+}
+@media (max-width: 600px) {
+  .clip .play { width: 44px; height: 44px; margin: -22px 0 0 -22px; }
+  .clip .play::after { left: 17px; top: 12px; border-width: 9px 0 9px 14px; }
+  .clip figcaption { margin-top: 8px; font-size: 13px; letter-spacing: .06em; }
+}
