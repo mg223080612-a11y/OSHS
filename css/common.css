@@ -14,6 +14,7 @@
   --apricot: #f0c46b;     /* 물감 튄 살구색 */
   --apricot-soft: #f6d9a0;
   --display: 'Oswald', 'Noto Sans KR', sans-serif;      /* NOVEMBER 21 같은 좁은 글씨 */
+  --poster: 'Anton', 'Oswald', sans-serif;                         /* Home D-DAY 날짜 · 카운트다운 (포스터 날짜 글씨) */
   /* 글꼴을 늘리면 첫 화면이 느려집니다. 새 글꼴을 추가하기 전에 아래 4가지로 해결되는지 먼저 보세요 */
   --brand: 'Noto Sans KR', sans-serif;                  /* GLOBAL VISION ... (작은 영문 라벨) */
   --serif: 'Playfair Display', 'Noto Sans KR', serif;   /* 메인 화면 숫자·메뉴 */

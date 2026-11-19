@@ -18,3 +18,13 @@ document.querySelectorAll('.countdown').forEach((box) => {
   tick();
   setInterval(tick, 1000);
 });
+
+// 남은 날짜 배지 : D-2 · D-1 · D-DAY (한국 날짜 기준), 공연이 지나면 숨김
+document.querySelectorAll('[data-dday]').forEach((badge) => {
+  const box = document.querySelector('.countdown[data-target]');
+  if (!box) return;
+  const kstDay = (t) => Math.floor((t + 9 * 3600 * 1000) / 86400000);   // 한국 시간으로 며칠째인지
+  const diff = kstDay(new Date(box.dataset.target).getTime()) - kstDay(Date.now());
+  if (diff < 0) badge.hidden = true;
+  else badge.textContent = diff === 0 ? 'D-DAY' : `D-${diff}`;
+});

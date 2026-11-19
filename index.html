@@ -21,12 +21,13 @@
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- 글꼴은 4가지만 씁니다. 제목 글꼴 3개는 이 사이트의 fonts/ 에서(css/fonts.css),
+  <!-- 글꼴은 5가지만 씁니다. 제목 글꼴 4개는 이 사이트의 fonts/ 에서(css/fonts.css),
        한글 글꼴(Noto Sans KR)은 파일이 무거워서 Google Fonts 에서 받습니다 -->
   <!-- 첫 화면 제목 글꼴은 페이지와 함께 처음부터 받기 (preload) -->
   <link rel="preload" href="fonts/kaushan-script-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/oswald-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/playfair-display-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/anton-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="css/fonts.css" />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/common.css" />
@@ -91,9 +92,10 @@
         </div>
 
         <div class="dday">
-          <p class="dday-label"><span>D-DAY</span></p>
-          <p class="dday-date">11<i>.</i>21</p>
-          <p class="dday-full">2026.11.21 SAT. 5PM <span class="hall">HULBERT HALL</span></p>
+          <!-- D-2 같은 남은 날짜는 js/home.js 가 카운트다운 날짜로 계산해서 바꿈 (당일은 D-DAY) -->
+          <p class="dday-badge" data-dday>D-DAY</p>
+          <p class="dday-date">NOVEMBER 21 <span>SAT. 5PM</span></p>
+          <p class="dday-place">GVCS MUNGYEONG HULBERT HALL</p>
           <a class="map-link" href="https://map.naver.com/p/search/%EA%B8%80%EB%A1%9C%EB%B2%8C%EC%84%A0%EC%A7%84%ED%95%99%EA%B5%90%20%EB%AC%B8%EA%B2%BD%EC%BA%A0%ED%8D%BC%EC%8A%A4" target="_blank" rel="noopener" data-i18n="mapLink">지도에서 보기 ↗</a>
           <div class="countdown" data-target="2026-11-21T17:00:00+09:00" aria-live="off">
             <div><b data-unit="d">--</b><span>DAYS</span></div>
