@@ -36,7 +36,7 @@
 .clip .play { width: 60px; height: 60px; margin: -30px 0 0 -30px; }
 .clip .play::after { left: 23px; top: 17px; border-width: 12px 0 12px 19px; }
 .clip figcaption {
-  margin-top: 12px; text-align: center;
+  margin-top: 12px; text-align: left;
   font-family: var(--display); font-size: 15px; letter-spacing: .12em;
   color: var(--apricot-soft);
 }

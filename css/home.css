@@ -152,7 +152,6 @@
 /* --- 영상 : 스케치 영상(제목 바로 아래, 크게 · 자동 재생) + 인터뷰(D-DAY 칸 맨 아래) --- */
 .clip.hero-feature { width: clamp(380px, 44vw, 660px); margin: 4px 0 0; }
 .clip.hero-interview { margin-top: 28px; }
-.clip.hero-feature figcaption, .clip.hero-interview figcaption { text-align: left; }   /* 영상 이름은 왼쪽 정렬 (History 는 가운데) */
 
 @media (max-width: 860px) {
   .dl-btn { gap: 6px; }
