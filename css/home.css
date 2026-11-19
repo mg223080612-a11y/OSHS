@@ -90,8 +90,6 @@
   transform: rotate(-6deg); transform-origin: left;
   text-shadow: 0 6px 0 rgba(0, 0, 0, .35), 0 10px 30px rgba(0, 0, 0, .5);
 }
-.hero-desc { font-family: var(--serif-ko); font-size: clamp(16px, 1.5vw, 20px); line-height: 1.8; text-wrap: balance; }  /* 줄바꿈 시 한 단어만 남지 않게 */
-.hero-desc b { font-family: var(--serif); font-weight: 500; color: var(--apricot-soft); }
 
 .dday { text-align: center; width: clamp(340px, 30vw, 440px); }
 .dday-label {
@@ -151,12 +149,10 @@
 .countdown b { display: block; font-family: var(--display); font-size: 36px; font-weight: 500; line-height: 1.1; color: var(--apricot); }
 .countdown span { font-family: var(--display); font-size: 11px; letter-spacing: .2em; color: var(--muted); }
 
-/* --- 영상 두 개 : 제목 · 문구 바로 아래 (왼쪽 칸 안). 크게, 이름은 썸네일 아래 (History 와 같은 모양) --- */
-.hero-videos {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 1.6vw, 22px);
-  width: clamp(380px, 44vw, 660px); margin-top: 32px;
-}
-.hero-videos .clip figcaption { text-align: left; }   /* 영상 이름은 왼쪽 정렬 (History 는 가운데) */
+/* --- 영상 : 스케치 영상(제목 바로 아래, 크게 · 자동 재생) + 인터뷰(D-DAY 칸 맨 아래) --- */
+.clip.hero-feature { width: clamp(380px, 44vw, 660px); margin: 4px 0 0; }
+.clip.hero-interview { margin-top: 28px; }
+.clip.hero-feature figcaption, .clip.hero-interview figcaption { text-align: left; }   /* 영상 이름은 왼쪽 정렬 (History 는 가운데) */
 
 @media (max-width: 860px) {
   .dl-btn { gap: 6px; }
@@ -166,7 +162,8 @@
   .hero-eyebrow { justify-content: center; }
   .hero-script .his { margin-left: 0; transform-origin: center; }
   .dday { width: 100%; max-width: 440px; justify-self: center; }
-  .hero-videos { margin: 28px auto 0; width: 100%; max-width: 520px; }
+  .clip.hero-feature { width: 100%; max-width: 560px; margin: 0 auto; }   /* 휴대폰 : 화면 폭 가득 */
+  .clip.hero-interview { max-width: 440px; margin: 28px auto 0; }
   .hero-eyebrow { font-size: 12px; letter-spacing: .2em; }
   .hero-script { margin-bottom: 40px; }
   .dday-label { font-size: 22px; }
@@ -225,6 +222,3 @@
 }
 
 /* 휴대폰 : 영상 두 개 사이 간격만 좁게 (재생 버튼 · 글자 크기는 css/video.css) */
-@media (max-width: 600px) {
-  .hero-videos { gap: 12px; }
-}

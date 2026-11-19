@@ -30,7 +30,7 @@
 .video:hover .play::after { border-left-color: var(--bg); }
 .video:focus-visible { outline: 2px solid var(--apricot); outline-offset: 4px; }
 
-/* ----- 작은 영상 + 아래 이름 (Home 첫 화면 · History 의 인터뷰 · 준비 스케치) ----- */
+/* ----- 작은 영상 + 아래 이름 (Home 첫 화면 · History 의 인터뷰 · 스케치 영상) ----- */
 .clip { margin: 0; }
 .clip .video { box-shadow: 0 18px 40px rgba(0, 0, 0, .55); }
 .clip .play { width: 60px; height: 60px; margin: -30px 0 0 -30px; }

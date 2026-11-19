@@ -13,7 +13,7 @@
 .past-label { font-family: var(--brand); font-size: 11px; font-weight: 700; letter-spacing: .2em; color: var(--muted); margin-top: 14px; }
 .past-title { font-family: var(--display); font-size: 34px; font-weight: 500; letter-spacing: .04em; margin-top: 4px; }
 
-/* 영상 칸 : 공연 영상(크게) + 아래 작은 영상 두 개 (인터뷰 · 준비 스케치) */
+/* 영상 칸 : 공연 영상(크게) + 아래 작은 영상 두 개 (인터뷰 · 스케치 영상) */
 .past-videos { display: grid; gap: 22px; min-width: 0; }
 .past-extras { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(12px, 2vw, 22px); }
 
