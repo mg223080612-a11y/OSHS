@@ -1,18 +1,17 @@
 /* =====================================================================
    Home (index.html)
-   포스터 느낌 배경 · 제목 · 영상 두 개 · D-DAY · 지도 · 카운트다운 · 다운로드 / 아래 줄거리
+   포스터 느낌 배경(책장 · 물감 방울) · 제목 · 영상 두 개 · D-DAY · 지도 · 카운트다운 · 다운로드 / 아래 줄거리
    ===================================================================== */
 
 /* ===== 메인 화면 ===== */
 .hero {
-  --band-w: clamp(46px, 7vw, 120px);   /* 왼쪽 금색 물감 띠 너비 */
   position: relative; overflow: hidden;
   min-height: 100vh; min-height: 100svh;
   display: flex; align-items: center;
   background: #0c0915;
 }
 
-/* --- 배경 : 포스터 느낌 (흐린 보라 책장 + 왼쪽 금색 물감 띠 + 물감 방울) --- */
+/* --- 배경 : 포스터 느낌 (흐린 보라 책장 + 물감 방울) --- */
 .poster-bg, .poster-bg span { position: absolute; inset: 0; pointer-events: none; }
 /* 포스터 그림을 아주 흐리게 깔아서 보라 책장 색만 남김 (글씨는 안 보일 만큼) */
 .poster-bg .shelf {
@@ -27,12 +26,6 @@
     radial-gradient(ellipse 55% 60% at 70% 30%, rgba(160, 70, 120, .22), transparent 70%),
     linear-gradient(rgba(42, 22, 78, .38), rgba(42, 22, 78, .38)),   /* 포스터처럼 보랏빛을 더 */
     linear-gradient(180deg, rgba(19, 14, 39, .35) 0%, rgba(19, 14, 39, .2) 45%, rgba(19, 14, 39, .75) 82%, var(--bg) 100%);
-}
-/* 왼쪽 금색 물감 띠 (포스터 왼쪽 가장자리) */
-.poster-bg .band {
-  right: auto; width: var(--band-w); z-index: 1;
-  background: url(../images/paint-band.svg) 0 0 / 100% 100% no-repeat;
-  opacity: .92;
 }
 /* 흩뿌린 물감 방울 : 왼쪽 위에 많고 오른쪽 아래로 갈수록 드묾 */
 .poster-bg .splat {
@@ -53,7 +46,7 @@
   position: relative; z-index: 1;
   width: 100%;
   /* 양쪽 막 안쪽에서, 제목과 D-DAY 가 가운데로 모이게 */
-  padding: 120px calc(var(--band-w) + 3vw) 90px;
+  padding: 120px var(--edge) 90px;
   display: grid; grid-template-columns: auto auto; justify-content: center;  /* 두 덩어리를 묶어서 화면 가운데에 */
   gap: clamp(40px, 6vw, 110px); align-items: center;
 }
@@ -158,21 +151,22 @@
 .countdown b { display: block; font-family: var(--display); font-size: 36px; font-weight: 500; line-height: 1.1; color: var(--apricot); }
 .countdown span { font-family: var(--display); font-size: 11px; letter-spacing: .2em; color: var(--muted); }
 
-/* --- 영상 두 개 : 제목 · 문구 바로 아래 (왼쪽 칸 안) --- */
+/* --- 영상 두 개 : 제목 · 문구 바로 아래 (왼쪽 칸 안). 크게, 이름은 썸네일 아래 (History 와 같은 모양) --- */
 .hero-videos {
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 1.6vw, 22px);
-  max-width: 540px; margin-top: 32px;
+  width: clamp(380px, 44vw, 660px); margin-top: 32px;
 }
+.hero-videos .clip figcaption { text-align: left; }   /* 영상 이름은 왼쪽 정렬 (History 는 가운데) */
 
 @media (max-width: 860px) {
   .dl-btn { gap: 6px; }
   /* 휴대폰 : 위아래로 쌓고 가운데 정렬 */
   /* 휴대폰 : 위아래로 쌓고 가운데 정렬 */
-  .hero-inner { grid-template-columns: 1fr; gap: 56px; padding: 110px calc(var(--band-w) + 14px) 90px; text-align: center; }
+  .hero-inner { grid-template-columns: 1fr; gap: 56px; padding: 110px var(--edge) 90px; text-align: center; }
   .hero-eyebrow { justify-content: center; }
   .hero-script .his { margin-left: 0; transform-origin: center; }
   .dday { width: 100%; max-width: 440px; justify-self: center; }
-  .hero-videos { margin: 28px auto 0; max-width: 440px; }
+  .hero-videos { margin: 28px auto 0; width: 100%; max-width: 520px; }
   .hero-eyebrow { font-size: 12px; letter-spacing: .2em; }
   .hero-script { margin-bottom: 40px; }
   .dday-label { font-size: 22px; }
@@ -193,8 +187,6 @@
 
 /* ----- 휴대폰 : 양옆 보라색 커튼 없애고, 조명은 넓고 은은하게 ----- */
 @media (max-width: 600px) {
-  .hero { --band-w: 30px; }
-  .hero-inner { padding-left: 44px; padding-right: 18px; }
   .poster-bg .splat { opacity: .5; background-size: 900px auto; background-repeat: repeat-y; }   /* 세로 화면에서 방울이 너무 커지지 않게 */
 }
 
