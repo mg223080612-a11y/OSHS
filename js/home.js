@@ -1,20 +1,14 @@
 // ===== Home (index.html) 전용 =====
 
-// 공연 시작은 data-target의 시각, D-DAY는 한국의 달력 날짜를 기준으로 합니다.
+// D-DAY 배지 : data-target 의 공연 날짜를 한국 달력 날짜 기준으로 셉니다.
+// 공연 전에는 D-n, 공연 당일에는 D-DAY, 다음 날부터는 숨깁니다. (카운트다운 타이머는 공연 당일을 맞아 뺐습니다)
 const dayMs = 24 * 60 * 60 * 1000;
 const kstOffsetMs = 9 * 60 * 60 * 1000;
 const kstDay = (time) => Math.floor((time + kstOffsetMs) / dayMs);
-const pad = (n) => String(n).padStart(2, '0');
-document.querySelectorAll('.countdown[data-target]').forEach((box) => {
-  const target = Date.parse(box.dataset.target);
+document.querySelectorAll('[data-dday][data-target]').forEach((badge) => {
+  const target = Date.parse(badge.dataset.target);
   if (!Number.isFinite(target)) return;
   const showDay = kstDay(target);
-  const nextMidnight = (showDay + 1) * dayMs - kstOffsetMs;
-  const hero = box.closest('.hero');
-  const badge = hero.querySelector('[data-dday]');
-  const soon = hero.querySelector('.soon');
-  const cells = {};
-  box.querySelectorAll('[data-unit]').forEach((el) => { cells[el.dataset.unit] = el; });
   let timer;
 
   const tick = () => {
@@ -22,21 +16,11 @@ document.querySelectorAll('.countdown[data-target]').forEach((box) => {
     const now = Date.now();
     const daysLeft = showDay - kstDay(now);
     badge.hidden = daysLeft < 0;
-    if (daysLeft >= 0) badge.textContent = daysLeft === 0 ? 'D-DAY' : `D-${daysLeft}`;
-
-    const remaining = target - now;
-    soon.hidden = remaining <= 0;
-    box.hidden = remaining <= 0;
-    if (remaining > 0) {
-      const seconds = Math.ceil(remaining / 1000);
-      cells.d.textContent = pad(Math.floor(seconds / 86400));
-      cells.h.textContent = pad(Math.floor(seconds / 3600) % 24);
-      cells.m.textContent = pad(Math.floor(seconds / 60) % 60);
-      cells.s.textContent = pad(seconds % 60);
-      timer = setTimeout(tick, remaining % 1000 || 1000);
-    } else if (daysLeft === 0) {
-      timer = setTimeout(tick, nextMidnight - now);
-    }
+    if (daysLeft < 0) return;
+    badge.textContent = daysLeft === 0 ? 'D-DAY' : `D-${daysLeft}`;
+    // 한국 시간 자정에 다시 계산 (열어 둔 탭도 날짜가 바뀌면 갱신)
+    const nextMidnight = (kstDay(now) + 1) * dayMs - kstOffsetMs;
+    timer = setTimeout(tick, Math.min(nextMidnight - now, 2147483647));
   };
   tick();
   window.addEventListener('pageshow', tick);
