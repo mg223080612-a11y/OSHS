@@ -101,7 +101,8 @@
   padding: 4px 12px; transform: rotate(-2deg);
   box-shadow: 3px 4px 0 rgba(0, 0, 0, .35);
 }
-.dday-badge[hidden] { display: none; }
+.dday-badge[hidden], .hero .countdown[hidden] { display: none; }
+.countdown[hidden] + .downloads { margin-top: 24px; }
 .dday-date {
   font-family: var(--poster); font-weight: 400; letter-spacing: .01em;
   font-size: clamp(44px, 4.4vw, 62px); line-height: 1.02;

@@ -125,13 +125,17 @@
   .cast-group { font-size: 17px; letter-spacing: .22em; }
   .cast-grid { gap: 12px; }
   .cast-grid .cast-card, .cast-grid-lead .cast-card { flex-basis: calc((100% - 12px) / 2); }
-  .cast-body { padding: 40px 8px 14px; }
+  /* 번역이 길면 카드가 글 높이에 맞춰 늘어나도록 사진과 글을 같은 격자 칸에 겹침 */
+  .cast-card { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .cast-photo, .cast-body, .cast-desc { grid-area: 1 / 1; }
+  .cast-photo { width: 100%; min-height: 100%; }
+  .cast-body { position: relative; align-self: end; padding: 40px 8px 14px; }
   .cast .cast-grid .cast-name { font-size: 22px; }
   .cast-actor, .cast-grid-lead .cast-actor { font-size: 12.5px; margin-top: 6px; }
   .cast-photo::after { inset: 6px; }
   /* 카드가 작아서, 설명이 열리면 이름은 잠깐 숨기고 카드 전체를 설명에 씀 */
-  .cast-desc { padding: 14px 12px; }
-  .cast-desc p { font-size: 12px; line-height: 1.65; }
+  .cast-desc { position: relative; padding: 14px 12px; }
+  .cast-desc p { font-size: 12px; line-height: 1.65; overflow-wrap: anywhere; }
   .cast-card.open .cast-body { opacity: 0; }
   .cast-body { transition: opacity .3s ease; }
   /* 앙상블은 3칸씩 작게 */

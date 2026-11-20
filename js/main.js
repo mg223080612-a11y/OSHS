@@ -13,19 +13,31 @@ window.addEventListener('scroll', onScroll, { passive: true });
 // 메뉴 항목 · 국기를 누르거나, 메뉴 바깥을 누르거나, Esc 를 누르면 닫힙니다.
 const toggle = document.querySelector('.menu-toggle');
 const gnb = document.querySelector('.gnb');
+const mobileNav = window.matchMedia('(max-width: 860px)');
 const setMenu = (open) => {
   gnb.classList.toggle('open', open);
   toggle.setAttribute('aria-expanded', open);
-  toggle.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+  updateMenuLabel(toggle);
+  if (open) gnb.querySelector(mobileNav.matches ? 'a' : '.lang-btn')?.focus();
+};
+const closeMenuAndFocusToggle = () => {
+  if (!gnb.classList.contains('open')) return;
+  setMenu(false);
+  toggle.focus();
 };
 toggle?.addEventListener('click', () => setMenu(!gnb.classList.contains('open')));
 gnb?.addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false); });
-document.addEventListener('close-menu', () => setMenu(false));   // 국기를 눌렀을 때 (i18n.js)
-document.addEventListener('click', (e) => {
+document.addEventListener('close-menu', closeMenuAndFocusToggle);   // 국기를 눌렀을 때 (i18n.js)
+const closeOutside = (e) => {
   if (gnb.classList.contains('open') && !gnb.contains(e.target) && !toggle.contains(e.target)) setMenu(false);
-});
+};
+document.addEventListener('click', closeOutside);
+document.addEventListener('focusin', closeOutside);
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && gnb.classList.contains('open')) { setMenu(false); toggle.focus(); }
+  if (e.key === 'Escape') closeMenuAndFocusToggle();
+});
+window.matchMedia('(min-width: 1281px)').addEventListener('change', (e) => {
+  if (e.matches) setMenu(false);
 });
 
 // (상단 메뉴의 밑줄은 각 페이지 HTML 에 class="active" 로 직접 적혀 있습니다)
@@ -35,7 +47,6 @@ document.addEventListener('keydown', (e) => {
 // 화면이 860px 이하일 때만 작동. 맨 아래에 '다음 페이지' 안내가 생기고,
 // 끝까지 내린 상태에서 손가락으로 더 끌어올리면 막대가 차오르다가, 다 차면 다음 페이지로 넘어갑니다.
 (() => {
-  const mobile = window.matchMedia('(max-width: 860px)');
   const links = [...document.querySelectorAll('.gnb > a')];
   const current = links.findIndex((a) => a.classList.contains('active'));
   const next = links[current + 1];
@@ -57,7 +68,7 @@ document.addEventListener('keydown', (e) => {
   const go = () => { going = true; document.body.classList.add('page-leaving'); setTimeout(() => { location.href = hint.href; }, 250); };
 
   window.addEventListener('touchstart', (e) => {
-    startY = (mobile.matches && !going && atBottom()) ? e.touches[0].clientY : null;
+    startY = (mobileNav.matches && !gnb.classList.contains('open') && !going && atBottom()) ? e.touches[0].clientY : null;
   }, { passive: true });
   window.addEventListener('touchmove', (e) => {
     if (startY === null) return;

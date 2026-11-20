@@ -221,7 +221,7 @@ const TEXT = {
     rYoung: 'Seolwoo als Kind',
     rFather: 'Seolwoos Vater',
     rMother: 'Seolwoos Mutter',
-    friend: 'Freundeskreis',
+    friend: 'Freund',
     student: 'Schüler',
     rTkd: 'Leitung des Taekwondo-Clubs',
     d_seolwoo: 'Trägt eine eigene Geschichte im Herzen und erkennt bei den Vorbereitungen mit den Freunden, was Verständnis und Liebe bedeuten.',
@@ -385,6 +385,40 @@ const LANGS = [
   ['zh', '中文'], ['de', 'Deutsch'], ['es', 'Español'],
 ];
 
+const CONTROL_TEXT = {
+  ko: { language: '언어', openMenu: '메뉴 열기', closeMenu: '메뉴 닫기', role: '{name} 배역 소개', performance: '공연 영상', play: '{name} 재생' },
+  en: { language: 'Language', openMenu: 'Open menu', closeMenu: 'Close menu', role: 'Character description for {name}', performance: 'Performance', play: 'Play {name}' },
+  id: { language: 'Bahasa', openMenu: 'Buka menu', closeMenu: 'Tutup menu', role: 'Deskripsi tokoh {name}', performance: 'Pertunjukan', play: 'Putar {name}' },
+  mn: { language: 'Хэл', openMenu: 'Цэс нээх', closeMenu: 'Цэс хаах', role: '{name} дүрийн танилцуулга', performance: 'Тоглолтын бичлэг', play: '{name} тоглуулах' },
+  zh: { language: '语言', openMenu: '打开菜单', closeMenu: '关闭菜单', role: '{name}的角色介绍', performance: '演出录像', play: '播放{name}' },
+  de: { language: 'Sprache', openMenu: 'Menü öffnen', closeMenu: 'Menü schließen', role: 'Rollenbeschreibung für {name}', performance: 'Aufführung', play: '{name} abspielen' },
+  es: { language: 'Idioma', openMenu: 'Abrir menú', closeMenu: 'Cerrar menú', role: 'Descripción del personaje {name}', performance: 'Función', play: 'Reproducir {name}' },
+};
+
+function updateMenuLabel(toggle) {
+  const labels = CONTROL_TEXT[document.documentElement.lang];
+  const open = toggle.getAttribute('aria-expanded') === 'true';
+  toggle.setAttribute('aria-label', open ? labels.closeMenu : labels.openMenu);
+}
+
+function updateVideoLabel(element) {
+  const lang = document.documentElement.lang;
+  const labels = CONTROL_TEXT[lang];
+  const article = element.closest('.past');
+  let title;
+  if (article) {
+    const year = article.querySelector('.past-year').textContent;
+    const show = article.querySelector('.past-title').innerText.replace(/\s+/g, ' ').trim();
+    const kind = element.closest('.clip')?.querySelector('figcaption')?.textContent || labels.performance;
+    title = `${year} ${show} · ${kind}`;
+  } else {
+    const kind = TEXT[lang]?.vidSketch || '스케치 영상';
+    title = `${element.dataset.show} · ${kind}`;
+  }
+  if (element.tagName === 'IFRAME') element.title = title;
+  else element.setAttribute('aria-label', labels.play.replace('{name}', title));
+}
+
 // ----- 화면에 적용 -----
 // 브라우저 탭 제목 : 'Production | Our Story, His Story | 2026 청소년예술제' 처럼
 // 페이지 이름(body 의 data-page-title) + 언어별 기본 제목
@@ -398,6 +432,14 @@ const applyLang = (lang) => {
   const base = (lang !== 'ko' && TEXT[lang]?.title) || KO_BASE;
   document.title = PAGE_TITLE ? `${PAGE_TITLE} | ${base}` : base;
   document.documentElement.lang = lang;
+  const labels = CONTROL_TEXT[lang];
+  document.querySelectorAll('.menu-toggle').forEach(updateMenuLabel);
+  document.querySelectorAll('.lang-switch').forEach((box) => box.setAttribute('aria-label', labels.language));
+  document.querySelectorAll('.cast-toggle').forEach((button) => {
+    const role = button.closest('.cast-card').querySelector('.cast-name').textContent;
+    button.setAttribute('aria-label', labels.role.replace('{name}', role));
+  });
+  document.querySelectorAll('.video[data-id], .video iframe').forEach(updateVideoLabel);
   document.querySelectorAll('.lang-btn').forEach((b) => {
     b.classList.toggle('active', b.dataset.lang === lang);
     b.setAttribute('aria-pressed', b.dataset.lang === lang);
@@ -408,9 +450,8 @@ const applyLang = (lang) => {
 // 국기 버튼 만들기 (상단바 · 펼친 메뉴 두 곳)
 document.querySelectorAll('.lang-switch').forEach((box) => {
   box.setAttribute('role', 'group');
-  box.setAttribute('aria-label', 'Language');
   box.innerHTML = LANGS.map(([code, name]) => `
-    <button class="lang-btn" type="button" data-lang="${code}" title="${name}" aria-label="${name}">
+    <button class="lang-btn" type="button" data-lang="${code}" lang="${code}" title="${name}" aria-label="${name}">
       <svg viewBox="0 0 30 30" aria-hidden="true">${FLAGS[code]}</svg>
       <span class="lang-code" aria-hidden="true">${code.toUpperCase()}</span>
     </button>`).join('');
@@ -425,4 +466,4 @@ document.querySelectorAll('.lang-switch').forEach((box) => {
 // 지난번에 고른 언어로 시작 (없으면 한국어)
 let saved = 'ko';
 try { saved = localStorage.getItem('lang') || 'ko'; } catch (e) { /* 무시 */ }
-applyLang(TEXT[saved] || saved === 'ko' ? saved : 'ko');
+applyLang(LANGS.some(([code]) => code === saved) ? saved : 'ko');

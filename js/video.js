@@ -6,12 +6,13 @@ document.querySelectorAll('.video[data-id]').forEach((btn) => {
   btn.addEventListener('click', () => {
     const frame = document.createElement('iframe');
     frame.src = `https://www.youtube-nocookie.com/embed/${btn.dataset.id}?autoplay=1&rel=0`;
-    frame.title = btn.getAttribute('aria-label').replace(' 재생', '');
     frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
     frame.allowFullscreen = true;
     const box = document.createElement('div');
     box.className = 'video';
     box.appendChild(frame);
     btn.replaceWith(box);
+    updateVideoLabel(frame);
+    frame.focus({ preventScroll: true });
   });
 });
