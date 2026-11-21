@@ -335,7 +335,7 @@
 
 
   // ---------- 현장 사진 (admin.html 에서 올린 사진) ----------
-  // 공연 전 : '지금 무대 뒤' 띠 / 공연 중 : LIVE 폴라로이드 (새 사진이 오면 번쩍 + 툭) / 공연 후 : 대표 사진 + '오늘의 사진'
+  // 공연 전 : '지금 무대 뒤' 띠 / 공연 중 : LIVE 대표 사진 + 넘겨 보는 작은 사진 줄 / 공연 후 : 대표 사진 + '오늘의 사진'
   const liveBox = document.querySelector('[data-snaps="live"]');
   const stripBox = document.querySelector('[data-snaps="strip"]');
   const galleryBox = document.querySelector('[data-snaps="gallery"]');
@@ -345,7 +345,7 @@
   let photoSig = '', shown = [];
   const NEW_MS = 3 * 60 * 1000;
   const hhmm = (t) => new Date(t).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Seoul' });
-  function pola(p, big = false, badge = true) {
+  function pola(p, big = false, badge = true, tag = '') {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'sd-pola';
@@ -365,6 +365,7 @@
     foot.append(cap, time);
     b.append(img, foot);
     if (badge && Date.now() - p.at < NEW_MS) b.append(el('span', 'sd-pola-new', 'NEW'));
+    if (tag) b.append(el('span', 'sd-pola-tag', tag));
     return b;
   }
   function flash() {
@@ -377,6 +378,96 @@
   // (미리보기에서는 '막이 오른 지 42분' 기준)
   const showStartAt = () => (preview ? previewStart : SHOW_START);
   const isShowPhoto = (p, start) => (p.kind ? p.kind === 'show' : (p.taken || p.at) >= start);
+  // 공연 중 LIVE : 위에 대표 사진 크게 + 아래 작은 사진 줄. 작은 사진 줄을 옆으로 넘기면 가운데(금색 테두리) 사진이 대표 사진이 됨
+  // 처음엔 가장 최근 공연 사진. 작은 사진을 누르면 그 사진이 가운데로 오고, 대표 사진을 누르면 크게 보기
+  // 새 사진이 와도 보고 있던 사진을 그대로 지킴 (맨 앞을 보고 있었으면 새 사진으로 바뀜)
+  let liveRow = null, liveMain = null, liveAt = -1, liveNudged = false, liveHiRes = 0;
+  function renderLive(arrived) {
+    const keepId = liveRow && liveAt > 0 ? shown[liveAt]?.id : null;
+    const start = showStartAt();
+    const head = el('p', 'sd-snaps-head', '<span class="sd-rec" aria-hidden="true"></span>LIVE · 현장에서 방금');
+    liveMain = el('div', 'sd-snaps-main');
+    liveAt = -1;
+    const parts = [head, liveMain];
+    liveRow = null;
+    if (shown.length > 1) {
+      const rowhead = el('div', 'sd-snaps-rowhead');
+      rowhead.append(el('span', 'sd-snaps-count', `<b>1</b> / ${shown.length}`), el('span', 'sd-snaps-hint', '밀어서 사진 넘기기 <b aria-hidden="true">→</b>'));
+      const row = el('div', 'sd-snaps-row');
+      row.tabIndex = 0;
+      row.setAttribute('aria-label', '현장 사진 고르기. 옆으로 넘기면 위의 큰 사진이 바뀜');
+      shown.forEach((p) => row.append(pola(p, false, true, isShowPhoto(p, start) ? '' : '무대 뒤')));
+      parts.push(rowhead, row, el('div', 'sd-snaps-bar', '<span></span>'));
+      liveRow = row;
+    }
+    liveBox.classList.remove('is-scrolled');
+    liveBox.replaceChildren(...parts);
+    let at = 0;
+    if (keepId) at = Math.max(0, shown.findIndex((p) => p.id === keepId));
+    setLiveMain(at, true);
+    if (at === 0 && arrived && body.dataset.phase === 'onair') { liveMain.firstChild.classList.add('is-arriving'); flash(); }
+    if (!liveRow) return;
+    if (at > 0) { liveRow.scrollLeft = at * liveStep(); liveBox.classList.add('is-scrolled'); }
+    liveRow.addEventListener('scroll', paintLive, { passive: true });
+    paintLive();
+    if (!liveNudged && !reduce && at === 0) nudgeLive(liveRow);
+  }
+  // 대표 사진 바꾸기 : 넘기는 동안은 작은 사진(이미 받아 둔 것)으로 바로 바꾸고, 멈추면 큰 사진으로
+  function setLiveMain(i, first = false) {
+    if (i === liveAt || !shown[i]) return;
+    liveAt = i;
+    const card = pola(shown[i], first);
+    card.classList.add('sd-pola-main');
+    if (!first) card.classList.add('is-swap');
+    liveMain.replaceChildren(card);
+    clearTimeout(liveHiRes);
+    if (!first) liveHiRes = setTimeout(() => {
+      const img = card.querySelector('img'), p = shown[i];
+      img.srcset = `/photos/${p.id}-t.jpg 480w, /photos/${p.id}.jpg ${p.w}w`;
+      img.sizes = '(max-width: 860px) 92vw, 40vw';
+    }, 300);
+    if (liveRow) {
+      [...liveRow.children].forEach((c, k) => { c.classList.toggle('is-active', k === i); c.setAttribute('aria-current', k === i ? 'true' : 'false'); });
+      const count = liveBox.querySelector('.sd-snaps-count b');
+      if (count) count.textContent = i + 1;
+      const bar = liveBox.querySelector('.sd-snaps-bar span');
+      if (bar) bar.style.width = `${((i + 1) / shown.length) * 100}%`;
+    }
+  }
+  function liveStep() {
+    const c = liveRow.children;
+    return c.length > 1 ? c[1].offsetLeft - c[0].offsetLeft : 1;
+  }
+  function paintLive() {
+    if (!liveRow) return;
+    const i = Math.max(0, Math.min(shown.length - 1, Math.round(liveRow.scrollLeft / liveStep())));
+    if (!liveRow.dataset.nudging) setLiveMain(i);
+    if (liveRow.scrollLeft > 20 && !liveRow.dataset.nudging) liveBox.classList.add('is-scrolled');
+  }
+  // 처음 화면에 보일 때 한 번 : 작은 사진 줄이 살짝 밀렸다 돌아와서 '옆으로 넘길 수 있다'는 걸 보여 줌
+  function nudgeLive(row) {
+    const io = new IntersectionObserver((entries) => {
+      if (!entries[0].isIntersecting || liveNudged) return;
+      liveNudged = true; io.disconnect();
+      if (row.scrollLeft > 0) return;
+      row.dataset.nudging = '1';
+      row.style.scrollSnapType = 'none';   // 딱 붙는 효과를 잠깐 끔 (안 끄면 바로 제자리로 튕김)
+      setTimeout(() => row.scrollTo({ left: liveStep() * .4, behavior: 'smooth' }), 500);
+      setTimeout(() => row.scrollTo({ left: 0, behavior: 'smooth' }), 1150);
+      setTimeout(() => { row.style.scrollSnapType = ''; delete row.dataset.nudging; }, 1900);
+    }, { threshold: .9 });
+    io.observe(row);
+  }
+  // 작은 사진을 누르면 크게 보기 대신 그 사진을 가운데로 (→ 대표 사진이 바뀜)
+  liveBox.addEventListener('click', (e) => {
+    const card = liveRow && e.target.closest('.sd-snaps-row .sd-pola');
+    if (!card) return;
+    e.stopPropagation();
+    const i = [...liveRow.children].indexOf(card);
+    liveRow.scrollTo({ left: i * liveStep(), behavior: reduce ? 'auto' : 'smooth' });
+    liveBox.classList.add('is-scrolled');
+  });
+
   function renderPhotos() {
     const list = (server.photos || []).slice().sort((a, b) => b.at - a.at);
     const start = showStartAt();
@@ -391,16 +482,10 @@
     shown = [...showList.slice().sort(byShot), ...rehearsal];   // 크게 보기 순서 = 오늘의 사진 순서
     list.forEach((p) => seen.add(p.id));
 
-    // 공연 중 : LIVE — 막이 오른 뒤에 올린 사진만. 아직 없으면 '첫 장면을 기다리는 중'
-    if (showList.length) {
-      const main = pola(showList[0], true);
-      main.classList.add('sd-pola-main');
-      const parts = [el('p', 'sd-snaps-head', '<span class="sd-rec" aria-hidden="true"></span>LIVE · 현장에서 방금'), main];
-      if (showList.length > 1) { const row = el('div', 'sd-snaps-row'); showList.slice(1, 4).forEach((p) => row.append(pola(p))); parts.push(row); }
-      if (list.length > 4) { const more = el('button', 'sd-snaps-more', `오늘 사진 ${list.length}장 · 모두 보기 →`); more.type = 'button'; parts.push(more); }
-      liveBox.replaceChildren(...parts);
-      if (arrivedLive && body.dataset.phase === 'onair') { main.classList.add('is-arriving'); flash(); }
-    } else if (list.length) {
+    // 공연 중 : LIVE — 옆으로 넘겨 보는 사진 띠. 맨 앞이 가장 최근 공연 사진, 뒤로 갈수록 이전 사진 → 끝에 무대 뒤 · 리허설
+    // 아직 공연 사진이 없으면 '첫 장면을 기다리는 중'
+    if (showList.length) renderLive(arrivedLive);
+    else if (list.length) {
       liveBox.replaceChildren(
         el('p', 'sd-snaps-head', '<span class="sd-rec" aria-hidden="true"></span>LIVE · 현장 사진'),
         el('div', 'sd-pola-wait', '<span>첫 장면을 기다리는 중…</span><small>공연 사진이 올라오면 여기에 바로 떠요</small>'),
@@ -467,7 +552,6 @@
   document.addEventListener('click', (e) => {
     const card = e.target.closest('.sd-pola');
     if (card) { openLb(card.dataset.id); return; }
-    if (e.target.closest('.sd-snaps-more')) openLb(shown[0]?.id);
   });
   lb.querySelector('.sd-lb-prev').addEventListener('click', () => stepLb(-1));
   lb.querySelector('.sd-lb-next').addEventListener('click', () => stepLb(1));

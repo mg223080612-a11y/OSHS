@@ -96,13 +96,14 @@
             </div>
           </figure>
 
-          <!-- 공연 중 : 영상 대신 막이 오른 뒤 지난 시간 -->
+          <!-- 공연 중 : 화면 순서는 ON AIR 한 줄 → 현장 사진 → 막이 오른 지 → 제목 (css/showday.css 의 "공연 중 화면 순서") -->
+          <!-- 현장 사진 (admin.html 에서 올린 사진) : 새 사진이 오면 폴라로이드처럼 떨어짐. 사진이 없으면 비어 있음 -->
+          <div class="sd-snaps" data-snaps="live"></div>
+          <!-- 막이 오른 뒤 지난 시간 -->
           <div class="sd-live" data-phase-show="onair">
             <p class="sd-live-label">막이 오른 지</p>
             <p class="sd-live-time"><span data-elapsed>00:00</span></p>
             <p class="sd-live-note">화면 밝기를 낮추고, 무대에 집중해 주세요.<br />커튼콜에서 만나요.</p>
-            <!-- 현장 사진 (admin.html 에서 올린 사진) : 새 사진이 오면 폴라로이드처럼 떨어짐. 사진이 없으면 비어 있음 -->
-            <div class="sd-snaps" data-snaps="live"></div>
           </div>
 
           <!-- 공연 후 : 영상 자리에 단체 사진. 커튼콜 사진은 images/lineup/musical.jpg 에 같은 이름으로 덮어쓰기 -->
@@ -121,12 +122,10 @@
             <!-- 리허설 사진이 올라오기 시작하면 나타남 → 아래 '지금 무대 뒤'로 -->
             <a class="sd-rehearsal" href="#backstage" hidden><span class="sd-rec" aria-hidden="true"></span><span>지금 무대 뒤 · 리허설 중</span><b data-rehearsal-count></b><span aria-hidden="true">↓</span></a>
           </div>
-          <!-- 공연 중 -->
-          <div data-phase-show="onair">
+          <!-- 공연 중 : ON AIR + 공연 정보 한 줄 -->
+          <div class="sd-onair-bar" data-phase-show="onair">
             <p class="sd-onair"><span class="sd-dot" aria-hidden="true"></span>ON AIR</p>
-            <p class="sd-now">지금 헐버트홀에서<br />공연 중</p>
-            <p class="dday-date">NOVEMBER 21 <span>SAT. 5PM</span></p>
-            <p class="dday-place">GVCS MUNGYEONG HULBERT HALL</p>
+            <p class="sd-onair-info">11.21 SAT 5PM <span aria-hidden="true">·</span> HULBERT HALL</p>
           </div>
           <!-- 공연 후 -->
           <div data-phase-show="after">
