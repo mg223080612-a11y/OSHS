@@ -146,6 +146,7 @@
     curtain.style.setProperty('--sd-ty', `${g.tasselY}px`);
   }
   window.addEventListener('resize', placeCurtain);
+  window.addEventListener('resize', () => { title.style.minWidth = ''; });   // 제목 폭을 잡아 둔 것(becomeHistory)은 창 크기가 바뀌면 풂
   // His Story → History : 막이 다 열린 뒤에 시작 (바뀌는 속도는 css/showday.css 의 '공연 후 : His Story → History')
   const HISTORY_BEAT_MS = 500;        // 막이 다 열린 뒤 쉬는 시간
   const HISTORY_NO_GL_MS = 2700;      // 단순 커튼(2.2초에 열림)일 때
@@ -154,6 +155,8 @@
   function becomeHistory(delay) {
     clearTimeout(historyTimer);
     const change = () => {
+      // 글자가 접히는 동안 왼쪽 단이 좁아져 화면이 옆으로 조금씩 밀리지 않게, 바뀌기 직전의 폭을 잡아 둠 (창 크기가 바뀌면 풂)
+      if (!title.classList.contains('is-history')) title.style.minWidth = `${Math.ceil(title.getBoundingClientRect().width)}px`;
       title.classList.add('is-history');
       title.setAttribute('aria-label', 'Our Story, His Story — History');
     };
@@ -184,6 +187,7 @@
     body.classList.remove('sd-reopened');
     cloth?.close({ instant: true });
     title.classList.remove('is-history');
+    title.style.minWidth = '';
     title.setAttribute('aria-label', 'Our Story, His Story');
   }
   curtain.querySelector('.sd-open').addEventListener('click', () => openCurtain());
