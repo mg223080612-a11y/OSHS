@@ -394,13 +394,17 @@
   let photoSig = '', shown = [];
   const NEW_MS = 3 * 60 * 1000;
   const hhmm = (t) => new Date(t).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Seoul' });
+  // 사진에 적는 시각 : 공연 날 사진은 '17:01', 다른 날 사진(전날 리허설 등)은 날짜까지 '11/20 19:14' (시각만 보면 순서가 뒤섞여 보이므로)
+  const monthDay = (t) => new Date(t).toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', timeZone: 'Asia/Seoul' });
+  const SHOW_DAY = monthDay(SHOW_START);
+  const stamp = (t) => (monthDay(t) === SHOW_DAY ? hhmm(t) : `${monthDay(t)} ${hhmm(t)}`);
   function pola(p, big = false, badge = true, tag = '') {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'sd-pola';
     b.dataset.id = p.id;
     b.dataset.at = p.at;
-    b.setAttribute('aria-label', `${hhmm(p.taken || p.at)} 현장 사진${p.cap ? ` · ${p.cap}` : ''} 크게 보기`);
+    b.setAttribute('aria-label', `${stamp(p.taken || p.at)} 현장 사진${p.cap ? ` · ${p.cap}` : ''} 크게 보기`);
     const img = document.createElement('img');
     img.alt = '';
     img.width = p.w; img.height = p.h;
@@ -409,7 +413,7 @@
     img.src = `/photos/${p.id}-t.jpg`;
     if (big) { img.srcset = `/photos/${p.id}-t.jpg 480w, /photos/${p.id}.jpg ${p.w}w`; img.sizes = '(max-width: 860px) 92vw, 40vw'; }
     const foot = el('span', 'sd-pola-foot');
-    const time = el('span', 'sd-pola-time'); time.textContent = hhmm(p.taken || p.at);   // 찍은 시각 (없으면 올린 시각)
+    const time = el('span', 'sd-pola-time'); time.textContent = stamp(p.taken || p.at);   // 찍은 시각 (없으면 올린 시각)
     const cap = el('span', 'sd-pola-cap'); cap.textContent = p.cap || '';
     foot.append(cap, time);
     b.append(img, foot);
@@ -616,8 +620,8 @@
   function paintLb() {
     const p = shown[lbAt];
     lbImg.src = `/photos/${p.id}.jpg`;
-    lbImg.alt = p.cap || `${hhmm(p.taken || p.at)} 현장 사진`;
-    lb.querySelector('[data-lb-time]').textContent = hhmm(p.taken || p.at);
+    lbImg.alt = p.cap || `${stamp(p.taken || p.at)} 현장 사진`;
+    lb.querySelector('[data-lb-time]').textContent = stamp(p.taken || p.at);
     lb.querySelector('[data-lb-cap]').textContent = p.cap || '';
     lb.classList.toggle('is-single', shown.length < 2);
   }
