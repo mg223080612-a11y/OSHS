@@ -152,14 +152,25 @@
             <p class="sd-onair"><span class="sd-dot" aria-hidden="true"></span>ON AIR</p>
             <p class="sd-onair-info">11.21 SAT 5PM <span aria-hidden="true">·</span> HULBERT HALL</p>
           </div>
-          <!-- 공연 후 -->
-          <div data-phase-show="after">
+          <!-- 공연 후 : THANK YOU 바로 아래에 엔딩 크레딧.
+               명단은 pages/crew.html 을 그대로 읽어 옴 (Crew 명단을 고치면 여기도 바뀜) -->
+          <div class="sd-after" data-phase-show="after">
             <p class="dday-badge sd-thanks">THANK YOU</p>
             <p class="dday-date">NOVEMBER 21 <span>2026 · HULBERT HALL</span></p>
             <p class="sd-after-copy">오늘 객석을 채워 주셔서 감사합니다.</p>
-            <div class="sd-jump">
-              <a href="#credits">엔딩 크레딧 보기 <span aria-hidden="true">↓</span></a>
-            </div>
+
+            <section class="sd-credits" id="credits" aria-labelledby="credits-title">
+              <p class="sd-kicker">ENDING CREDITS</p>
+              <h2 id="credits-title">이 무대를 만든 사람들</h2>
+              <div class="sd-roll" tabindex="0" aria-label="엔딩 크레딧. 자동으로 올라갑니다">
+                <div class="sd-roll-inner"></div>
+              </div>
+              <div class="sd-cr-ctrl">
+                <button type="button" class="sd-cr-play" aria-pressed="false"><span class="on">일시정지</span><span class="off">이어서 보기</span></button>
+                <button type="button" class="sd-cr-restart">처음부터</button>
+                <span class="sd-cr-tip">이름을 누르면 꽃잎이 날려요</span>
+              </div>
+            </section>
           </div>
         </div>
       </div>
@@ -213,27 +224,6 @@
         <h2 id="backstage-title">지금 무대 뒤</h2>
       </div>
       <div class="sd-strip" data-snaps="strip"></div>
-    </section>
-
-    <!-- ===== 공연 후 : 엔딩 크레딧. 명단은 pages/crew.html 을 그대로 읽어 옴 (Crew 명단을 고치면 여기도 바뀜) ===== -->
-    <section class="sd-credits" id="credits" data-phase-show="after" aria-labelledby="credits-title">
-      <p class="sd-kicker">ENDING CREDITS</p>
-      <h2 id="credits-title">이 무대를 만든 사람들</h2>
-      <form class="sd-find" role="search" action="#">
-        <label for="sd-find-input" class="sr-only">이름으로 친구 찾기</label>
-        <input id="sd-find-input" type="search" placeholder="이름으로 내 친구 찾기" autocomplete="off" />
-        <button type="button" class="sd-find-prev" aria-label="이전 결과" hidden>↑</button>
-        <button type="button" class="sd-find-next" aria-label="다음 결과" hidden>↓</button>
-      </form>
-      <p class="sd-find-result" role="status"></p>
-      <div class="sd-roll" tabindex="0" aria-label="엔딩 크레딧. 자동으로 올라갑니다">
-        <div class="sd-roll-inner"></div>
-      </div>
-      <div class="sd-cr-ctrl">
-        <button type="button" class="sd-cr-play" aria-pressed="false"><span class="on">일시정지</span><span class="off">이어서 보기</span></button>
-        <button type="button" class="sd-cr-restart">처음부터</button>
-        <span class="sd-cr-tip">이름을 누르면 꽃잎이 날려요</span>
-      </div>
     </section>
 
     <!-- ===== 공연 후 : 오늘의 사진 (현장에서 올린 사진 전부) ===== -->

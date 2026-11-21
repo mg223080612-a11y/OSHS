@@ -128,7 +128,8 @@
     session.set('sd-curtain', 'open');
     becomeHistory(reduce ? 0 : 1300);
     if (!reduce) for (let k = 0; k < 7; k++) setTimeout(() => petals(Math.random() * innerWidth, 90, 14, 1.4), 500 + k * 170);
-    if (document.activeElement && curtain.contains(document.activeElement)) title.closest('.hero').querySelector('.sd-jump a')?.focus({ preventScroll: true });
+    // 키보드로 커튼을 열었으면 바로 아래 엔딩 크레딧으로 (커튼은 aria-hidden 이 되므로)
+    if (document.activeElement && curtain.contains(document.activeElement)) document.querySelector('#credits .sd-roll')?.focus({ preventScroll: true });
   }
   function closeCurtain() {
     clearTimeout(historyTimer);
@@ -186,7 +187,6 @@
   const credits = document.getElementById('credits');
   const roll = credits.querySelector('.sd-roll');
   const inner = credits.querySelector('.sd-roll-inner');
-  let names = [];
   const nameBtn = (text) => {
     const b = document.createElement('button');
     b.type = 'button';
@@ -201,7 +201,6 @@
     doc.querySelectorAll('.lu-part').forEach((part) => {
       const block = el('div', 'cr-block');
       const label = part.querySelector('.lu-name');
-      block.dataset.part = label.textContent.trim();
       const isCast = part.querySelector('.lu-roles-inline');
       block.append(el('p', 'cr-part', isCast ? 'CAST' : label.innerHTML));
       const subs = part.querySelectorAll('.lu-sub');
@@ -232,7 +231,6 @@
     const rows = doc.querySelectorAll('.th-row');
     if (rows.length) {
       const block = el('div', 'cr-block');
-      block.dataset.part = 'Special Thanks';
       block.append(el('p', 'cr-part', 'SPECIAL THANKS'));
       const dl = el('dl', 'cr-thanks');
       rows.forEach((row) => {
@@ -248,7 +246,6 @@
     }
     inner.append(el('p', 'cr-made', 'website made by <b>GVCS MG coding club Sync</b>'));
     inner.append(el('p', 'cr-you', '그리고 오늘 객석을 함께 채운 당신까지<b lang="en">Our Story</b>'));
-    names = [...inner.querySelectorAll('.cr-name')];
     // 파트 이름(밴드 · 합창 …)도 지금 고른 언어로
     if (typeof applyLang === 'function' && document.documentElement.lang !== 'ko') applyLang(document.documentElement.lang);
   }
@@ -259,10 +256,10 @@
     fetch('pages/crew.html')
       .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
       .then((html) => { buildCredits(new DOMParser().parseFromString(html, 'text/html')); startRoll(); })
-      .catch(() => { credits.hidden = true; document.querySelector('.sd-jump a[href="#credits"]')?.setAttribute('hidden', ''); });
+      .catch(() => { credits.hidden = true; });
   }
 
-  let offset = 0, userPaused = false, holdUntil = 0, last = 0, running = false, visible = false, finding = false;
+  let offset = 0, userPaused = false, holdUntil = 0, last = 0, running = false, visible = false;
   const SPEED = 42;   // 1초에 올라가는 px
   const maxOffset = () => Math.max(0, inner.scrollHeight - roll.clientHeight);
   function place() {
@@ -272,7 +269,9 @@
   function frame(t) {
     const dt = last ? Math.min(0.05, (t - last) / 1000) : 0;
     last = t;
-    if (body.dataset.phase === 'after' && !userPaused && !finding && Date.now() > holdUntil && visible && !document.hidden) {
+    // 크레딧이 첫 화면(커튼 바로 뒤)에 있으므로, 커튼이 열린 뒤부터 올라가게
+    const curtainOpen = curtain.classList.contains('is-open');
+    if (body.dataset.phase === 'after' && curtainOpen && !userPaused && Date.now() > holdUntil && visible && !document.hidden) {
       offset += SPEED * dt;
       if (offset >= maxOffset()) {
         offset = maxOffset();
@@ -312,47 +311,6 @@
     const r = n.getBoundingClientRect();
     petals(e.clientX || r.left + r.width / 2, e.clientY || r.top, 14);
   });
-
-  // ---------- 내 친구 찾기 ----------
-  const input = document.getElementById('sd-find-input');
-  const result = credits.querySelector('.sd-find-result');
-  const prevBtn = credits.querySelector('.sd-find-prev');
-  const nextBtn = credits.querySelector('.sd-find-next');
-  let found = [], cur = 0;
-  credits.querySelector('.sd-find').addEventListener('submit', (e) => { e.preventDefault(); if (found.length) go(cur + 1); });
-  function go(i) {
-    if (!found.length) return;
-    cur = (i + found.length) % found.length;
-    found.forEach((f, k) => f.classList.toggle('is-current', k === cur));
-    const f = found[cur];
-    offset = Math.max(0, Math.min(maxOffset(), f.offsetTop - roll.clientHeight / 2 + f.offsetHeight / 2));
-    if (!reduce) inner.style.transition = 'transform .7s cubic-bezier(.3,.7,.2,1)';
-    place();
-    setTimeout(() => {
-      inner.style.transition = '';
-      const r = f.getBoundingClientRect();
-      petals(r.left + r.width / 2, r.top, 10, 0.6);
-    }, reduce ? 0 : 750);
-  }
-  function search() {
-    const q = input.value.trim().toLowerCase();
-    names.forEach((n) => n.classList.remove('is-found', 'is-current'));
-    finding = q.length >= 2;
-    found = finding ? names.filter((n) => n.textContent.toLowerCase().includes(q)) : [];
-    roll.classList.toggle('has-find', finding);
-    prevBtn.hidden = nextBtn.hidden = found.length < 2;
-    if (!finding) { result.textContent = q ? '두 글자 이상 넣어 주세요' : ''; return; }
-    if (!found.length) { result.textContent = `‘${input.value.trim()}’ 이름은 크레딧에 없어요`; return; }
-    found.forEach((n) => n.classList.add('is-found'));
-    const parts = [...new Set(found.map((n) => n.closest('.cr-block').dataset.part))];
-    result.textContent = `${parts.join(' · ')}에서 ${found.length}번 찾았어요`;
-    go(0);
-  }
-  let searchTimer;
-  input.addEventListener('input', () => { clearTimeout(searchTimer); searchTimer = setTimeout(search, 180); });
-  prevBtn.addEventListener('click', () => go(cur - 1));
-  nextBtn.addEventListener('click', () => go(cur + 1));
-
 
   // ---------- 현장 사진 (admin.html 에서 올린 사진) ----------
   // 공연 전 : '지금 무대 뒤' 띠 / 공연 중 : LIVE 대표 사진 + 넘겨 보는 작은 사진 줄 / 공연 후 : 대표 사진 + '오늘의 사진'
@@ -555,9 +513,9 @@
     }
   }
 
-  // 홈 안에서 아래로 내려가는 링크 (리허설 중 → 지금 무대 뒤, 엔딩 크레딧 보기) : 부드럽게 스크롤
+  // 홈 안에서 아래로 내려가는 링크 (리허설 중 → 지금 무대 뒤) : 부드럽게 스크롤
   document.addEventListener('click', (e) => {
-    const a = e.target.closest('.sd-rehearsal, .sd-jump a[href^="#"]');
+    const a = e.target.closest('.sd-rehearsal');
     const target = a && document.querySelector(a.getAttribute('href'));
     if (!target) return;
     e.preventDefault();
