@@ -30,6 +30,21 @@
 /fonts/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 
+# 사이트 아이콘 (탭 · 홈 화면 아이콘) : 거의 안 바뀌므로 7일
+/favicon.ico
+  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+
+/favicon-16.png
+  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+
+/favicon-32.png
+  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+
+/apple-touch-icon.png
+  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+
+# 현장 사진 (/photos/*.jpg) 은 worker 가 1년 고정 캐시로 보냄 (한 번 올린 사진은 안 바뀜) — functions/photos/[name].js
+
 # 운영진 전용 공연 관리 페이지 : 검색에 안 잡히게, 늘 새로 받기
 /admin.html
   X-Robots-Tag: noindex, nofollow
