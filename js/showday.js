@@ -402,14 +402,15 @@
     const keepId = liveRow && liveAt > 0 ? shown[liveAt]?.id : null;
     const start = showStartAt();
     const pre = body.dataset.phase === 'before';
-    const head = el('p', 'sd-snaps-head', pre ? '<span class="sd-rec" aria-hidden="true"></span>BACKSTAGE · 지금 무대 뒤' : '<span class="sd-rec" aria-hidden="true"></span>LIVE · 현장에서 방금');
+    // 공연 중에만 'LIVE · 현장에서 방금' 머리글 (공연 전 무대 뒤 사진은 머리글 없이)
     liveMain = el('div', 'sd-snaps-main');
     liveAt = -1;
-    const parts = [head, liveMain];
+    const parts = pre ? [liveMain] : [el('p', 'sd-snaps-head', '<span class="sd-rec" aria-hidden="true"></span>LIVE · 현장에서 방금'), liveMain];
     liveRow = null;
     if (shown.length > 1) {
       const rowhead = el('div', 'sd-snaps-rowhead');
-      rowhead.append(el('span', 'sd-snaps-count', `<b>1</b> / ${shown.length}`), el('span', 'sd-snaps-hint', '밀어서 사진 넘기기 <b aria-hidden="true">→</b>'));
+      rowhead.append(el('span', 'sd-snaps-count', `<b>1</b> / ${shown.length}`),
+        el('span', 'sd-snaps-hint', '<i class="sd-hint-x">밀어서 사진 넘기기 <b aria-hidden="true">→</b></i><i class="sd-hint-y">스크롤해서 넘기기 <b aria-hidden="true">↓</b></i>'));
       const row = el('div', 'sd-snaps-row');
       row.tabIndex = 0;
       row.setAttribute('aria-label', '현장 사진 고르기. 옆으로 넘기면 위의 큰 사진이 바뀜');
@@ -424,7 +425,7 @@
     setLiveMain(at, true);
     if (at === 0 && arrived) { liveMain.firstChild.classList.add('is-arriving'); flash(); }
     if (!liveRow) return;
-    if (at > 0) { liveRow.scrollLeft = at * liveStep(); liveBox.classList.add('is-scrolled'); }
+    if (at > 0) { setPos(at * liveStep()); liveBox.classList.add('is-scrolled'); }
     liveRow.addEventListener('scroll', paintLive, { passive: true });
     paintLive();
     if (!liveNudged && !reduce && at === 0) nudgeLive(liveRow);
@@ -451,26 +452,35 @@
       if (bar) bar.style.width = `${((i + 1) / shown.length) * 100}%`;
     }
   }
+  // 작은 사진 줄 방향 : 폰은 가로(아래 줄), 컴퓨터(1024px 이상)는 세로(대표 사진 오른쪽)
+  const wide = matchMedia('(min-width: 1024px)');
+  const pos = () => (wide.matches ? liveRow.scrollTop : liveRow.scrollLeft);
+  function setPos(v, smooth = false) {
+    liveRow.scrollTo({ [wide.matches ? 'top' : 'left']: v, behavior: smooth && !reduce ? 'smooth' : 'auto' });
+  }
   function liveStep() {
     const c = liveRow.children;
-    return c.length > 1 ? c[1].offsetLeft - c[0].offsetLeft : 1;
+    if (c.length < 2) return 1;
+    return wide.matches ? c[1].offsetTop - c[0].offsetTop : c[1].offsetLeft - c[0].offsetLeft;
   }
+  // 화면 폭이 바뀌어 방향이 바뀌면 보던 사진 자리로 다시 맞춤
+  wide.addEventListener('change', () => { if (liveRow && liveAt > 0) requestAnimationFrame(() => setPos(liveAt * liveStep())); });
   function paintLive() {
     if (!liveRow) return;
-    const i = Math.max(0, Math.min(shown.length - 1, Math.round(liveRow.scrollLeft / liveStep())));
+    const i = Math.max(0, Math.min(shown.length - 1, Math.round(pos() / liveStep())));
     if (!liveRow.dataset.nudging) setLiveMain(i);
-    if (liveRow.scrollLeft > 20 && !liveRow.dataset.nudging) liveBox.classList.add('is-scrolled');
+    if (pos() > 20 && !liveRow.dataset.nudging) liveBox.classList.add('is-scrolled');
   }
   // 처음 화면에 보일 때 한 번 : 작은 사진 줄이 살짝 밀렸다 돌아와서 '옆으로 넘길 수 있다'는 걸 보여 줌
   function nudgeLive(row) {
     const io = new IntersectionObserver((entries) => {
       if (!entries[0].isIntersecting || liveNudged) return;
       liveNudged = true; io.disconnect();
-      if (row.scrollLeft > 0) return;
+      if (pos() > 0) return;
       row.dataset.nudging = '1';
       row.style.scrollSnapType = 'none';   // 딱 붙는 효과를 잠깐 끔 (안 끄면 바로 제자리로 튕김)
-      setTimeout(() => row.scrollTo({ left: liveStep() * .4, behavior: 'smooth' }), 500);
-      setTimeout(() => row.scrollTo({ left: 0, behavior: 'smooth' }), 1150);
+      setTimeout(() => setPos(liveStep() * .4, true), 500);
+      setTimeout(() => setPos(0, true), 1150);
       setTimeout(() => { row.style.scrollSnapType = ''; delete row.dataset.nudging; }, 1900);
     }, { threshold: .9 });
     io.observe(row);
@@ -481,7 +491,7 @@
     if (!card) return;
     e.stopPropagation();
     const i = [...liveRow.children].indexOf(card);
-    liveRow.scrollTo({ left: i * liveStep(), behavior: reduce ? 'auto' : 'smooth' });
+    setPos(i * liveStep(), true);
     liveBox.classList.add('is-scrolled');
   });
 

@@ -521,3 +521,43 @@ body[data-phase] .sd-backstage.is-empty, body[data-phase] .sd-gallery.is-empty {
 .sd-snaps-bar { position: relative; height: 2px; margin-top: 8px; overflow: hidden; background: rgba(246, 217, 160, .14); border-radius: 2px; }
 .sd-snaps-bar span { position: absolute; inset: 0 auto 0 0; background: var(--apricot-soft); border-radius: 2px; transition: width .25s ease; }
 @media (prefers-reduced-motion: reduce) { .sd-snaps-hint b { animation: none; } .sd-pola.is-swap { animation: none; } }
+
+/* 작은 사진 줄 안내 문구 : 폰은 '밀어서 →', 컴퓨터는 '스크롤해서 ↓' */
+.sd-snaps-hint i { font-style: normal; display: inline-flex; align-items: center; gap: 6px; }
+.sd-hint-y { display: none !important; }
+.sd-hint-y b { animation-name: sd-hint-y; }
+@keyframes sd-hint-y { 50% { transform: translateY(4px); } }
+
+/* ---------- 컴퓨터(1024px 이상) : 대표 사진은 왼쪽에 크게, 작은 사진은 오른쪽에 세로로 스크롤 ----------
+   작은 사진 줄 높이 = 대표 사진 높이 (contain: size 로 줄 길이가 칸을 늘리지 않게)
+   세로 줄은 맨 위 사진이 대표 사진 (폰 가로 줄은 가운데 사진) */
+@media (min-width: 1024px) {
+  body.sd-stack .hero-inner { max-width: 1040px; }
+  body.sd-stack .sd-live, body.sd-stack .hero-script, body.sd-stack .clip.hero-feature { max-width: 720px; }
+  .sd-snaps:has(.sd-snaps-row) {
+    display: grid; grid-template-columns: minmax(0, 1fr) 176px; column-gap: 18px;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas: "head head" "main rowhead" "main row";
+    margin-top: 20px;
+  }
+  .sd-snaps:has(.sd-snaps-row) > .sd-snaps-head { grid-area: head; margin-bottom: 12px; }
+  .sd-snaps:has(.sd-snaps-row) > .sd-snaps-main { grid-area: main; }
+  .sd-snaps-rowhead { grid-area: rowhead; margin: 0 0 10px; flex-direction: column; align-items: flex-start; gap: 5px; }
+  .sd-hint-x { display: none !important; }
+  .sd-hint-y { display: inline-flex !important; }
+  .sd-snaps-row {
+    --th: 132px;
+    grid-area: row; contain: size; align-self: stretch;
+    flex-direction: column; gap: 10px; margin: 0; padding: 3px 4px 0; scroll-padding-top: 3px;
+    overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scroll-snap-type: y mandatory;
+    -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent);
+    mask-image: linear-gradient(180deg, #000 78%, transparent);
+  }
+  /* 맨 위 사진(금색 테두리)이 대표 사진. 마지막 사진도 맨 위까지 올라올 수 있게 아래 빈 칸 */
+  .sd-snaps-row::after { content: ''; flex: 0 0 calc(100% - var(--th) - 10px); }
+  .sd-snaps-row .sd-pola { flex: 0 0 var(--th); width: 100%; scroll-snap-align: start; }
+  .sd-snaps-row .sd-pola img { height: 100%; aspect-ratio: auto; }
+  .sd-snaps-bar { display: none; }
+}
+/* 폰 : 쌓는 화면 맨 위(D-DAY · ON AIR 줄)와 메뉴 사이 여백 줄임 */
+@media (max-width: 860px) { body.sd-stack .hero-inner { padding-top: 84px; } }
