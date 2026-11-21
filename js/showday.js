@@ -35,6 +35,8 @@
         server.photos = Array.isArray(data.photos) ? data.photos : [];
         server.hero = data.hero || null;
         renderPhotos();
+        // 다음에 열 때 js/phase-early.js 가 바로 쓰도록 기억
+        try { localStorage.setItem('oshs-showday', JSON.stringify({ ended: server.ended, photos: server.photos.length })); } catch (e) { /* 막혀 있으면 생략 */ }
       } else if (res.ok) {
         server.api = 'none';   // API 대신 일반 페이지가 돌아옴 = 관리자 기능이 배포되지 않음
       } else if (res.status === 404 || res.status === 503 || res.status === 405) {
@@ -49,11 +51,13 @@
     if (server.api === 'none') return t < FALLBACK_END ? 'onair' : 'after';
     return 'onair';
   }
-  let phaseTimer, pollTimer;
+  let phaseTimer, pollTimer, applied = false;
   function applyPhase() {
     clearTimeout(phaseTimer);
     const phase = preview || phaseAt(Date.now());
-    if (body.dataset.phase !== phase) {
+    // 처음 한 번은 꼭 (js/phase-early.js 가 미리 정해 둔 화면이어도 시계 · 사진을 시작해야 함)
+    if (!applied || body.dataset.phase !== phase) {
+      applied = true;
       body.dataset.phase = phase;
       onPhase(phase);
       renderPhotos();   // 공연 전 ↔ 공연 중 : 사진 칸 문구 · 순서가 달라짐
@@ -640,14 +644,18 @@
   }
 
   // 처음 열 때 : 공연 시작 뒤라면 운영진 상태를 먼저 물어보고 (최대 2.5초) 화면을 정함
+  // 사진이 있을 수 있으면 위쪽을 잠깐 숨겨 둠(js/phase-early.js) → 서버 답이 오면 보여 줌 (공연 전 최대 1.5초 · 공연 중 최대 2.5초)
+  const reveal = () => document.documentElement.classList.remove('sd-wait');
   const refresh = async () => {
     const now = Date.now();
     if (!preview && now >= SHOW_START && now < HARD_END) {
       await Promise.race([checkServer(), new Promise((r) => setTimeout(r, 2500))]);
     } else if (preview || now >= PHOTOS_FROM) {
-      checkServer();   // 사진만 받아 옴 (화면 결정은 기다리지 않음)
+      const ask = checkServer();   // 사진만 받아 옴 (화면 결정은 기다리지 않음)
+      if (document.documentElement.classList.contains('sd-wait')) await Promise.race([ask, new Promise((r) => setTimeout(r, 1500))]);
     }
     applyPhase();
+    reveal();
   };
   refresh();
   window.addEventListener('pageshow', (e) => { if (e.persisted) refresh(); });

@@ -561,3 +561,7 @@ body[data-phase] .sd-backstage.is-empty, body[data-phase] .sd-gallery.is-empty {
 }
 /* 폰 : 쌓는 화면 맨 위(D-DAY · ON AIR 줄)와 메뉴 사이 여백 줄임 */
 @media (max-width: 860px) { body.sd-stack .hero-inner { padding-top: 84px; } }
+/* 사진이 있을 수 있을 때 : 서버 답을 기다리는 동안(공연 전 1.5초 · 공연 중 2.5초까지) 위쪽을 숨김 → 반짝임 방지 (js/phase-early.js) */
+.hero-inner { transition: opacity .3s ease; }
+html.sd-wait .hero-inner { opacity: 0; animation: sd-unwait 0s 3s forwards; }   /* 혹시 답이 안 와도 3초 뒤엔 보임 */
+@keyframes sd-unwait { to { opacity: 1; } }
