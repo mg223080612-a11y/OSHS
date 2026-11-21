@@ -73,7 +73,7 @@ body.sd-stack .sd-pre-live { padding: 0; border: 0; }
 .hero .sd-pre-live .countdown span { display: block; margin-top: 8px; font-size: 11px; }
 .sd-pre-live .sd-live-note { margin-top: 14px; }
 
-body[data-phase="onair"] .sd-onair-bar { display: flex !important; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 14px; }
+body[data-phase="onair"] .sd-onair-bar:not(.sd-pre-bar) { display: flex !important; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 14px; }
 .sd-onair-bar { flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 14px; }
 .sd-onair-bar .sd-onair { margin: 0; }
 .sd-onair-info { font: 400 16px/1 var(--poster); letter-spacing: .1em; color: var(--apricot-soft); }
