@@ -88,7 +88,7 @@ body.sd-stack .sd-live { width: 100%; margin-top: 30px; padding: 22px 0 24px; }
 .hero-script .his { transition: color 2.4s 1.6s; }
 .hero-script.is-history .sd-gap, .hero-script.is-history .sd-cap { max-width: 0; opacity: 0; }
 .hero-script.is-history .his { color: var(--apricot-soft); }
-.sd-history-note { margin: -8px 0 30px; font-size: clamp(15px, 1.15vw, 17px); line-height: 1.7; text-wrap: balance; opacity: 0; transform: translateY(10px); transition: opacity 1.6s 3.4s, transform 1.6s 3.4s; }
+.sd-history-note { margin: -8px 0 30px; font-size: clamp(15px, 1.11vw, 17px); line-height: 1.7; text-wrap: balance; opacity: 0; transform: translateY(10px); transition: opacity 1.6s 3.4s, transform 1.6s 3.4s; }
 .sd-history-note b { font: 400 1.2em var(--hand); color: var(--apricot); }
 .hero-script.is-history + .sd-history-note { opacity: 1; transform: none; }
 /* 커튼을 이미 연 뒤 새로고침 · 다시 들어옴(body.sd-reopened, js/phase-early.js) : 첫 화면부터 History 로, 바뀌는 움직임 없이 */
