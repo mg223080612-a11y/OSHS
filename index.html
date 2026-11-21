@@ -86,7 +86,7 @@
             <span class="our">Our Story,</span>
             <span class="his"><span>His</span><span class="sd-gap"> </span><span class="sd-cap">S</span><span>tory</span></span>
           </h1>
-          <p class="sd-history-note" data-phase-show="after">우리의 이야기가, 그분의 이야기가 되어<br />오늘 하나의 <b>History</b>가 되었습니다</p>
+          <p class="sd-history-note" data-phase-show="after">우리의 이야기가, 그분의 이야기가 되어 하나의 <b>History</b>가 되었습니다</p>
 
           <!-- 스케치 영상 → 이어서 인터뷰 영상 : 공연 전에만. 페이지가 열리면 바로 재생 (브라우저 규칙상 소리 끈 채로 시작 · 둘 다 끝나면 처음부터 다시)
                순서는 playlist= 뒤에 쉼표로 적은 차례 (스케치 1zKIKNlS_kg, 인터뷰 JrOu2xMo8-Y).
@@ -122,6 +122,11 @@
           <!-- 공연 후 : 영상 자리에 단체 사진. 커튼콜 사진은 images/lineup/musical.jpg 에 같은 이름으로 덮어쓰기 -->
           <figure class="sd-photo" data-phase-show="after">
             <img src="images/lineup/musical.jpg" width="1400" height="932" alt="2026 청소년예술제 배우 단체 사진" loading="lazy" />
+            <!-- 사진 아래 줄 : 왼쪽 표시 + 오른쪽 '사진 보기' (현장 사진이 올라와 있을 때만 나타남) -->
+            <figcaption>
+              <span class="sd-photo-tag">CURTAIN CALL · 2026.11.21</span>
+              <a class="sd-to-gallery" href="#gallery" hidden>현장 사진 <b data-gallery-n></b>장 보기 <span aria-hidden="true">↓</span></a>
+            </figcaption>
           </figure>
         </div>
 
@@ -157,7 +162,6 @@
           <div class="sd-after" data-phase-show="after">
             <p class="dday-badge sd-thanks">THANK YOU</p>
             <p class="dday-date">NOVEMBER 21 <span>2026 · HULBERT HALL</span></p>
-            <p class="sd-after-copy">오늘 객석을 채워 주셔서 감사합니다.</p>
 
             <section class="sd-credits" id="credits" aria-labelledby="credits-title">
               <p class="sd-kicker">ENDING CREDITS</p>
@@ -175,27 +179,13 @@
         </div>
       </div>
 
-      <!-- 공연 후 첫 화면 : 닫힌 커튼. 술을 아래로 당기거나, 커튼을 양옆으로 밀거나, 버튼으로 열기 -->
+      <!-- 공연 후 첫 화면 : 닫힌 커튼 (첫 화면 한 장 크기). 버튼을 누르거나, 막을 옆으로 밀거나, 술을 아래로 당겨서 열기
+           막 · 휘장 · 금색 술 · 무대 바닥은 js/curtain.js 가 캔버스에 그림 (WebGL 이 안 되는 기기는 css 의 단순 커튼) -->
       <div class="sd-curtain" aria-hidden="false">
-        <div class="sd-drape sd-drape-l" aria-hidden="true"></div>
-        <div class="sd-drape sd-drape-r" aria-hidden="true"></div>
-        <div class="sd-seam" aria-hidden="true"></div>
-        <div class="sd-glow" aria-hidden="true"></div>
-        <svg class="sd-valance" viewBox="0 0 1200 140" preserveAspectRatio="xMidYMin slice" aria-hidden="true" focusable="false">
-          <defs>
-            <linearGradient id="sdBand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c0426"/><stop offset=".7" stop-color="#47135c"/><stop offset="1" stop-color="#2a0837"/></linearGradient>
-            <linearGradient id="sdGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbe6b8"/><stop offset=".45" stop-color="#d9a54a"/><stop offset="1" stop-color="#7a4c16"/></linearGradient>
-            <radialGradient id="sdSwag" cx=".5" cy=".1" r=".95"><stop offset="0" stop-color="#651f7d"/><stop offset=".55" stop-color="#43115a"/><stop offset="1" stop-color="#1c0426"/></radialGradient>
-            <pattern id="sdPleat" width="34" height="140" patternUnits="userSpaceOnUse"><rect width="34" height="140" fill="url(#sdBand)"/><rect width="5" height="140" fill="#000" fill-opacity=".3"/><rect x="15" width="7" height="140" fill="#fff" fill-opacity=".05"/></pattern>
-          </defs>
-          <rect width="1200" height="52" fill="url(#sdPleat)"/>
-          <rect y="44" width="1200" height="5" fill="url(#sdGold)"/>
-          <path d="M0 46 C40 150 160 150 200 46 L200 36 L0 36 Z" fill="url(#sdSwag)"/><path d="M20 54 C58 122 142 122 180 54" fill="none" stroke="#14031b" stroke-opacity=".5" stroke-width="3"/><path d="M44 50 C72 96 128 96 156 50" fill="none" stroke="#8a33a6" stroke-opacity=".3" stroke-width="2"/><path d="M0 46 C40 150 160 150 200 46" fill="none" stroke="url(#sdGold)" stroke-width="4"/><path d="M200 46 C240 150 360 150 400 46 L400 36 L200 36 Z" fill="url(#sdSwag)"/><path d="M220 54 C258 122 342 122 380 54" fill="none" stroke="#14031b" stroke-opacity=".5" stroke-width="3"/><path d="M244 50 C272 96 328 96 356 50" fill="none" stroke="#8a33a6" stroke-opacity=".3" stroke-width="2"/><path d="M200 46 C240 150 360 150 400 46" fill="none" stroke="url(#sdGold)" stroke-width="4"/><path d="M400 46 C440 150 560 150 600 46 L600 36 L400 36 Z" fill="url(#sdSwag)"/><path d="M420 54 C458 122 542 122 580 54" fill="none" stroke="#14031b" stroke-opacity=".5" stroke-width="3"/><path d="M444 50 C472 96 528 96 556 50" fill="none" stroke="#8a33a6" stroke-opacity=".3" stroke-width="2"/><path d="M400 46 C440 150 560 150 600 46" fill="none" stroke="url(#sdGold)" stroke-width="4"/><path d="M600 46 C640 150 760 150 800 46 L800 36 L600 36 Z" fill="url(#sdSwag)"/><path d="M620 54 C658 122 742 122 780 54" fill="none" stroke="#14031b" stroke-opacity=".5" stroke-width="3"/><path d="M644 50 C672 96 728 96 756 50" fill="none" stroke="#8a33a6" stroke-opacity=".3" stroke-width="2"/><path d="M600 46 C640 150 760 150 800 46" fill="none" stroke="url(#sdGold)" stroke-width="4"/><path d="M800 46 C840 150 960 150 1000 46 L1000 36 L800 36 Z" fill="url(#sdSwag)"/><path d="M820 54 C858 122 942 122 980 54" fill="none" stroke="#14031b" stroke-opacity=".5" stroke-width="3"/><path d="M844 50 C872 96 928 96 956 50" fill="none" stroke="#8a33a6" stroke-opacity=".3" stroke-width="2"/><path d="M800 46 C840 150 960 150 1000 46" fill="none" stroke="url(#sdGold)" stroke-width="4"/><path d="M1000 46 C1040 150 1160 150 1200 46 L1200 36 L1000 36 Z" fill="url(#sdSwag)"/><path d="M1020 54 C1058 122 1142 122 1180 54" fill="none" stroke="#14031b" stroke-opacity=".5" stroke-width="3"/><path d="M1044 50 C1072 96 1128 96 1156 50" fill="none" stroke="#8a33a6" stroke-opacity=".3" stroke-width="2"/><path d="M1000 46 C1040 150 1160 150 1200 46" fill="none" stroke="url(#sdGold)" stroke-width="4"/>
-          <g transform="translate(0 0)"><path d="M0 40 V96" stroke="url(#sdGold)" stroke-width="2"/><circle cy="100" r="6.5" fill="url(#sdGold)"/><path d="M-5 105 Q0 99 5 105 L9.5 133 Q0 138 -9.5 133 Z" fill="url(#sdGold)"/><path d="M-6 113 V132 M-3 113 V134 M0 113 V135 M3 113 V134 M6 113 V132" stroke="#6b400f" stroke-opacity=".6" stroke-width=".9"/></g><g transform="translate(200 0)"><path d="M0 40 V96" stroke="url(#sdGold)" stroke-width="2"/><circle cy="100" r="6.5" fill="url(#sdGold)"/><path d="M-5 105 Q0 99 5 105 L9.5 133 Q0 138 -9.5 133 Z" fill="url(#sdGold)"/><path d="M-6 113 V132 M-3 113 V134 M0 113 V135 M3 113 V134 M6 113 V132" stroke="#6b400f" stroke-opacity=".6" stroke-width=".9"/></g><g transform="translate(400 0)"><path d="M0 40 V96" stroke="url(#sdGold)" stroke-width="2"/><circle cy="100" r="6.5" fill="url(#sdGold)"/><path d="M-5 105 Q0 99 5 105 L9.5 133 Q0 138 -9.5 133 Z" fill="url(#sdGold)"/><path d="M-6 113 V132 M-3 113 V134 M0 113 V135 M3 113 V134 M6 113 V132" stroke="#6b400f" stroke-opacity=".6" stroke-width=".9"/></g><g transform="translate(600 0)"><path d="M0 40 V96" stroke="url(#sdGold)" stroke-width="2"/><circle cy="100" r="6.5" fill="url(#sdGold)"/><path d="M-5 105 Q0 99 5 105 L9.5 133 Q0 138 -9.5 133 Z" fill="url(#sdGold)"/><path d="M-6 113 V132 M-3 113 V134 M0 113 V135 M3 113 V134 M6 113 V132" stroke="#6b400f" stroke-opacity=".6" stroke-width=".9"/></g><g transform="translate(800 0)"><path d="M0 40 V96" stroke="url(#sdGold)" stroke-width="2"/><circle cy="100" r="6.5" fill="url(#sdGold)"/><path d="M-5 105 Q0 99 5 105 L9.5 133 Q0 138 -9.5 133 Z" fill="url(#sdGold)"/><path d="M-6 113 V132 M-3 113 V134 M0 113 V135 M3 113 V134 M6 113 V132" stroke="#6b400f" stroke-opacity=".6" stroke-width=".9"/></g><g transform="translate(1000 0)"><path d="M0 40 V96" stroke="url(#sdGold)" stroke-width="2"/><circle cy="100" r="6.5" fill="url(#sdGold)"/><path d="M-5 105 Q0 99 5 105 L9.5 133 Q0 138 -9.5 133 Z" fill="url(#sdGold)"/><path d="M-6 113 V132 M-3 113 V134 M0 113 V135 M3 113 V134 M6 113 V132" stroke="#6b400f" stroke-opacity=".6" stroke-width=".9"/></g><g transform="translate(1200 0)"><path d="M0 40 V96" stroke="url(#sdGold)" stroke-width="2"/><circle cy="100" r="6.5" fill="url(#sdGold)"/><path d="M-5 105 Q0 99 5 105 L9.5 133 Q0 138 -9.5 133 Z" fill="url(#sdGold)"/><path d="M-6 113 V132 M-3 113 V134 M0 113 V135 M3 113 V134 M6 113 V132" stroke="#6b400f" stroke-opacity=".6" stroke-width=".9"/></g>
-        </svg>
+        <canvas class="sd-cloth" aria-hidden="true"></canvas>
         <div class="sd-cord">
-          <span class="sd-rope" aria-hidden="true"></span>
-          <button type="button" class="sd-tassel" aria-label="커튼 열기">
+          <button type="button" class="sd-tassel" aria-label="술을 당겨 커튼 열기">
+            <!-- 이 그림은 WebGL 이 안 될 때만 보임 -->
             <svg viewBox="0 0 34 76" aria-hidden="true" focusable="false">
               <defs><linearGradient id="sdTas" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8a5a1c"/><stop offset=".45" stop-color="#fbe6b8"/><stop offset=".7" stop-color="#d9a54a"/><stop offset="1" stop-color="#7a4c16"/></linearGradient></defs>
               <circle cx="17" cy="7" r="6" fill="url(#sdTas)"/>
@@ -205,14 +195,15 @@
               <path d="M7 30 L4.5 69 M11 29 L9.5 71 M15 28.5 L14.5 72 M19 28.5 L19.5 72 M23 29 L24.5 71 M27 30 L29.5 69" stroke="#6b400f" stroke-opacity=".55" stroke-width="1"/>
             </svg>
           </button>
-          <span class="sd-pull" aria-hidden="true">당겨서<br />커튼 열기</span>
+          <span class="sd-pull" aria-hidden="true">당겨서 열기</span>
         </div>
         <div class="sd-end">
-          <p class="sd-end-kicker">2026 청소년예술제 · 오늘의 막이 내렸습니다</p>
+          <p class="sd-end-kicker">2026 청소년예술제 · <span data-after-day="막이 내렸습니다">오늘의 막이 내렸습니다</span></p>
           <p class="sd-lockup" lang="en"><span class="our">Our Story,</span><span class="his">His Story</span></p>
           <p class="sd-fin">THE END</p>
-          <p class="sd-end-thanks">오늘 함께해 주셔서 감사합니다</p>
+          <p class="sd-end-thanks"><span data-after-day="">오늘 </span>함께해 주셔서 감사합니다</p>
           <button type="button" class="sd-open">커튼콜 보기</button>
+          <p class="sd-open-hint" aria-hidden="true">막을 옆으로 밀어도 열려요</p>
         </div>
       </div>
     </section>
@@ -227,9 +218,9 @@
     </section>
 
     <!-- ===== 공연 후 : 오늘의 사진 (현장에서 올린 사진 전부) ===== -->
-    <section class="sd-gallery is-empty" data-phase-show="after" aria-labelledby="gallery-title">
-      <p class="sd-kicker">TODAY'S PHOTOS</p>
-      <h2 id="gallery-title">오늘의 사진</h2>
+    <section class="sd-gallery is-empty" id="gallery" data-phase-show="after" aria-labelledby="gallery-title">
+      <p class="sd-kicker" data-after-day="2026.11.21 · PHOTOS">TODAY'S PHOTOS</p>
+      <h2 id="gallery-title" data-after-day="그날의 사진">오늘의 사진</h2>
       <p class="sd-gallery-sub" data-gallery-count></p>
       <div class="sd-gallery-groups" data-snaps="gallery"></div>
     </section>
@@ -279,6 +270,7 @@
   <script src="js/main.js"></script>
   <script src="js/home.js"></script>
   <script src="js/petals.js"></script>
+  <script src="js/curtain.js"></script>
   <script src="js/showday.js"></script>
 </body>
 </html>

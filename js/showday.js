@@ -1,4 +1,5 @@
 // ===== 공연 당일 Home : 공연 전 → 공연 중(ON AIR) → 공연 후(THE END 커튼 · History · 엔딩 크레딧) =====
+// 공연 후 커튼의 그림과 움직임은 js/curtain.js (이 파일보다 먼저 불러와야 함)
 // 공연 중 → 공연 후 는 운영진이 admin.html 에서 '공연 종료'를 누르면 바뀝니다 (functions/api/showday.js).
 //   - 17:00 전에는 종료가 눌려 있어도 공연 전 화면 그대로
 //   - 관리자 기능(Cloudflare 설정)이 아직 없으면 FALLBACK_END 시각에 자동으로
@@ -19,7 +20,8 @@
   };
 
   // ---------- 지금이 어느 때인지 ----------
-  const asked = new URLSearchParams(location.search).get('preview');
+  const params = new URLSearchParams(location.search);
+  const asked = params.get('preview');
   let preview = ['before', 'onair', 'after'].includes(asked) ? asked : null;
   let previewStart = Date.now() - 42 * 60 * 1000;   // 미리보기에서는 막이 오른 지 42분째로
   // 운영진이 누른 '공연 종료' 상태. api: 'unknown'(아직 못 물어봄) · 'ok' · 'none'(관리자 기능 없음)
@@ -36,7 +38,10 @@
         server.hero = data.hero || null;
         renderPhotos();
         // 다음에 열 때 js/phase-early.js 가 바로 쓰도록 기억
-        try { localStorage.setItem('oshs-showday', JSON.stringify({ ended: server.ended, photos: server.photos.length })); } catch (e) { /* 막혀 있으면 생략 */ }
+        // (대표 사진도 기억 → 새로고침했을 때 기본 사진이 떴다가 바뀌지 않게)
+        const heroPhoto = server.photos.find((p) => p.id === server.hero);
+        const hero = heroPhoto ? { id: heroPhoto.id, w: heroPhoto.w, h: heroPhoto.h, cap: heroPhoto.cap || '' } : null;
+        try { localStorage.setItem('oshs-showday', JSON.stringify({ ended: server.ended, photos: server.photos.length, hero })); } catch (e) { /* 막혀 있으면 생략 */ }
       } else if (res.ok) {
         server.api = 'none';   // API 대신 일반 페이지가 돌아옴 = 관리자 기능이 배포되지 않음
       } else if (res.status === 404 || res.status === 503 || res.status === 405) {
@@ -51,9 +56,17 @@
     if (server.api === 'none') return t < FALLBACK_END ? 'onair' : 'after';
     return 'onair';
   }
+  // 공연 다음 날부터 : '오늘'이 들어간 문구를 data-after-day 에 적어 둔 글로 바꿈 (비어 있으면 그 말만 뺌)
+  // 미리 보려면 주소 끝에 ?preview=after&day=later
+  const forcedLater = !!preview && params.get('day') === 'later';
+  function applyAfterDay(root) {
+    if (Date.now() < HARD_END && !forcedLater) return;
+    root.querySelectorAll('[data-after-day]').forEach((e) => { e.textContent = e.dataset.afterDay; delete e.dataset.afterDay; });
+  }
   let phaseTimer, pollTimer, applied = false;
   function applyPhase() {
     clearTimeout(phaseTimer);
+    applyAfterDay(document);
     const phase = preview || phaseAt(Date.now());
     // 처음 한 번은 꼭 (js/phase-early.js 가 미리 정해 둔 화면이어도 시계 · 사진을 시작해야 함)
     if (!applied || body.dataset.phase !== phase) {
@@ -105,83 +118,125 @@
   if (countBoxes.length) { tickCount(); setInterval(() => { if (body.dataset.phase === 'before') tickCount(); }, 1000); }
 
   // ---------- 공연 후 : THE END 커튼 + History ----------
+  // 막 그림과 움직임은 js/curtain.js (WebGL). 못 쓰는 기기는 css/showday.css 의 단순 커튼(.no-gl)
   const curtain = document.querySelector('.sd-curtain');
+  const heroInner = document.querySelector('.hero-inner');
   const title = document.querySelector('.hero-script');
-  const drapes = [...curtain.querySelectorAll('.sd-drape')];
-  const rope = curtain.querySelector('.sd-rope');
   const tassel = curtain.querySelector('.sd-tassel');
+  const cloth = window.createStageCurtain?.(curtain.querySelector('.sd-cloth'), {
+    reduce,
+    onProgress: (open) => curtain.style.setProperty('--sd-open', open.toFixed(3)),   // 막을 밀수록 가운데 글이 흐려짐
+    // 막이 다 열린 뒤 한 박자 쉬고 제목이 History 로 바뀌기 시작
+    onArrive: (open) => { if (open && curtain.classList.contains('is-open') && !title.classList.contains('is-history')) becomeHistory(HISTORY_BEAT_MS); },
+    // 브라우저가 그리기 기능을 거둬 가면 단순 커튼으로, 되찾으면 다시 실사 커튼으로
+    onLost: () => curtain.classList.replace('has-gl', 'no-gl'),
+    onRestored: () => curtain.classList.replace('no-gl', 'has-gl'),
+  }) || null;
+  curtain.classList.add(cloth ? 'has-gl' : 'no-gl');
+  // 가운데 글 · 당김 줄 누르는 자리를 막 그림에 맞춤
+  function placeCurtain() {
+    if (!cloth) return;
+    cloth.refresh();
+    const g = cloth.geometry();
+    if (!g) return;
+    curtain.classList.toggle('no-tassel', !g.tassel);
+    curtain.style.setProperty('--sd-center', `${g.centerY}px`);
+    curtain.style.setProperty('--sd-tx', `${g.tasselX}px`);
+    curtain.style.setProperty('--sd-ty', `${g.tasselY}px`);
+  }
+  window.addEventListener('resize', placeCurtain);
+  // His Story → History : 막이 다 열린 뒤에 시작 (바뀌는 속도는 css/showday.css 의 '공연 후 : His Story → History')
+  const HISTORY_BEAT_MS = 500;        // 막이 다 열린 뒤 쉬는 시간
+  const HISTORY_NO_GL_MS = 2700;      // 단순 커튼(2.2초에 열림)일 때
+  const HISTORY_FALLBACK_MS = 4500;   // 막이 다 열렸다는 신호가 안 올 때를 위한 예비 시각
   let historyTimer;
   function becomeHistory(delay) {
     clearTimeout(historyTimer);
-    historyTimer = setTimeout(() => {
+    const change = () => {
       title.classList.add('is-history');
       title.setAttribute('aria-label', 'Our Story, His Story — History');
-    }, delay);
+    };
+    if (delay > 0) historyTimer = setTimeout(change, delay); else change();
   }
-  function openCurtain() {
+  // 막이 열렸는지에 따라 : 첫 화면 높이(body.sd-opened) · 닫혀 있는 동안 막 뒤 내용에 키보드 · 낭독기가 닿지 않게(inert)
+  function setOpened(open) {
+    curtain.classList.toggle('is-open', open);
+    curtain.setAttribute('aria-hidden', String(open));
+    body.classList.toggle('sd-opened', open);
+    heroInner.inert = !open && body.dataset.phase === 'after';
+  }
+  // instant : 이미 연 적이 있어 바로 열린 화면으로 / dragged : 손으로 밀던 자리에서 이어서 열림
+  function openCurtain({ instant = false, dragged = false } = {}) {
     if (curtain.classList.contains('is-open')) return;
-    drapes.forEach((d) => { d.style.transform = ''; });
-    rope.style.height = '';
-    curtain.classList.remove('is-dragging');
-    curtain.classList.add('is-open');
-    curtain.setAttribute('aria-hidden', 'true');
+    const hadFocus = document.activeElement && curtain.contains(document.activeElement);
+    setOpened(true);
+    if (dragged) cloth?.release(true); else cloth?.open({ instant });
     session.set('sd-curtain', 'open');
-    becomeHistory(reduce ? 0 : 1300);
-    if (!reduce) for (let k = 0; k < 7; k++) setTimeout(() => petals(Math.random() * innerWidth, 90, 14, 1.4), 500 + k * 170);
+    becomeHistory(reduce || instant ? 0 : cloth ? HISTORY_FALLBACK_MS : HISTORY_NO_GL_MS);   // 실사 커튼은 보통 onArrive 가 먼저 와서 앞당김
+    if (!reduce && !instant) for (let k = 0; k < 7; k++) setTimeout(() => petals(Math.random() * innerWidth, 90, 14, 1.4), 500 + k * 170);
     // 키보드로 커튼을 열었으면 바로 아래 엔딩 크레딧으로 (커튼은 aria-hidden 이 되므로)
-    if (document.activeElement && curtain.contains(document.activeElement)) document.querySelector('#credits .sd-roll')?.focus({ preventScroll: true });
+    if (hadFocus) document.querySelector('#credits .sd-roll')?.focus({ preventScroll: true });
   }
   function closeCurtain() {
     clearTimeout(historyTimer);
-    curtain.classList.remove('is-open');
-    curtain.setAttribute('aria-hidden', 'false');
+    setOpened(false);
+    body.classList.remove('sd-reopened');
+    cloth?.close({ instant: true });
     title.classList.remove('is-history');
     title.setAttribute('aria-label', 'Our Story, His Story');
   }
-  curtain.querySelector('.sd-open').addEventListener('click', openCurtain);
+  curtain.querySelector('.sd-open').addEventListener('click', () => openCurtain());
+
+  // 끌기 공통 : 한번 누르면 그 손가락 · 마우스가 요소 밖으로 나가도 놓을 때까지 따라감
+  // 첫 손가락 · 마우스 왼쪽 버튼만 받음 (오른쪽 버튼은 메뉴가 떠서 '놓음'이 안 올 수 있음). 받았으면 true
+  // onEnd(마지막 이벤트, 취소됨) — 취소됨 = 브라우저가 스크롤 등으로 가져간 경우
+  function track(down, onMove, onEnd) {
+    if (!down.isPrimary || down.button > 0) return false;
+    const mine = (e) => e.pointerId === down.pointerId;
+    const move = (e) => { if (mine(e)) onMove(e); };
+    const stop = (e) => {
+      if (!mine(e)) return;
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', stop);
+      window.removeEventListener('pointercancel', stop);
+      onEnd(e, e.type === 'pointercancel');
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', stop);
+    window.addEventListener('pointercancel', stop);
+    return true;
+  }
 
   // 술을 아래로 당기기 (그냥 눌러도 열림)
-  let pullY = null, pulled = 0;
-  const ropeBase = () => rope.getBoundingClientRect().height;
-  tassel.addEventListener('pointerdown', (e) => { pullY = e.clientY; pulled = 0; rope.dataset.base = ropeBase(); tassel.setPointerCapture(e.pointerId); });
-  tassel.addEventListener('pointermove', (e) => {
-    if (pullY === null) return;
-    pulled = Math.max(0, Math.min(140, e.clientY - pullY));
-    rope.style.height = `${Number(rope.dataset.base) + pulled}px`;
+  const MAX_PULL_PX = 140;
+  tassel.addEventListener('pointerdown', (down) => {
+    const tracking = track(
+      down,
+      (e) => cloth?.pull(Math.max(0, Math.min(MAX_PULL_PX, e.clientY - down.clientY))),
+      (e, cancelled) => {
+        curtain.classList.remove('is-pulling');
+        cloth?.letGo();
+        if (!cancelled) openCurtain();
+      },
+    );
+    if (tracking) curtain.classList.add('is-pulling');   // 당기는 동안 '당겨서 열기' 글은 숨김 (술이 그 위로 내려오므로)
   });
-  const letGo = () => {
-    if (pullY === null) return;
-    pullY = null;
-    rope.style.height = '';
-    openCurtain();
-  };
-  tassel.addEventListener('pointerup', letGo);
-  tassel.addEventListener('pointercancel', () => { pullY = null; rope.style.height = ''; });
   tassel.addEventListener('click', (e) => { if (e.detail === 0) openCurtain(); });   // 키보드
 
-  // 커튼을 양옆으로 밀어서 열기
-  let dragX = null;
-  curtain.addEventListener('pointerdown', (e) => {
-    if (e.target.closest('button') || curtain.classList.contains('is-open')) return;
-    dragX = e.clientX;
-    curtain.classList.add('is-dragging');
+  // 커튼을 양옆으로 밀어서 열기 : 민 만큼 막이 따라오고, 70px 넘게 밀고 놓으면 끝까지 열림
+  const OPEN_AFTER_PX = 70;
+  curtain.addEventListener('pointerdown', (down) => {
+    if (down.target.closest('button') || curtain.classList.contains('is-open')) return;
+    const pushed = (e) => Math.abs(e.clientX - down.clientX);
+    track(
+      down,
+      (e) => cloth?.drag(pushed(e) / (innerWidth / 2)),
+      (e, cancelled) => {
+        if (!cancelled && pushed(e) > OPEN_AFTER_PX) openCurtain({ dragged: true });
+        else cloth?.release(false);
+      },
+    );
   });
-  curtain.addEventListener('pointermove', (e) => {
-    if (dragX === null) return;
-    const d = Math.min(Math.abs(e.clientX - dragX), innerWidth / 2);
-    drapes[0].style.transform = `translateX(${-d}px)`;
-    drapes[1].style.transform = `translateX(${d}px)`;
-  });
-  const endDrag = (e) => {
-    if (dragX === null) return;
-    const d = Math.abs((e.clientX ?? dragX) - dragX);
-    dragX = null;
-    curtain.classList.remove('is-dragging');
-    if (d > 70) openCurtain();
-    else drapes.forEach((dr) => { dr.style.transform = ''; });
-  };
-  curtain.addEventListener('pointerup', endDrag);
-  curtain.addEventListener('pointercancel', endDrag);
 
   // ---------- 엔딩 크레딧 : pages/crew.html 의 명단을 읽어서 만듦 ----------
   const credits = document.getElementById('credits');
@@ -245,7 +300,8 @@
       inner.append(block);
     }
     inner.append(el('p', 'cr-made', 'website made by <b>GVCS MG coding club Sync</b>'));
-    inner.append(el('p', 'cr-you', '그리고 오늘 객석을 함께 채운 당신까지<b lang="en">Our Story</b>'));
+    inner.append(el('p', 'cr-you', '그리고 <span data-after-day="">오늘 </span>객석을 함께 채운 당신까지<b lang="en">Our Story</b>'));
+    applyAfterDay(inner);
     // 파트 이름(밴드 · 합창 …)도 지금 고른 언어로
     if (typeof applyLang === 'function' && document.documentElement.lang !== 'ko') applyLang(document.documentElement.lang);
   }
@@ -319,6 +375,21 @@
   const galleryBox = document.querySelector('[data-snaps="gallery"]');
   const heroImg = document.querySelector('.sd-photo img');
   const heroDefault = { src: heroImg?.getAttribute('src'), alt: heroImg?.getAttribute('alt') };
+  // 공연 후 단체 사진 자리 : 운영진이 고른 대표 사진(없으면 기본 사진). 같은 사진이면 다시 받지 않음
+  function paintHero(hero) {
+    if (!heroImg) return;
+    const src = hero ? `/photos/${hero.id}.jpg` : heroDefault.src;
+    if (heroImg.getAttribute('src') !== src) heroImg.src = src;
+    heroImg.alt = hero ? (hero.cap || '오늘 공연 사진') : heroDefault.alt;
+    if (hero) { heroImg.width = hero.w; heroImg.height = hero.h; }
+  }
+  // 지난번에 받아 둔 대표 사진을 먼저 보여 줌 (서버 답이 오면 renderPhotos 가 다시 맞춤)
+  function paintSavedHero() {
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem('oshs-showday') || 'null'); } catch (e) { saved = null; }
+    const hero = saved && saved.hero;
+    if (hero && /^[a-z0-9]+$/i.test(String(hero.id)) && hero.w > 0 && hero.h > 0) paintHero(hero);
+  }
   const seen = new Set();
   let photoSig = '', shown = [];
   const NEW_MS = 3 * 60 * 1000;
@@ -461,7 +532,8 @@
     const list = (server.photos || []).slice().sort((a, b) => b.at - a.at);
     const start = showStartAt();
     const showList = list.filter((p) => isShowPhoto(p, start));
-    const byShot = (a, b) => (b.taken || b.at) - (a.taken || a.at);
+    const byShot = (a, b) => (b.taken || b.at) - (a.taken || a.at);   // 최근 것부터 (공연 전 · 공연 중)
+    const byTime = (a, b) => (a.taken || a.at) - (b.taken || b.at);   // 시간 흐름대로, 빠른 것부터 (공연 후 '오늘의 사진')
     const rehearsal = list.filter((p) => !isShowPhoto(p, start)).sort(byShot);
     const phase = body.dataset.phase;
     const pre = phase === 'before';
@@ -471,7 +543,10 @@
     const arrivedLive = photoSig !== '' && (pre ? list : showList).some((p) => !seen.has(p.id));
     photoSig = sig;
     // 크게 보기 · LIVE 순서 = 오늘의 사진 순서 (공연 전에는 올라온 사진 전부를 찍은 시각 순으로)
-    shown = pre ? list.slice().sort(byShot) : [...showList.slice().sort(byShot), ...rehearsal];
+    // 공연 후에는 '오늘의 사진'과 같은 순서 (공연 → 무대 뒤 · 리허설, 각각 시간이 빠른 것부터)
+    shown = pre ? list.slice().sort(byShot)
+      : phase === 'after' ? [...showList.slice().sort(byTime), ...rehearsal.slice().sort(byTime)]
+        : [...showList.slice().sort(byShot), ...rehearsal];
     // 위에 사진 + 아래 시계로 쌓는 화면 : 공연 중에는 늘, 공연 전에는 무대 뒤 사진이 올라오기 시작하면
     body.classList.toggle('sd-stack', phase === 'onair' || (pre && list.length > 0));
     list.forEach((p) => seen.add(p.id));
@@ -500,22 +575,32 @@
     galleryBox.replaceChildren(...groups.flatMap(([name, g]) => {
       const head = el('h3', 'sd-gallery-group', `${name} <span>${g.length}장</span>`);
       const grid = el('div', 'sd-gallery-grid');
-      grid.append(...g.slice().sort(byShot).map((p) => pola(p, false, false)));
+      // 시간이 빠른 사진부터 왼쪽 → 오른쪽, 위 → 아래. 묶음의 첫 사진은 크게 보이므로 큰 파일도 고를 수 있게
+      grid.append(...g.slice().sort(byTime).map((p, i) => {
+        const card = pola(p, false, false);
+        if (i === 0) {
+          const img = card.querySelector('img');
+          img.srcset = `/photos/${p.id}-t.jpg 480w, /photos/${p.id}.jpg ${p.w}w`;
+          img.sizes = '(max-width: 600px) 66vw, 460px';
+        }
+        return card;
+      }));
       return [head, grid];
     }));
     document.querySelector('.sd-gallery').classList.toggle('is-empty', !list.length);
-    document.querySelector('[data-gallery-count]').textContent = list.length ? `현장에서 담은 ${list.length}장의 순간` : '';
-    const hero = list.find((p) => p.id === server.hero);
-    if (heroImg) {
-      heroImg.src = hero ? `/photos/${hero.id}.jpg` : heroDefault.src;
-      heroImg.alt = hero ? (hero.cap || '오늘 공연 사진') : heroDefault.alt;
-      if (hero) { heroImg.width = hero.w; heroImg.height = hero.h; }
+    document.querySelector('[data-gallery-count]').textContent = list.length ? `현장에서 담은 ${list.length}장의 순간 · 시간 순서` : '';
+    // 단체 사진 아래 '현장 사진 N장 보기' (사진이 있을 때만)
+    const toGallery = document.querySelector('.sd-to-gallery');
+    if (toGallery) {
+      toGallery.hidden = !list.length;
+      toGallery.querySelector('[data-gallery-n]').textContent = list.length;
     }
+    paintHero(list.find((p) => p.id === server.hero));
   }
 
-  // 홈 안에서 아래로 내려가는 링크 (리허설 중 → 지금 무대 뒤) : 부드럽게 스크롤
+  // 홈 안에서 아래로 내려가는 링크 (리허설 중 → 지금 무대 뒤 · 현장 사진 보기 → 오늘의 사진) : 부드럽게 스크롤
   document.addEventListener('click', (e) => {
-    const a = e.target.closest('.sd-rehearsal');
+    const a = e.target.closest('.sd-rehearsal, .sd-to-gallery');
     const target = a && document.querySelector(a.getAttribute('href'));
     if (!target) return;
     e.preventDefault();
@@ -562,11 +647,9 @@
     if (phase === 'onair') { tickElapsed(); elapsedTimer = setInterval(tickElapsed, 1000); }
     if (phase === 'after') {
       loadCredits();
-      if (session.get('sd-curtain') === 'open') {
-        curtain.classList.add('is-open');
-        curtain.setAttribute('aria-hidden', 'true');
-        becomeHistory(reduce ? 0 : 400);
-      } else closeCurtain();
+      if (session.get('sd-curtain') === 'open') openCurtain({ instant: true });
+      else closeCurtain();
+      placeCurtain();
       offset = 0; place();
     } else {
       closeCurtain();
@@ -590,7 +673,7 @@
       const b = e.target.closest('button');
       if (!b) return;
       session.set('sd-curtain', null);
-      if (b.classList.contains('sd-again')) { closeCurtain(); scrollTo({ top: 0, behavior: 'smooth' }); return; }
+      if (b.classList.contains('sd-again')) { closeCurtain(); placeCurtain(); scrollTo({ top: 0 }); return; }
       preview = b.dataset.p;
       previewStart = Date.now() - 42 * 60 * 1000;
       previewCdTarget = Date.now() + (5 * 3600 + 12 * 60 + 43) * 1000;
@@ -615,6 +698,13 @@
     applyPhase();
     reveal();
   };
+  // js/phase-early.js 가 지난번 상태로 이미 '공연 후'로 정했으면, 서버 답을 기다리지 않고 커튼 · 크레딧 · 대표 사진부터 준비
+  // (새로고침했을 때 크레딧 칸이 비어 있거나 사진 · 제목이 뒤늦게 바뀌지 않게). 서버 답이 다르면 applyPhase 가 다시 맞춤
+  if (body.dataset.phase === 'after') {
+    applied = true;
+    paintSavedHero();
+    onPhase('after');
+  }
   refresh();
   window.addEventListener('pageshow', (e) => { if (e.persisted) refresh(); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) refresh(); });

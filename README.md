@@ -47,17 +47,19 @@ favicon.ico · favicon-16/32.png · apple-touch-icon.png   (브라우저가 맨 
 
 ## 공연 당일 Home · 공연 종료 버튼
 
-- Home(`index.html`)은 시간에 따라 바뀝니다 (`css/showday.css` · `js/showday.js`).
+- Home(`index.html`)은 시간에 따라 바뀝니다 (`css/showday.css` · `js/showday.js` · 공연 후 커튼 그림은 `js/curtain.js`).
   - 11/21 17:00 전 : 기존 화면 (D-DAY)
   - 17:00부터 : **ON AIR** (막이 오른 뒤 지난 시간)
   - 운영진이 **공연 종료**를 누르면 : **THE END 커튼** → 제목이 *History* 로 → 엔딩 크레딧 (명단은 `pages/crew.html` 에서 읽어 옴)
-  - 미리보기 : `story.gvcs.kr/?preview=onair` · `?preview=after`
+    - 커튼(벨벳 막 · 위 휘장 · 금색 술 · 무대 바닥)은 그림 파일 없이 `js/curtain.js` 가 그립니다(WebGL). 열 때는 버튼 · 막을 옆으로 밀기 · 술 당기기. WebGL 이 안 되는 기기는 단순한 커튼으로 보입니다.
+    - '오늘'이 들어간 문구는 공연 다음 날부터 자동으로 바뀝니다 (`index.html` 의 `data-after-day`).
+  - 미리보기 : `story.gvcs.kr/?preview=onair` · `?preview=after` (다음 날 문구까지 보려면 `?preview=after&day=later`)
 - **공연 종료 버튼** : `story.gvcs.kr/admin.html` (메뉴에 없음). 비밀번호를 넣고 버튼을 1.5초 꾹 누르면 1~2분 안에 모든 방문자 화면이 바뀜. 되돌리기 가능.
   - 17:00 전에 눌러도 방문자 화면은 바뀌지 않음 (테스트 가능). 테스트 뒤에는 되돌리기.
   - 관리자 기능이 설정되지 않았으면 19:30에 자동으로, 아무도 안 눌러도 다음 날 0시에는 공연 후 화면.
   - 서버 코드 : `functions/api/showday.js` (Cloudflare Pages Functions)
 - **현장 사진** : 같은 `admin.html` 의 **현장 사진** 탭에서 폰으로 찍거나 앨범에서 골라 올리면 Home 에 바로 뜸.
-  - 촬영 시각(사진 정보)으로 나눔 : 17:00 전 → Home 의 **지금 무대 뒤**(리허설), 17:00 후 → ON AIR 화면. 공연 후에는 **오늘의 사진**에 전부.
+  - 촬영 시각(사진 정보)으로 나눔 : 17:00 전 → Home 의 **지금 무대 뒤**(리허설), 17:00 후 → ON AIR 화면. 공연 후에는 **오늘의 사진**에 전부 (공연 → 무대 뒤 · 리허설 순서, 각각 시간이 빠른 사진부터). 방문자에게는 숨기지 않은 사진을 모두 보냅니다(올릴 수 있는 한도와 같은 400장까지, `functions/api/showday.js` 의 `MAX_PUBLIC`).
   - 목록에서 사진마다 공연/리허설 직접 바꾸기 · 대표 사진 · 숨기기 · 삭제 가능
   - 올릴 때 사진을 줄이고 위치 정보(GPS)는 지움. 최대 400장
   - 비밀번호 두 가지 : `ADMIN_KEY` = 전부(공연 종료 + 사진), `PHOTO_KEY` = 사진만 (사진 담당 선생님·학생용)
