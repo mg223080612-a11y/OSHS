@@ -56,6 +56,7 @@
     if (body.dataset.phase !== phase) {
       body.dataset.phase = phase;
       onPhase(phase);
+      renderPhotos();   // 공연 전 ↔ 공연 중 : 사진 칸 문구 · 순서가 달라짐
     }
     if (preview) { schedulePoll(); return; }
     const now = Date.now();
@@ -83,6 +84,21 @@
     const h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60;
     elapsedEl.textContent = h ? `${h}:${pad(m)}:${pad(s % 60)}` : `${pad(m)}:${pad(s % 60)}`;
   }
+
+  // ---------- 공연 전 : 막이 오르기까지 남은 시간 (DAYS · HOURS · MINUTES · SECONDS 네 칸) ----------
+  // 미리보기(?preview=before)에서는 5시간 12분 남은 것처럼
+  const countBoxes = [...document.querySelectorAll('[data-countdown]')].map((box) => {
+    const cells = {};
+    box.querySelectorAll('[data-unit]').forEach((e) => { cells[e.dataset.unit] = e; });
+    return cells;
+  });
+  let previewCdTarget = Date.now() + (5 * 3600 + 12 * 60 + 43) * 1000;
+  function tickCount() {
+    const s = Math.max(0, Math.floor(((preview ? previewCdTarget : SHOW_START) - Date.now()) / 1000));
+    const v = { d: Math.floor(s / 86400), h: Math.floor(s / 3600) % 24, m: Math.floor(s / 60) % 60, s: s % 60 };
+    countBoxes.forEach((cells) => { for (const k in v) if (cells[k]) cells[k].textContent = pad(v[k]); });
+  }
+  if (countBoxes.length) { tickCount(); setInterval(() => { if (body.dataset.phase === 'before') tickCount(); }, 1000); }
 
   // ---------- 공연 후 : THE END 커튼 + History ----------
   const curtain = document.querySelector('.sd-curtain');
@@ -385,7 +401,8 @@
   function renderLive(arrived) {
     const keepId = liveRow && liveAt > 0 ? shown[liveAt]?.id : null;
     const start = showStartAt();
-    const head = el('p', 'sd-snaps-head', '<span class="sd-rec" aria-hidden="true"></span>LIVE · 현장에서 방금');
+    const pre = body.dataset.phase === 'before';
+    const head = el('p', 'sd-snaps-head', pre ? '<span class="sd-rec" aria-hidden="true"></span>BACKSTAGE · 지금 무대 뒤' : '<span class="sd-rec" aria-hidden="true"></span>LIVE · 현장에서 방금');
     liveMain = el('div', 'sd-snaps-main');
     liveAt = -1;
     const parts = [head, liveMain];
@@ -396,7 +413,7 @@
       const row = el('div', 'sd-snaps-row');
       row.tabIndex = 0;
       row.setAttribute('aria-label', '현장 사진 고르기. 옆으로 넘기면 위의 큰 사진이 바뀜');
-      shown.forEach((p) => row.append(pola(p, false, true, isShowPhoto(p, start) ? '' : '무대 뒤')));
+      shown.forEach((p) => row.append(pola(p, false, true, pre || isShowPhoto(p, start) ? '' : '무대 뒤')));
       parts.push(rowhead, row, el('div', 'sd-snaps-bar', '<span></span>'));
       liveRow = row;
     }
@@ -405,7 +422,7 @@
     let at = 0;
     if (keepId) at = Math.max(0, shown.findIndex((p) => p.id === keepId));
     setLiveMain(at, true);
-    if (at === 0 && arrived && body.dataset.phase === 'onair') { liveMain.firstChild.classList.add('is-arriving'); flash(); }
+    if (at === 0 && arrived) { liveMain.firstChild.classList.add('is-arriving'); flash(); }
     if (!liveRow) return;
     if (at > 0) { liveRow.scrollLeft = at * liveStep(); liveBox.classList.add('is-scrolled'); }
     liveRow.addEventListener('scroll', paintLive, { passive: true });
@@ -474,17 +491,22 @@
     const showList = list.filter((p) => isShowPhoto(p, start));
     const byShot = (a, b) => (b.taken || b.at) - (a.taken || a.at);
     const rehearsal = list.filter((p) => !isShowPhoto(p, start)).sort(byShot);
-    const sig = `${list.map((p) => `${p.id}${p.kind || ''}`).join()}|${server.hero || ''}|${start}`;
+    const phase = body.dataset.phase;
+    const pre = phase === 'before';
+    const sig = `${list.map((p) => `${p.id}${p.kind || ''}`).join()}|${server.hero || ''}|${start}|${phase}`;
     document.querySelectorAll('.sd-pola-new').forEach((n) => { if (Date.now() - n.parentElement.dataset.at > NEW_MS) n.remove(); });
     if (sig === photoSig) return;
-    const arrivedLive = photoSig !== '' && showList.some((p) => !seen.has(p.id));
+    const arrivedLive = photoSig !== '' && (pre ? list : showList).some((p) => !seen.has(p.id));
     photoSig = sig;
-    shown = [...showList.slice().sort(byShot), ...rehearsal];   // 크게 보기 순서 = 오늘의 사진 순서
+    // 크게 보기 · LIVE 순서 = 오늘의 사진 순서 (공연 전에는 올라온 사진 전부를 찍은 시각 순으로)
+    shown = pre ? list.slice().sort(byShot) : [...showList.slice().sort(byShot), ...rehearsal];
+    // 위에 사진 + 아래 시계로 쌓는 화면 : 공연 중에는 늘, 공연 전에는 무대 뒤 사진이 올라오기 시작하면
+    body.classList.toggle('sd-stack', phase === 'onair' || (pre && list.length > 0));
     list.forEach((p) => seen.add(p.id));
 
     // 공연 중 : LIVE — 옆으로 넘겨 보는 사진 띠. 맨 앞이 가장 최근 공연 사진, 뒤로 갈수록 이전 사진 → 끝에 무대 뒤 · 리허설
     // 아직 공연 사진이 없으면 '첫 장면을 기다리는 중'
-    if (showList.length) renderLive(arrivedLive);
+    if (pre ? list.length : showList.length) renderLive(arrivedLive);
     else if (list.length) {
       liveBox.replaceChildren(
         el('p', 'sd-snaps-head', '<span class="sd-rec" aria-hidden="true"></span>LIVE · 현장 사진'),
@@ -599,6 +621,7 @@
       if (b.classList.contains('sd-again')) { closeCurtain(); scrollTo({ top: 0, behavior: 'smooth' }); return; }
       preview = b.dataset.p;
       previewStart = Date.now() - 42 * 60 * 1000;
+      previewCdTarget = Date.now() + (5 * 3600 + 12 * 60 + 43) * 1000;
       body.dataset.phase = '';
       applyPhase();
       renderPhotos();

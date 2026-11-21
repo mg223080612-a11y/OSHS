@@ -99,6 +99,17 @@
           <!-- 공연 중 : 화면 순서는 ON AIR 한 줄 → 현장 사진 → 막이 오른 지 → 제목 (css/showday.css 의 "공연 중 화면 순서") -->
           <!-- 현장 사진 (admin.html 에서 올린 사진) : 새 사진이 오면 폴라로이드처럼 떨어짐. 사진이 없으면 비어 있음 -->
           <div class="sd-snaps" data-snaps="live"></div>
+          <!-- 공연 전, 무대 뒤 사진이 올라오기 시작하면 : 사진 아래에 막이 오르기까지 남은 시간 -->
+          <div class="sd-live sd-pre-live">
+            <p class="sd-live-label">막이 오르기까지</p>
+            <div class="countdown" data-countdown aria-live="off">
+              <div><b data-unit="d">--</b><span>DAYS</span></div>
+              <div><b data-unit="h">--</b><span>HOURS</span></div>
+              <div><b data-unit="m">--</b><span>MINUTES</span></div>
+              <div><b data-unit="s">--</b><span>SECONDS</span></div>
+            </div>
+            <p class="sd-live-note">오늘 오후 5시, 헐버트홀에서 만나요.</p>
+          </div>
           <!-- 막이 오른 뒤 지난 시간 -->
           <div class="sd-live" data-phase-show="onair">
             <p class="sd-live-label">막이 오른 지</p>
@@ -118,9 +129,21 @@
             <p class="dday-badge" data-dday data-target="2026-11-21T17:00:00+09:00" hidden>D-DAY</p>
             <p class="dday-date">NOVEMBER 21 <span>SAT. 5PM</span></p>
             <p class="dday-place">GVCS MUNGYEONG HULBERT HALL</p>
+            <!-- 막이 오르기까지 남은 시간 (js/showday.js) -->
+            <div class="countdown" data-countdown aria-live="off">
+              <div><b data-unit="d">--</b><span>DAYS</span></div>
+              <div><b data-unit="h">--</b><span>HOURS</span></div>
+              <div><b data-unit="m">--</b><span>MINUTES</span></div>
+              <div><b data-unit="s">--</b><span>SECONDS</span></div>
+            </div>
             <a class="map-link" href="https://map.naver.com/p/search/%EA%B8%80%EB%A1%9C%EB%B2%8C%EC%84%A0%EC%A7%84%ED%95%99%EA%B5%90%20%EB%AC%B8%EA%B2%BD%EC%BA%A0%ED%8D%BC%EC%8A%A4" target="_blank" rel="noopener" data-i18n="mapLink">지도에서 보기 ↗</a>
             <!-- 리허설 사진이 올라오기 시작하면 나타남 → 아래 '지금 무대 뒤'로 -->
             <a class="sd-rehearsal" href="#backstage" hidden><span class="sd-rec" aria-hidden="true"></span><span>지금 무대 뒤 · 리허설 중</span><b data-rehearsal-count></b><span aria-hidden="true">↓</span></a>
+          </div>
+          <!-- 공연 전, 무대 뒤 사진이 올라오기 시작하면 : D-DAY + 공연 정보 한 줄 -->
+          <div class="sd-onair-bar sd-pre-bar">
+            <p class="sd-onair sd-pre"><span class="sd-dot" aria-hidden="true"></span>D-DAY</p>
+            <p class="sd-onair-info">11.21 SAT 5PM <span aria-hidden="true">·</span> HULBERT HALL</p>
           </div>
           <!-- 공연 중 : ON AIR + 공연 정보 한 줄 -->
           <div class="sd-onair-bar" data-phase-show="onair">

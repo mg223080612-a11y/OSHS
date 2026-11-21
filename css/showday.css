@@ -39,28 +39,47 @@ body[data-phase="onair"] .poster-bg { filter: brightness(.45) saturate(.8); tran
 .sd-live-time { font: 400 clamp(64px, 8vw, 112px)/1 var(--poster); color: var(--apricot-soft); letter-spacing: .02em; }
 .sd-live-note { margin-top: 10px; color: var(--muted); font-size: 15px; line-height: 1.6; }
 
-/* ---------- 공연 중 화면 순서 : ON AIR 한 줄 → 현장 사진 → 막이 오른 지 → 제목 (한 줄로 가운데에) ----------
-   제목(.hero-copy)과 날짜(.dday) 두 덩어리를 풀어서(display: contents) 순서를 order 로 정함 */
-body[data-phase="onair"] .hero-inner {
+/* ---------- 위에서 아래로 쌓는 화면 (body.sd-stack) : 공연 중 + 공연 전에 무대 뒤 사진이 올라오기 시작하면 ----------
+   공연 중 : ON AIR 한 줄 → 현장 사진 → 막이 오른 지 → 제목
+   공연 전 : D-DAY 한 줄 → 무대 뒤 사진 → 막이 오르기까지 → 제목 → 스케치 영상
+   제목(.hero-copy)과 날짜(.dday) 두 덩어리를 풀어서(display: contents) 순서를 order 로 정함 (js/showday.js 가 body 에 sd-stack 을 붙임) */
+body.sd-stack .hero-inner {
   display: flex; flex-direction: column; align-items: center;
   max-width: 640px; margin: 0 auto; padding: 108px var(--edge) 80px; gap: 0; text-align: center;
 }
-body[data-phase="onair"] .hero-copy,
-body[data-phase="onair"] .dday { display: contents; }
-body[data-phase="onair"] .sd-onair-bar { order: 1; }
-body[data-phase="onair"] .sd-snaps { order: 2; }
-body[data-phase="onair"] .sd-live { order: 3; }
-body[data-phase="onair"] .hero-eyebrow { order: 4; justify-content: center; margin: 44px 0 22px; }
-body[data-phase="onair"] .hero-script { order: 5; margin: 0; }
-body[data-phase="onair"] .hero-script .his { margin-left: 0; transform-origin: center; }
-body:not([data-phase="onair"]) .sd-snaps[data-snaps="live"] { display: none; }
+body.sd-stack .hero-copy,
+body.sd-stack .dday { display: contents; }
+body.sd-stack .sd-onair-bar { order: 1; }
+body.sd-stack .sd-snaps { order: 2; }
+body.sd-stack .sd-live { order: 3; }
+body.sd-stack .hero-eyebrow { order: 4; justify-content: center; margin: 44px 0 22px; }
+body.sd-stack .hero-script { order: 5; margin: 0; }
+body.sd-stack .hero-script .his { margin-left: 0; transform-origin: center; }
+body.sd-stack .clip.hero-feature { order: 6; width: 100%; margin: 40px 0 0; }
+body:not(.sd-stack) .sd-snaps[data-snaps="live"] { display: none; }
+/* 공연 전 쌓는 화면에서는 오른쪽 날짜 칸 · '리허설 중' 버튼 · 아래 '지금 무대 뒤' 띠를 숨김 (위로 올라왔으므로) */
+body.sd-stack .dday > [data-phase-show="before"],
+body.sd-stack .sd-backstage { display: none !important; }
+.sd-pre-bar, .sd-pre-live { display: none; }
+body.sd-stack[data-phase="before"] .sd-pre-bar { display: flex !important; }
+body.sd-stack[data-phase="before"] .sd-pre-live { display: block; }
+.sd-onair.sd-pre { color: #1a1020; background: var(--apricot-soft); }
+.sd-onair.sd-pre .sd-dot { background: #b3263a; }
+/* 공연 전, 사진이 올라온 쌓는 화면 : 원래 카운트다운(네 칸)을 크게 */
+body.sd-stack .sd-pre-live { padding: 0; border: 0; }
+.sd-pre-live .sd-live-label { margin-bottom: 4px; }
+.hero .sd-pre-live .countdown { margin: 8px 0 0; padding: 20px 0; }
+.hero .sd-pre-live .countdown b { font-size: clamp(46px, 13vw, 72px); line-height: 1; }
+.hero .sd-pre-live .countdown span { display: block; margin-top: 8px; font-size: 11px; }
+.sd-pre-live .sd-live-note { margin-top: 14px; }
 
 body[data-phase="onair"] .sd-onair-bar { display: flex !important; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 14px; }
+.sd-onair-bar { flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 14px; }
 .sd-onair-bar .sd-onair { margin: 0; }
 .sd-onair-info { font: 400 16px/1 var(--poster); letter-spacing: .1em; color: var(--apricot-soft); }
 .sd-onair-info span { margin: 0 .3em; color: var(--muted); }
-body[data-phase="onair"] .sd-snaps { width: 100%; margin-top: 26px; padding-top: 0; border-top: 0; text-align: left; }
-body[data-phase="onair"] .sd-live { width: 100%; margin-top: 30px; padding: 22px 0 24px; }
+body.sd-stack .sd-snaps { width: 100%; margin-top: 26px; padding-top: 0; border-top: 0; text-align: left; }
+body.sd-stack .sd-live { width: 100%; margin-top: 30px; padding: 22px 0 24px; }
 
 /* ---------- 공연 후 : His Story → History ---------- */
 .hero-script .his > span { display: inline-block; }
