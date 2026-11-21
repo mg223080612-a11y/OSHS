@@ -29,3 +29,13 @@
 
 /fonts/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# 운영진 전용 공연 관리 페이지 : 검색에 안 잡히게, 늘 새로 받기
+/admin.html
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
+
+/admin
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
+

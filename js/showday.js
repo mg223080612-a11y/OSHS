@@ -1,9 +1,14 @@
 // ===== 공연 당일 Home : 공연 전 → 공연 중(ON AIR) → 공연 후(THE END 커튼 · History · 엔딩 크레딧) =====
-// 시각은 한국 시간 기준. 공연이 끝나는 시각(SHOW_END)은 실제 일정에 맞춰 바꾸세요.
+// 공연 중 → 공연 후 는 운영진이 admin.html 에서 '공연 종료'를 누르면 바뀝니다 (functions/api/showday.js).
+//   - 17:00 전에는 종료가 눌려 있어도 공연 전 화면 그대로
+//   - 관리자 기능(Cloudflare 설정)이 아직 없으면 FALLBACK_END 시각에 자동으로
+//   - 아무도 안 눌러도 HARD_END(다음 날 0시)가 지나면 공연 후
 // 주소 끝에 ?preview=onair 또는 ?preview=after 를 붙이면 그 화면을 미리 볼 수 있습니다.
 (() => {
   const SHOW_START = Date.parse('2026-11-21T17:00:00+09:00');
-  const SHOW_END = Date.parse('2026-11-21T19:30:00+09:00');   // ※ 임시. 실제로 공연이 끝나는 시각으로 바꾸기
+  const FALLBACK_END = Date.parse('2026-11-21T19:30:00+09:00');   // 관리자 기능이 설정되지 않았을 때만 쓰는 예비 시각
+  const HARD_END = Date.parse('2026-11-22T00:00:00+09:00');
+  const API = '/api/showday';
   const body = document.body;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const petals = (...a) => window.throwPetals?.(...a);
@@ -16,8 +21,31 @@
   const asked = new URLSearchParams(location.search).get('preview');
   let preview = ['before', 'onair', 'after'].includes(asked) ? asked : null;
   let previewStart = Date.now() - 42 * 60 * 1000;   // 미리보기에서는 막이 오른 지 42분째로
-  const phaseAt = (t) => (t < SHOW_START ? 'before' : t < SHOW_END ? 'onair' : 'after');
-  let phaseTimer;
+  // 운영진이 누른 '공연 종료' 상태. api: 'unknown'(아직 못 물어봄) · 'ok' · 'none'(관리자 기능 없음)
+  const server = { api: 'unknown', ended: false };
+  async function checkServer() {
+    try {
+      const res = await fetch(API, { cache: 'no-store' });
+      const isJson = (res.headers.get('content-type') || '').includes('json');
+      if (res.ok && isJson) {
+        const data = await res.json();
+        server.api = 'ok';
+        server.ended = !!data.ended;
+      } else if (res.ok) {
+        server.api = 'none';   // API 대신 일반 페이지가 돌아옴 = 관리자 기능이 배포되지 않음
+      } else if (res.status === 404 || res.status === 503 || res.status === 405) {
+        server.api = 'none';
+      }
+    } catch (e) { /* 잠깐 끊긴 것은 무시하고 지난 상태 유지 */ }
+  }
+  function phaseAt(t) {
+    if (t < SHOW_START) return 'before';
+    if (t >= HARD_END) return 'after';
+    if (server.api === 'ok') return server.ended ? 'after' : 'onair';
+    if (server.api === 'none') return t < FALLBACK_END ? 'onair' : 'after';
+    return 'onair';
+  }
+  let phaseTimer, pollTimer;
   function applyPhase() {
     clearTimeout(phaseTimer);
     const phase = preview || phaseAt(Date.now());
@@ -25,11 +53,21 @@
       body.dataset.phase = phase;
       onPhase(phase);
     }
-    if (!preview) {
-      const now = Date.now();
-      const next = now < SHOW_START ? SHOW_START : now < SHOW_END ? SHOW_END : null;
-      if (next) phaseTimer = setTimeout(applyPhase, Math.min(next - now + 50, 2147483647));
-    }
+    if (preview) return;
+    const now = Date.now();
+    const edges = [SHOW_START, HARD_END, server.api === 'none' ? FALLBACK_END : 0].filter((t) => t > now);
+    if (edges.length) phaseTimer = setTimeout(applyPhase, Math.min(Math.min(...edges) - now + 50, 2147483647));
+    schedulePoll();
+  }
+  // 공연 중에는 30초마다, 공연 후에도(되돌리기 대비) 1분마다 상태 확인. 화면이 꺼져 있을 때는 쉼
+  function schedulePoll() {
+    clearTimeout(pollTimer);
+    const now = Date.now();
+    if (preview || now < SHOW_START || now >= HARD_END || server.api === 'none') return;
+    const wait = (body.dataset.phase === 'onair' ? 30000 : 60000) + Math.random() * 5000;
+    pollTimer = setTimeout(async () => {
+      if (!document.hidden) { await checkServer(); applyPhase(); } else schedulePoll();
+    }, wait);
   }
 
   // ---------- 공연 중 : 막이 오른 뒤 지난 시간 ----------
@@ -334,7 +372,14 @@
     });
   }
 
-  applyPhase();
-  window.addEventListener('pageshow', applyPhase);
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) applyPhase(); });
+  // 처음 열 때 : 공연 시작 뒤라면 운영진 상태를 먼저 물어보고 (최대 2.5초) 화면을 정함
+  const refresh = async () => {
+    if (!preview && Date.now() >= SHOW_START && Date.now() < HARD_END) {
+      await Promise.race([checkServer(), new Promise((r) => setTimeout(r, 2500))]);
+    }
+    applyPhase();
+  };
+  refresh();
+  window.addEventListener('pageshow', (e) => { if (e.persisted) refresh(); });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refresh(); });
 })();

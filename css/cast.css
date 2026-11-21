@@ -150,6 +150,7 @@
 .fl-hint { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 34px auto -40px; color: var(--apricot-soft); font-size: 15px; text-align: center; }
 .fl-hint svg { width: 20px; height: 20px; flex-shrink: 0; }
 .fl-hint span { text-wrap: balance; }
+.fl-hint[hidden] { display: none; }
 .fl-btn {
   position: absolute; top: 16px; right: 16px; z-index: 4;
   display: inline-flex; align-items: center; gap: 4px;

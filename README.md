@@ -44,3 +44,23 @@ favicon.ico · favicon-16/32.png · apple-touch-icon.png   (브라우저가 맨 
   `<span class="cast-ph">` 줄을 `<img src="../images/cast/(이름).jpg">` 로 바꾸면 됩니다.
 - **History 영상 추가**: `pages/history.html` 의 `<article class="past">` 한 덩어리를 복사해 연도 · 제목 · `data-id`(유튜브 주소 `v=` 뒤 11글자)만 바꾸면 됩니다.
 - 페이지마다 역할이 하나씩입니다. 같은 정보를 여러 페이지에 반복하지 마세요. (카운트다운은 Home 에만)
+
+## 공연 당일 Home · 공연 종료 버튼
+
+- Home(`index.html`)은 시간에 따라 바뀝니다 (`css/showday.css` · `js/showday.js`).
+  - 11/21 17:00 전 : 기존 화면 (D-DAY)
+  - 17:00부터 : **ON AIR** (막이 오른 뒤 지난 시간)
+  - 운영진이 **공연 종료**를 누르면 : **THE END 커튼** → 제목이 *History* 로 → 엔딩 크레딧 (명단은 `pages/crew.html` 에서 읽어 옴)
+  - 미리보기 : `story.gvcs.kr/?preview=onair` · `?preview=after`
+- **공연 종료 버튼** : `story.gvcs.kr/admin.html` (메뉴에 없음). 비밀번호를 넣고 버튼을 1.5초 꾹 누르면 1~2분 안에 모든 방문자 화면이 바뀜. 되돌리기 가능.
+  - 17:00 전에 눌러도 방문자 화면은 바뀌지 않음 (테스트 가능). 테스트 뒤에는 되돌리기.
+  - 관리자 기능이 설정되지 않았으면 19:30에 자동으로, 아무도 안 눌러도 다음 날 0시에는 공연 후 화면.
+  - 서버 코드 : `functions/api/showday.js` (Cloudflare Pages Functions)
+
+### Cloudflare 설정 (한 번만)
+
+1. Cloudflare 대시보드 → **Storage & Databases → KV** → **Create** → 이름 `oshs-showday`
+2. **Workers & Pages** → 이 사이트 프로젝트 → **Settings → Bindings → Add → KV namespace**
+   변수 이름 `SHOWDAY`, 네임스페이스 `oshs-showday` 선택 → 저장
+3. 같은 **Settings → Variables and Secrets → Add** → 종류 **Secret**, 이름 `ADMIN_KEY`, 값 = 관리자 비밀번호
+4. `main` 에 push(또는 다시 배포)하면 적용. `story.gvcs.kr/api/showday` 를 열어 `{"ended":false,...}` 가 보이면 성공

@@ -3,6 +3,11 @@
 // 던진 수는 이 브라우저에만 저장됩니다 (다른 사람 수와 합치려면 서버가 필요).
 // i18n.js 보다 먼저 불러와야 버튼 글자도 번역됩니다.
 (() => {
+  // ▼ 꽃 던지기 켜고 끄기 : true 로 바꾸면 버튼과 안내 문구가 나타남 (지금은 꺼 둠)
+  const ENABLED = false;
+  if (!ENABLED) return;
+  document.querySelector('.fl-hint')?.removeAttribute('hidden');
+
   const KEY = 'cast-flowers';
   let counts = {};
   try { counts = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { counts = {}; }
