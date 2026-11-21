@@ -48,6 +48,7 @@
         server.api = 'none';
       }
     } catch (e) { /* 잠깐 끊긴 것은 무시하고 지난 상태 유지 */ }
+    if (server.api !== 'ok') paintHeroIfEmpty();   // 사진 목록을 못 받았으면 단체 사진 자리에 기본 사진이라도
   }
   function phaseAt(t) {
     if (t < SHOW_START) return 'before';
@@ -339,10 +340,8 @@
     requestAnimationFrame(frame);
   }
   function startRoll() { if (running || reduce) return; running = true; requestAnimationFrame(frame); }
-  function setUserPaused(p) { userPaused = p; credits.classList.toggle('is-paused', p); credits.querySelector('.sd-cr-play').setAttribute('aria-pressed', String(p)); }
+  function setUserPaused(p) { userPaused = p; credits.classList.toggle('is-paused', p); }   // 스페이스 키로 멈춤 · 다시 움직임
   new IntersectionObserver((es) => { visible = es[0].isIntersecting; }, { threshold: 0.2 }).observe(roll);
-  credits.querySelector('.sd-cr-play').addEventListener('click', () => setUserPaused(!userPaused));
-  credits.querySelector('.sd-cr-restart').addEventListener('click', () => { offset = 0; place(); setUserPaused(false); });
   // 손으로 올리고 내리기 (휠 · 끌기 · 방향키). 잠시 뒤 다시 자동으로
   const nudge = (d) => { offset = Math.max(0, Math.min(maxOffset(), offset + d)); holdUntil = Date.now() + 2500; place(); };
   let moved = 0;
@@ -369,12 +368,15 @@
   });
 
   // ---------- 현장 사진 (admin.html 에서 올린 사진) ----------
-  // 공연 전 : '지금 무대 뒤' 띠 / 공연 중 : LIVE 대표 사진 + 넘겨 보는 작은 사진 줄 / 공연 후 : 대표 사진 + '오늘의 사진'
+  // 공연 전 : '지금 무대 뒤' 띠 / 공연 중 : LIVE 대표 사진 + 넘겨 보는 작은 사진 줄 / 공연 후 : 대표 사진 + 사진 모음
   const liveBox = document.querySelector('[data-snaps="live"]');
   const stripBox = document.querySelector('[data-snaps="strip"]');
   const galleryBox = document.querySelector('[data-snaps="gallery"]');
   const heroImg = document.querySelector('.sd-photo img');
-  const heroDefault = { src: heroImg?.getAttribute('src'), alt: heroImg?.getAttribute('alt') };
+  // HTML 에는 투명한 그림 한 점만 있고(다른 사진이 잠깐 보였다 바뀌지 않게), 기본 사진 주소는 data-default 에 있음
+  const heroDefault = { src: heroImg?.dataset.default, alt: heroImg?.getAttribute('alt') };
+  // 아직 아무 사진도 못 넣었을 때만 기본 사진을 넣음
+  function paintHeroIfEmpty() { if (heroImg && heroImg.getAttribute('src').startsWith('data:')) paintHero(null); }
   // 공연 후 단체 사진 자리 : 운영진이 고른 대표 사진(없으면 기본 사진). 같은 사진이면 다시 받지 않음
   function paintHero(hero) {
     if (!heroImg) return;
@@ -537,7 +539,7 @@
     const start = showStartAt();
     const showList = list.filter((p) => isShowPhoto(p, start));
     const byShot = (a, b) => (b.taken || b.at) - (a.taken || a.at);   // 최근 것부터 (공연 전 · 공연 중)
-    const byTime = (a, b) => (a.taken || a.at) - (b.taken || b.at);   // 시간 흐름대로, 빠른 것부터 (공연 후 '오늘의 사진')
+    const byTime = (a, b) => (a.taken || a.at) - (b.taken || b.at);   // 시간 흐름대로, 빠른 것부터 (공연 후 사진 모음)
     const rehearsal = list.filter((p) => !isShowPhoto(p, start)).sort(byShot);
     const phase = body.dataset.phase;
     const pre = phase === 'before';
@@ -546,8 +548,8 @@
     if (sig === photoSig) return;
     const arrivedLive = photoSig !== '' && (pre ? list : showList).some((p) => !seen.has(p.id));
     photoSig = sig;
-    // 크게 보기 · LIVE 순서 = 오늘의 사진 순서 (공연 전에는 올라온 사진 전부를 찍은 시각 순으로)
-    // 공연 후에는 '오늘의 사진'과 같은 순서 (공연 → 무대 뒤 · 리허설, 각각 시간이 빠른 것부터)
+    // 크게 보기 · LIVE 순서 = 사진 모음 순서 (공연 전에는 올라온 사진 전부를 찍은 시각 순으로)
+    // 공연 후에는 사진 모음과 같은 순서 (공연 → 무대 뒤 · 리허설, 각각 시간이 빠른 것부터)
     shown = pre ? list.slice().sort(byShot)
       : phase === 'after' ? [...showList.slice().sort(byTime), ...rehearsal.slice().sort(byTime)]
         : [...showList.slice().sort(byShot), ...rehearsal];
@@ -574,7 +576,7 @@
       chip.querySelector('[data-rehearsal-count]').textContent = list.length ? `사진 ${list.length}장` : '';
     }
 
-    // 공연 후 : 오늘의 사진 (공연 / 무대 뒤 · 리허설) + 대표 사진
+    // 공연 후 : 사진 모음 (공연 / 무대 뒤 · 리허설) + 대표 사진
     const groups = [['공연', showList], ['무대 뒤 · 리허설', rehearsal]].filter(([, g]) => g.length);
     galleryBox.replaceChildren(...groups.flatMap(([name, g]) => {
       const head = el('h3', 'sd-gallery-group', `${name} <span>${g.length}장</span>`);
@@ -592,7 +594,6 @@
       return [head, grid];
     }));
     document.querySelector('.sd-gallery').classList.toggle('is-empty', !list.length);
-    document.querySelector('[data-gallery-count]').textContent = list.length ? `현장에서 담은 ${list.length}장의 순간 · 시간 순서` : '';
     // 단체 사진 아래 '현장 사진 N장 보기' (사진이 있을 때만)
     const toGallery = document.querySelector('.sd-to-gallery');
     if (toGallery) {
@@ -602,7 +603,7 @@
     paintHero(list.find((p) => p.id === server.hero));
   }
 
-  // 홈 안에서 아래로 내려가는 링크 (리허설 중 → 지금 무대 뒤 · 현장 사진 보기 → 오늘의 사진) : 부드럽게 스크롤
+  // 홈 안에서 아래로 내려가는 링크 (리허설 중 → 지금 무대 뒤 · 현장 사진 보기 → 사진 모음) : 부드럽게 스크롤
   document.addEventListener('click', (e) => {
     const a = e.target.closest('.sd-rehearsal, .sd-to-gallery');
     const target = a && document.querySelector(a.getAttribute('href'));

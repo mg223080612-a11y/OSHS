@@ -119,9 +119,10 @@
             <p class="sd-live-note">화면 밝기를 낮추고, 무대에 집중해 주세요.<br />커튼콜에서 만나요.</p>
           </div>
 
-          <!-- 공연 후 : 영상 자리에 단체 사진. 커튼콜 사진은 images/lineup/musical.jpg 에 같은 이름으로 덮어쓰기 -->
+          <!-- 공연 후 : 영상 자리에 단체 사진. 운영진이 admin.html 에서 고른 대표 사진이 들어감 (js/showday.js)
+               처음에는 투명한 그림 한 점 : 다른 사진이 잠깐 보였다가 바뀌지 않게. 대표 사진이 없을 때만 data-default 의 사진을 씀 -->
           <figure class="sd-photo" data-phase-show="after">
-            <img src="images/lineup/musical.jpg" width="1400" height="932" alt="2026 청소년예술제 배우 단체 사진" loading="lazy" />
+            <img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-default="images/lineup/musical.jpg" width="1400" height="932" alt="2026 청소년예술제 단체 사진" loading="lazy" />
             <!-- 사진 아래 줄 : 왼쪽 표시 + 오른쪽 '사진 보기' (현장 사진이 올라와 있을 때만 나타남) -->
             <figcaption>
               <span class="sd-photo-tag">CURTAIN CALL · 2026.11.21</span>
@@ -166,13 +167,8 @@
             <section class="sd-credits" id="credits" aria-labelledby="credits-title">
               <p class="sd-kicker">ENDING CREDITS</p>
               <h2 id="credits-title">이 무대를 만든 사람들</h2>
-              <div class="sd-roll" tabindex="0" aria-label="엔딩 크레딧. 자동으로 올라갑니다">
+              <div class="sd-roll" tabindex="0" aria-label="엔딩 크레딧. 자동으로 올라갑니다. 스페이스 키로 멈추거나 다시 움직이고, 방향키로 올리고 내립니다">
                 <div class="sd-roll-inner"></div>
-              </div>
-              <div class="sd-cr-ctrl">
-                <button type="button" class="sd-cr-play" aria-pressed="false"><span class="on">일시정지</span><span class="off">이어서 보기</span></button>
-                <button type="button" class="sd-cr-restart">처음부터</button>
-                <span class="sd-cr-tip">이름을 누르면 꽃잎이 날려요</span>
               </div>
             </section>
           </div>
@@ -217,11 +213,10 @@
       <div class="sd-strip" data-snaps="strip"></div>
     </section>
 
-    <!-- ===== 공연 후 : 오늘의 사진 (현장에서 올린 사진 전부) ===== -->
+    <!-- ===== 공연 후 : 사진 모음 (현장에서 올린 사진 전부. 공연 → 무대 뒤 · 리허설, 각각 시간이 빠른 것부터) ===== -->
     <section class="sd-gallery is-empty" id="gallery" data-phase-show="after" aria-labelledby="gallery-title">
-      <p class="sd-kicker" data-after-day="2026.11.21 · PHOTOS">TODAY'S PHOTOS</p>
-      <h2 id="gallery-title" data-after-day="그날의 사진">오늘의 사진</h2>
-      <p class="sd-gallery-sub" data-gallery-count></p>
+      <p class="sd-kicker">PHOTOS</p>
+      <h2 id="gallery-title">무대 안팎의 순간들</h2>
       <div class="sd-gallery-groups" data-snaps="gallery"></div>
     </section>
 

@@ -17,6 +17,8 @@
   // sd-opened = 막이 열림 / sd-reopened = 전에 이미 열었음 (바뀌는 움직임을 다시 보여 주지 않음)
   try { if (phase === 'after' && sessionStorage.getItem('sd-curtain') === 'open') body.classList.add('sd-opened', 'sd-reopened'); } catch (e) { /* 막혀 있으면 매번 커튼부터 */ }
   if (phase === 'onair' || (phase === 'before' && saved && saved.photos > 0)) body.classList.add('sd-stack');
+  // 공연 후 : 지난번에 받아 둔 대표 사진(단체 사진 자리)을 미리 받아 둠 → 화면이 그려질 때 바로 뜸
+  if (phase === 'after' && saved && saved.hero && /^[a-z0-9]+$/i.test(String(saved.hero.id))) new Image().src = '/photos/' + saved.hero.id + '.jpg';
   // 사진이 있을 수도 있으면(처음 왔거나 지난번에 사진이 있었으면) 사진을 받아 올 때까지 위쪽을 잠깐 숨김
   if (phase !== 'after' && (!saved || saved.photos > 0)) document.documentElement.classList.add('sd-wait');
 })();

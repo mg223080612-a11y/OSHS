@@ -29,7 +29,7 @@ async function readState(env) {
   return { ended: !!(v && v.ended), at: (v && v.at) || null };
 }
 // 방문자에게 보내는 사진 수 상한 : 올릴 수 있는 한도(functions/api/photos.js 의 MAX_PHOTOS)와 같게.
-// 예전에는 최근에 올린 80장만 보내서, 먼저 올린 무대 뒤 · 리허설 사진이 '오늘의 사진'에서 빠졌음
+// 예전에는 최근에 올린 80장만 보내서, 먼저 올린 무대 뒤 · 리허설 사진이 사진 모음에서 빠졌음
 const MAX_PUBLIC = 400;
 async function publicPhotos(env) {
   const list = (await env.SHOWDAY.get('photos', { type: 'json' })) || [];
