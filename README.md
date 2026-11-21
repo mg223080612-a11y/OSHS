@@ -56,6 +56,12 @@ favicon.ico · favicon-16/32.png · apple-touch-icon.png   (브라우저가 맨 
   - 17:00 전에 눌러도 방문자 화면은 바뀌지 않음 (테스트 가능). 테스트 뒤에는 되돌리기.
   - 관리자 기능이 설정되지 않았으면 19:30에 자동으로, 아무도 안 눌러도 다음 날 0시에는 공연 후 화면.
   - 서버 코드 : `functions/api/showday.js` (Cloudflare Pages Functions)
+- **현장 사진** : 같은 `admin.html` 의 **현장 사진** 탭에서 폰으로 찍거나 앨범에서 골라 올리면 Home 에 바로 뜸.
+  - 촬영 시각(사진 정보)으로 나눔 : 17:00 전 → Home 의 **지금 무대 뒤**(리허설), 17:00 후 → ON AIR 화면. 공연 후에는 **오늘의 사진**에 전부.
+  - 목록에서 사진마다 공연/리허설 직접 바꾸기 · 대표 사진 · 숨기기 · 삭제 가능
+  - 올릴 때 사진을 줄이고 위치 정보(GPS)는 지움. 최대 400장
+  - 비밀번호 두 가지 : `ADMIN_KEY` = 전부(공연 종료 + 사진), `PHOTO_KEY` = 사진만 (사진 담당 선생님·학생용)
+  - 서버 코드 : `functions/api/photos.js`, `functions/photos/[name].js`
 
 ### Cloudflare 설정 (한 번만)
 
@@ -63,4 +69,5 @@ favicon.ico · favicon-16/32.png · apple-touch-icon.png   (브라우저가 맨 
 2. **Workers & Pages** → 이 사이트 프로젝트 → **Settings → Bindings → Add → KV namespace**
    변수 이름 `SHOWDAY`, 네임스페이스 `oshs-showday` 선택 → 저장
 3. 같은 **Settings → Variables and Secrets → Add** → 종류 **Secret**, 이름 `ADMIN_KEY`, 값 = 관리자 비밀번호
+   한 번 더 **Add** → 종류 **Secret**, 이름 `PHOTO_KEY`, 값 = 사진 업로드용 비밀번호 (`ADMIN_KEY` 와 다르게)
 4. `main` 에 push(또는 다시 배포)하면 적용. `story.gvcs.kr/api/showday` 를 열어 `{"ended":false,...}` 가 보이면 성공

@@ -49,7 +49,7 @@ body[data-phase="onair"] .poster-bg { filter: brightness(.45) saturate(.8); tran
 .sd-history-note b { font: 400 1.2em var(--hand); color: var(--apricot); }
 .hero-script.is-history + .sd-history-note { opacity: 1; transform: none; }
 .sd-photo { width: clamp(380px, 44vw, 660px); margin: 0; }
-.sd-photo img { display: block; width: 100%; height: auto; border: 1px solid rgba(240, 196, 107, .45); box-shadow: 6px 8px 0 rgba(0, 0, 0, .35); }
+.sd-photo img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border: 1px solid rgba(240, 196, 107, .45); box-shadow: 6px 8px 0 rgba(0, 0, 0, .35); }
 .sd-thanks { background: var(--apricot); }
 .sd-after-copy { margin-top: 18px; font-size: 16px; line-height: 1.6; }
 .sd-jump { display: grid; gap: 8px; margin-top: 22px; }
@@ -255,4 +255,134 @@ body[data-phase="after"] .sd-curtain { display: block; }
   .sd-beams span, .sd-dot, .sd-cord { animation: none; }
   .sd-drape, .sd-valance, .sd-end, .sd-gap, .sd-cap, .sd-history-note { transition: none; }
   .sd-roll { overflow-y: auto; -webkit-mask-image: none; mask-image: none; touch-action: auto; cursor: auto; }
+}
+
+/* =====================================================================
+   현장 사진 (admin.html 에서 올린 사진) : 폴라로이드
+   공연 전 '지금 무대 뒤' 띠 · 공연 중 LIVE · 공연 후 '오늘의 사진' + 크게 보기
+   ===================================================================== */
+body[data-phase] .sd-backstage.is-empty, body[data-phase] .sd-gallery.is-empty { display: none !important; }
+.sd-rec { display: inline-block; width: 8px; height: 8px; margin-right: 8px; border-radius: 50%; background: #ff4d63; vertical-align: 1px; animation: sd-blink 1.2s steps(2, jump-none) infinite; }
+.sd-pola {
+  position: relative; display: block; padding: 8px 8px 0; border: 0;
+  color: #2a1a10; background: #f7f1e6; text-align: left; cursor: zoom-in;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .15), 6px 10px 22px rgba(0, 0, 0, .45);
+  transition: transform .3s;
+}
+.sd-pola img { display: block; width: 100%; aspect-ratio: 4 / 3; height: auto; object-fit: cover; background: #2a1f3c; }
+.sd-pola-foot { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; min-height: 40px; padding: 8px 4px 10px; }
+.sd-pola-time { flex-shrink: 0; font: 400 20px/1 var(--hand); color: #6a2d70; }
+.sd-pola-cap { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 500 13px/1.3 var(--sans); color: #4a3a42; }
+.sd-pola:hover { transform: rotate(0deg) scale(1.02) !important; }
+.sd-pola:focus-visible { outline: 3px solid var(--apricot); outline-offset: 4px; }
+.sd-pola-new { position: absolute; top: -10px; right: -8px; padding: 5px 9px; color: #fff; background: #b3263a; font: 400 13px/1 var(--poster); letter-spacing: .12em; transform: rotate(6deg); box-shadow: 2px 3px 0 rgba(0, 0, 0, .35); }
+
+/* 공연 중 : LIVE */
+.sd-snaps:empty { display: none; }
+.sd-snaps { margin-top: 26px; padding-top: 22px; border-top: 1px solid rgba(240, 196, 107, .3); }
+.sd-snaps-head { margin-bottom: 16px; font: 500 13px/1.4 var(--display); letter-spacing: .2em; color: var(--apricot-soft); }
+.sd-snaps-stage { position: relative; }
+.sd-snaps .sd-pola-main { transform: rotate(-2deg); }
+.sd-snaps-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 22px; }
+.sd-snaps-row .sd-pola { padding: 5px 5px 0; }
+.sd-snaps-row .sd-pola:nth-child(1) { transform: rotate(2.5deg); }
+.sd-snaps-row .sd-pola:nth-child(2) { transform: rotate(-1.5deg); }
+.sd-snaps-row .sd-pola:nth-child(3) { transform: rotate(3deg); }
+.sd-snaps-row .sd-pola-foot { min-height: 0; padding: 5px 2px 6px; }
+.sd-snaps-row .sd-pola-time { font-size: 14px; }
+.sd-snaps-row .sd-pola-cap { display: none; }
+.sd-snaps-more { display: inline-block; margin-top: 18px; padding: 6px 0; border: 0; color: var(--apricot-soft); background: none; font: 500 14px var(--sans); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+.sd-snaps-more:focus-visible { outline: 2px solid var(--apricot); outline-offset: 3px; }
+/* 새 사진이 오면 : 셔터 번쩍 + 위에서 툭 */
+.sd-flash { position: fixed; inset: 0; z-index: 120; background: #fff; pointer-events: none; animation: sd-flash .55s ease-out forwards; }
+@keyframes sd-flash { from { opacity: .85; } to { opacity: 0; } }
+.sd-pola.is-arriving { animation: sd-drop .9s cubic-bezier(.2, 1.4, .4, 1) both; }
+@keyframes sd-drop { from { opacity: 0; transform: translateY(-60px) rotate(-12deg) scale(1.12); } to { opacity: 1; transform: rotate(-2deg); } }
+
+/* 공연 전 : 지금 무대 뒤 */
+.sd-backstage { padding: 56px 0 64px; background: linear-gradient(180deg, transparent, rgba(0, 0, 0, .25)); overflow: hidden; }
+.sd-strip-head { padding: 0 var(--edge); text-align: center; }
+.sd-strip-head h2 { margin-top: 6px; font: 700 clamp(24px, 2.6vw, 32px)/1.3 var(--sans); letter-spacing: -.03em; }
+.sd-strip {
+  display: flex; gap: 22px; margin-top: 26px; padding: 14px max(var(--edge), calc((100vw - 1200px) / 2)) 26px;
+  overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: rgba(240, 196, 107, .4) transparent;
+}
+.sd-strip .sd-pola { flex: 0 0 clamp(200px, 26vw, 280px); scroll-snap-align: center; }
+.sd-strip .sd-pola:nth-child(odd) { transform: rotate(-2deg); }
+.sd-strip .sd-pola:nth-child(even) { transform: rotate(2deg) translateY(10px); }
+
+/* 공연 후 : 오늘의 사진 */
+.sd-gallery { padding: 90px var(--edge) 100px; background: linear-gradient(#07050d, var(--bg) 40%); text-align: center; }
+.sd-gallery h2 { margin-top: 8px; font: 700 clamp(26px, 3vw, 38px)/1.3 var(--sans); letter-spacing: -.03em; }
+.sd-gallery-sub { margin-top: 8px; color: var(--muted); }
+.sd-gallery-grid { columns: 3 260px; column-gap: 26px; max-width: 1100px; margin: 40px auto 0; text-align: left; }
+.sd-gallery-grid .sd-pola { width: 100%; margin-bottom: 30px; break-inside: avoid; }
+.sd-gallery-grid .sd-pola img { aspect-ratio: auto; }
+.sd-gallery-grid .sd-pola:nth-child(3n+1) { transform: rotate(-1.5deg); }
+.sd-gallery-grid .sd-pola:nth-child(3n+2) { transform: rotate(1.2deg); }
+.sd-gallery-grid .sd-pola:nth-child(3n) { transform: rotate(-.6deg); }
+
+/* 크게 보기 */
+.sd-lightbox { width: 100vw; height: 100vh; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; color: var(--text); background: rgba(8, 5, 14, .94); }
+.sd-lightbox::backdrop { background: rgba(8, 5, 14, .7); }
+.sd-lightbox figure { display: grid; place-items: center; align-content: center; gap: 14px; height: 100%; margin: 0; padding: 56px 16px 28px; }
+.sd-lightbox img { display: block; max-width: min(100%, 1400px); max-height: calc(100dvh - 150px); width: auto; height: auto; box-shadow: 0 20px 60px rgba(0, 0, 0, .6); }
+.sd-lightbox figcaption { display: flex; gap: 14px; align-items: baseline; font-size: 15px; }
+.sd-lightbox figcaption b { font: 400 22px/1 var(--hand); color: var(--apricot); }
+.sd-lightbox button { position: absolute; width: 52px; height: 52px; border: 0; color: #fff; background: rgba(255, 255, 255, .08); font: 300 34px/1 var(--sans); cursor: pointer; }
+.sd-lightbox button:hover { background: rgba(255, 255, 255, .18); }
+.sd-lightbox button:focus-visible { outline: 2px solid var(--apricot); outline-offset: 2px; }
+.sd-lb-close { top: 10px; right: 10px; }
+.sd-lb-prev { left: 10px; top: 50%; transform: translateY(-50%); }
+.sd-lb-next { right: 10px; top: 50%; transform: translateY(-50%); }
+.sd-lightbox.is-single .sd-lb-prev, .sd-lightbox.is-single .sd-lb-next { display: none; }
+
+@media (max-width: 860px) {
+  .sd-snaps { text-align: left; }
+  .sd-strip .sd-pola { flex-basis: 64vw; }
+}
+@media (max-width: 600px) {
+  .sd-gallery-grid { columns: 2 140px; column-gap: 14px; }
+  .sd-gallery-grid .sd-pola { margin-bottom: 18px; padding: 5px 5px 0; }
+  .sd-gallery-grid .sd-pola-foot { min-height: 0; padding: 5px 2px 6px; }
+  .sd-gallery-grid .sd-pola-time { font-size: 15px; }
+  .sd-gallery-grid .sd-pola-cap { font-size: 11.5px; }
+  .sd-lightbox button { width: 44px; height: 44px; font-size: 28px; }
+  .sd-lb-prev, .sd-lb-next { top: auto; bottom: 14px; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sd-rec { animation: none; }
+  .sd-pola.is-arriving { animation: none; }
+  .sd-flash { display: none; }
+}
+
+/* 공연 전 : D-DAY 옆 '지금 무대 뒤 · 리허설 중' (리허설 사진이 올라오면 나타남) */
+.sd-rehearsal {
+  display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 18px; padding: 10px 14px;
+  border: 1px solid rgba(255, 77, 99, .55); color: var(--text); background: rgba(179, 38, 58, .18);
+  font-size: 14px; font-weight: 500; transition: background .25s;
+}
+.sd-rehearsal[hidden] { display: none; }
+.sd-rehearsal .sd-rec { margin-right: 0; }
+.sd-rehearsal b { color: var(--apricot-soft); font-weight: 700; }
+.sd-rehearsal:hover { background: rgba(179, 38, 58, .32); }
+.sd-rehearsal:focus-visible { outline: 2px solid var(--apricot); outline-offset: 3px; }
+.sd-backstage { scroll-margin-top: 70px; }
+
+/* 공연 중 : 공연 사진이 아직 없을 때 */
+.sd-pola-wait {
+  display: grid; place-items: center; align-content: center; gap: 8px; aspect-ratio: 4 / 3.4;
+  border: 2px dashed rgba(246, 217, 160, .35); color: var(--apricot-soft); text-align: center; transform: rotate(-1.5deg);
+}
+.sd-pola-wait span { font: 400 clamp(22px, 2.4vw, 28px)/1.2 var(--hand); }
+.sd-pola-wait small { color: var(--muted); font-size: 13px; }
+
+/* 공연 후 : 오늘의 사진 묶음 (공연 / 무대 뒤 · 리허설) */
+.sd-gallery-groups { max-width: 1100px; margin: 0 auto; }
+.sd-gallery-group { display: flex; align-items: center; gap: 16px; margin: 56px 0 0; font: 500 15px/1.4 var(--display); letter-spacing: .24em; color: var(--apricot); text-align: left; }
+.sd-gallery-group::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(240, 196, 107, .45), transparent); }
+.sd-gallery-group span { color: var(--muted); font: 400 13px var(--sans); letter-spacing: 0; }
+.sd-gallery-groups .sd-gallery-grid { margin-top: 26px; }
+@media (max-width: 860px) {
+  .sd-rehearsal { justify-content: center; }
 }

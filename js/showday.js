@@ -8,6 +8,7 @@
   const SHOW_START = Date.parse('2026-11-21T17:00:00+09:00');
   const FALLBACK_END = Date.parse('2026-11-21T19:30:00+09:00');   // 관리자 기능이 설정되지 않았을 때만 쓰는 예비 시각
   const HARD_END = Date.parse('2026-11-22T00:00:00+09:00');
+  const PHOTOS_FROM = Date.parse('2026-11-21T00:00:00+09:00');   // 이때부터 현장 사진을 확인 (공연 전 '지금 무대 뒤')
   const API = '/api/showday';
   const body = document.body;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -22,7 +23,7 @@
   let preview = ['before', 'onair', 'after'].includes(asked) ? asked : null;
   let previewStart = Date.now() - 42 * 60 * 1000;   // 미리보기에서는 막이 오른 지 42분째로
   // 운영진이 누른 '공연 종료' 상태. api: 'unknown'(아직 못 물어봄) · 'ok' · 'none'(관리자 기능 없음)
-  const server = { api: 'unknown', ended: false };
+  const server = { api: 'unknown', ended: false, photos: [], hero: null };
   async function checkServer() {
     try {
       const res = await fetch(API, { cache: 'no-store' });
@@ -31,6 +32,9 @@
         const data = await res.json();
         server.api = 'ok';
         server.ended = !!data.ended;
+        server.photos = Array.isArray(data.photos) ? data.photos : [];
+        server.hero = data.hero || null;
+        renderPhotos();
       } else if (res.ok) {
         server.api = 'none';   // API 대신 일반 페이지가 돌아옴 = 관리자 기능이 배포되지 않음
       } else if (res.status === 404 || res.status === 503 || res.status === 405) {
@@ -53,18 +57,18 @@
       body.dataset.phase = phase;
       onPhase(phase);
     }
-    if (preview) return;
+    if (preview) { schedulePoll(); return; }
     const now = Date.now();
     const edges = [SHOW_START, HARD_END, server.api === 'none' ? FALLBACK_END : 0].filter((t) => t > now);
     if (edges.length) phaseTimer = setTimeout(applyPhase, Math.min(Math.min(...edges) - now + 50, 2147483647));
     schedulePoll();
   }
-  // 공연 중에는 30초마다, 공연 후에도(되돌리기 대비) 1분마다 상태 확인. 화면이 꺼져 있을 때는 쉼
+  // 공연 중에는 30초마다, 그 밖의 공연 날에는 1분마다 상태 · 새 사진 확인. 화면이 꺼져 있을 때는 쉼
   function schedulePoll() {
     clearTimeout(pollTimer);
     const now = Date.now();
-    if (preview || now < SHOW_START || now >= HARD_END || server.api === 'none') return;
-    const wait = (body.dataset.phase === 'onair' ? 30000 : 60000) + Math.random() * 5000;
+    if (server.api === 'none' || now >= HARD_END || (!preview && now < PHOTOS_FROM)) return;
+    const wait = (body.dataset.phase === 'onair' || preview ? 30000 : 60000) + Math.random() * 5000;
     pollTimer = setTimeout(async () => {
       if (!document.hidden) { await checkServer(); applyPhase(); } else schedulePoll();
     }, wait);
@@ -329,6 +333,151 @@
   prevBtn.addEventListener('click', () => go(cur - 1));
   nextBtn.addEventListener('click', () => go(cur + 1));
 
+
+  // ---------- 현장 사진 (admin.html 에서 올린 사진) ----------
+  // 공연 전 : '지금 무대 뒤' 띠 / 공연 중 : LIVE 폴라로이드 (새 사진이 오면 번쩍 + 툭) / 공연 후 : 대표 사진 + '오늘의 사진'
+  const liveBox = document.querySelector('[data-snaps="live"]');
+  const stripBox = document.querySelector('[data-snaps="strip"]');
+  const galleryBox = document.querySelector('[data-snaps="gallery"]');
+  const heroImg = document.querySelector('.sd-photo img');
+  const heroDefault = { src: heroImg?.getAttribute('src'), alt: heroImg?.getAttribute('alt') };
+  const seen = new Set();
+  let photoSig = '', shown = [];
+  const NEW_MS = 3 * 60 * 1000;
+  const hhmm = (t) => new Date(t).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Seoul' });
+  function pola(p, big = false, badge = true) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'sd-pola';
+    b.dataset.id = p.id;
+    b.dataset.at = p.at;
+    b.setAttribute('aria-label', `${hhmm(p.taken || p.at)} 현장 사진${p.cap ? ` · ${p.cap}` : ''} 크게 보기`);
+    const img = document.createElement('img');
+    img.alt = '';
+    img.width = p.w; img.height = p.h;
+    img.decoding = 'async';
+    img.loading = big ? 'eager' : 'lazy';
+    img.src = `/photos/${p.id}-t.jpg`;
+    if (big) { img.srcset = `/photos/${p.id}-t.jpg 480w, /photos/${p.id}.jpg ${p.w}w`; img.sizes = '(max-width: 860px) 92vw, 40vw'; }
+    const foot = el('span', 'sd-pola-foot');
+    const time = el('span', 'sd-pola-time'); time.textContent = hhmm(p.taken || p.at);   // 찍은 시각 (없으면 올린 시각)
+    const cap = el('span', 'sd-pola-cap'); cap.textContent = p.cap || '';
+    foot.append(cap, time);
+    b.append(img, foot);
+    if (badge && Date.now() - p.at < NEW_MS) b.append(el('span', 'sd-pola-new', 'NEW'));
+    return b;
+  }
+  function flash() {
+    if (reduce) return;
+    const f = el('div', 'sd-flash');
+    body.append(f);
+    setTimeout(() => f.remove(), 600);
+  }
+  // 공연 사진 / 리허설 사진 : 운영진이 직접 고른 게 있으면 그대로, 아니면 찍은 시각(없으면 올린 시각)이 막이 오른 뒤인지로
+  // (미리보기에서는 '막이 오른 지 42분' 기준)
+  const showStartAt = () => (preview ? previewStart : SHOW_START);
+  const isShowPhoto = (p, start) => (p.kind ? p.kind === 'show' : (p.taken || p.at) >= start);
+  function renderPhotos() {
+    const list = (server.photos || []).slice().sort((a, b) => b.at - a.at);
+    const start = showStartAt();
+    const showList = list.filter((p) => isShowPhoto(p, start));
+    const byShot = (a, b) => (b.taken || b.at) - (a.taken || a.at);
+    const rehearsal = list.filter((p) => !isShowPhoto(p, start)).sort(byShot);
+    const sig = `${list.map((p) => `${p.id}${p.kind || ''}`).join()}|${server.hero || ''}|${start}`;
+    document.querySelectorAll('.sd-pola-new').forEach((n) => { if (Date.now() - n.parentElement.dataset.at > NEW_MS) n.remove(); });
+    if (sig === photoSig) return;
+    const arrivedLive = photoSig !== '' && showList.some((p) => !seen.has(p.id));
+    photoSig = sig;
+    shown = [...showList.slice().sort(byShot), ...rehearsal];   // 크게 보기 순서 = 오늘의 사진 순서
+    list.forEach((p) => seen.add(p.id));
+
+    // 공연 중 : LIVE — 막이 오른 뒤에 올린 사진만. 아직 없으면 '첫 장면을 기다리는 중'
+    if (showList.length) {
+      const main = pola(showList[0], true);
+      main.classList.add('sd-pola-main');
+      const parts = [el('p', 'sd-snaps-head', '<span class="sd-rec" aria-hidden="true"></span>LIVE · 현장에서 방금'), main];
+      if (showList.length > 1) { const row = el('div', 'sd-snaps-row'); showList.slice(1, 4).forEach((p) => row.append(pola(p))); parts.push(row); }
+      if (list.length > 4) { const more = el('button', 'sd-snaps-more', `오늘 사진 ${list.length}장 · 모두 보기 →`); more.type = 'button'; parts.push(more); }
+      liveBox.replaceChildren(...parts);
+      if (arrivedLive && body.dataset.phase === 'onair') { main.classList.add('is-arriving'); flash(); }
+    } else if (list.length) {
+      liveBox.replaceChildren(
+        el('p', 'sd-snaps-head', '<span class="sd-rec" aria-hidden="true"></span>LIVE · 현장 사진'),
+        el('div', 'sd-pola-wait', '<span>첫 장면을 기다리는 중…</span><small>공연 사진이 올라오면 여기에 바로 떠요</small>'),
+      );
+    } else liveBox.replaceChildren();
+
+    // 공연 전 : 지금 무대 뒤 + D-DAY 옆 '리허설 중' 표시
+    stripBox.replaceChildren(...list.slice(0, 30).map((p) => pola(p)));
+    document.querySelector('.sd-backstage').classList.toggle('is-empty', !list.length);
+    const chip = document.querySelector('.sd-rehearsal');
+    if (chip) {
+      chip.hidden = !list.length;
+      chip.querySelector('[data-rehearsal-count]').textContent = list.length ? `사진 ${list.length}장` : '';
+    }
+
+    // 공연 후 : 오늘의 사진 (공연 / 무대 뒤 · 리허설) + 대표 사진
+    const groups = [['공연', showList], ['무대 뒤 · 리허설', rehearsal]].filter(([, g]) => g.length);
+    galleryBox.replaceChildren(...groups.flatMap(([name, g]) => {
+      const head = el('h3', 'sd-gallery-group', `${name} <span>${g.length}장</span>`);
+      const grid = el('div', 'sd-gallery-grid');
+      grid.append(...g.slice().sort(byShot).map((p) => pola(p, false, false)));
+      return [head, grid];
+    }));
+    document.querySelector('.sd-gallery').classList.toggle('is-empty', !list.length);
+    document.querySelector('[data-gallery-count]').textContent = list.length ? `현장에서 담은 ${list.length}장의 순간` : '';
+    const hero = list.find((p) => p.id === server.hero);
+    if (heroImg) {
+      heroImg.src = hero ? `/photos/${hero.id}.jpg` : heroDefault.src;
+      heroImg.alt = hero ? (hero.cap || '오늘 공연 사진') : heroDefault.alt;
+      if (hero) { heroImg.width = hero.w; heroImg.height = hero.h; }
+    }
+  }
+
+  // 홈 안에서 아래로 내려가는 링크 (리허설 중 → 지금 무대 뒤, 엔딩 크레딧 보기) : 부드럽게 스크롤
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('.sd-rehearsal, .sd-jump a[href^="#"]');
+    const target = a && document.querySelector(a.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    target.setAttribute('tabindex', '-1');
+    target.focus({ preventScroll: true });
+  });
+
+  // 크게 보기
+  const lb = document.querySelector('.sd-lightbox');
+  const lbImg = lb.querySelector('img');
+  let lbAt = 0;
+  function paintLb() {
+    const p = shown[lbAt];
+    lbImg.src = `/photos/${p.id}.jpg`;
+    lbImg.alt = p.cap || `${hhmm(p.taken || p.at)} 현장 사진`;
+    lb.querySelector('[data-lb-time]').textContent = hhmm(p.taken || p.at);
+    lb.querySelector('[data-lb-cap]').textContent = p.cap || '';
+    lb.classList.toggle('is-single', shown.length < 2);
+  }
+  function openLb(id) {
+    lbAt = Math.max(0, shown.findIndex((p) => p.id === id));
+    if (!shown.length) return;
+    paintLb();
+    if (!lb.open) lb.showModal();
+  }
+  const stepLb = (d) => { lbAt = (lbAt + d + shown.length) % shown.length; paintLb(); };
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('.sd-pola');
+    if (card) { openLb(card.dataset.id); return; }
+    if (e.target.closest('.sd-snaps-more')) openLb(shown[0]?.id);
+  });
+  lb.querySelector('.sd-lb-prev').addEventListener('click', () => stepLb(-1));
+  lb.querySelector('.sd-lb-next').addEventListener('click', () => stepLb(1));
+  lb.querySelector('.sd-lb-close').addEventListener('click', () => lb.close());
+  lb.addEventListener('click', (e) => { if (e.target === lb || e.target.tagName === 'FIGURE') lb.close(); });
+  lb.addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') stepLb(-1); if (e.key === 'ArrowRight') stepLb(1); });
+  let swipeX = null;
+  lb.addEventListener('pointerdown', (e) => { swipeX = e.clientX; });
+  lb.addEventListener('pointerup', (e) => { if (swipeX !== null && Math.abs(e.clientX - swipeX) > 60 && shown.length > 1) stepLb(e.clientX < swipeX ? 1 : -1); swipeX = null; });
+
   // ---------- 때가 바뀔 때 ----------
   function onPhase(phase) {
     clearInterval(elapsedTimer);
@@ -368,14 +517,18 @@
       previewStart = Date.now() - 42 * 60 * 1000;
       body.dataset.phase = '';
       applyPhase();
+      renderPhotos();
       scrollTo({ top: 0 });
     });
   }
 
   // 처음 열 때 : 공연 시작 뒤라면 운영진 상태를 먼저 물어보고 (최대 2.5초) 화면을 정함
   const refresh = async () => {
-    if (!preview && Date.now() >= SHOW_START && Date.now() < HARD_END) {
+    const now = Date.now();
+    if (!preview && now >= SHOW_START && now < HARD_END) {
       await Promise.race([checkServer(), new Promise((r) => setTimeout(r, 2500))]);
+    } else if (preview || now >= PHOTOS_FROM) {
+      checkServer();   // 사진만 받아 옴 (화면 결정은 기다리지 않음)
     }
     applyPhase();
   };

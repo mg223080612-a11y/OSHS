@@ -100,6 +100,8 @@
             <p class="sd-live-label">막이 오른 지</p>
             <p class="sd-live-time"><span data-elapsed>00:00</span></p>
             <p class="sd-live-note">화면 밝기를 낮추고, 무대에 집중해 주세요.<br />커튼콜에서 만나요.</p>
+            <!-- 현장 사진 (admin.html 에서 올린 사진) : 새 사진이 오면 폴라로이드처럼 떨어짐. 사진이 없으면 비어 있음 -->
+            <div class="sd-snaps" data-snaps="live"></div>
           </div>
 
           <!-- 공연 후 : 영상 자리에 단체 사진. 커튼콜 사진은 images/lineup/musical.jpg 에 같은 이름으로 덮어쓰기 -->
@@ -115,6 +117,8 @@
             <p class="dday-date">NOVEMBER 21 <span>SAT. 5PM</span></p>
             <p class="dday-place">GVCS MUNGYEONG HULBERT HALL</p>
             <a class="map-link" href="https://map.naver.com/p/search/%EA%B8%80%EB%A1%9C%EB%B2%8C%EC%84%A0%EC%A7%84%ED%95%99%EA%B5%90%20%EB%AC%B8%EA%B2%BD%EC%BA%A0%ED%8D%BC%EC%8A%A4" target="_blank" rel="noopener" data-i18n="mapLink">지도에서 보기 ↗</a>
+            <!-- 리허설 사진이 올라오기 시작하면 나타남 → 아래 '지금 무대 뒤'로 -->
+            <a class="sd-rehearsal" href="#backstage" hidden><span class="sd-rec" aria-hidden="true"></span><span>지금 무대 뒤 · 리허설 중</span><b data-rehearsal-count></b><span aria-hidden="true">↓</span></a>
           </div>
           <!-- 공연 중 -->
           <div data-phase-show="onair">
@@ -177,6 +181,15 @@
       </div>
     </section>
 
+    <!-- ===== 공연 전 : 지금 무대 뒤 (리허설 · 분장 사진). 사진이 올라오기 시작하면 나타남 ===== -->
+    <section class="sd-backstage is-empty" id="backstage" data-phase-show="before" aria-labelledby="backstage-title">
+      <div class="sd-strip-head">
+        <p class="sd-kicker"><span class="sd-rec" aria-hidden="true"></span>LIVE FROM BACKSTAGE</p>
+        <h2 id="backstage-title">지금 무대 뒤</h2>
+      </div>
+      <div class="sd-strip" data-snaps="strip"></div>
+    </section>
+
     <!-- ===== 공연 후 : 엔딩 크레딧. 명단은 pages/crew.html 을 그대로 읽어 옴 (Crew 명단을 고치면 여기도 바뀜) ===== -->
     <section class="sd-credits" id="credits" data-phase-show="after" aria-labelledby="credits-title">
       <p class="sd-kicker">ENDING CREDITS</p>
@@ -197,6 +210,25 @@
         <span class="sd-cr-tip">이름을 누르면 꽃잎이 날려요</span>
       </div>
     </section>
+
+    <!-- ===== 공연 후 : 오늘의 사진 (현장에서 올린 사진 전부) ===== -->
+    <section class="sd-gallery is-empty" data-phase-show="after" aria-labelledby="gallery-title">
+      <p class="sd-kicker">TODAY'S PHOTOS</p>
+      <h2 id="gallery-title">오늘의 사진</h2>
+      <p class="sd-gallery-sub" data-gallery-count></p>
+      <div class="sd-gallery-groups" data-snaps="gallery"></div>
+    </section>
+
+    <!-- 사진 크게 보기 -->
+    <dialog class="sd-lightbox" aria-label="사진 크게 보기">
+      <figure>
+        <img alt="" />
+        <figcaption><b data-lb-time></b><span data-lb-cap></span></figcaption>
+      </figure>
+      <button type="button" class="sd-lb-prev" aria-label="이전 사진">‹</button>
+      <button type="button" class="sd-lb-next" aria-label="다음 사진">›</button>
+      <button type="button" class="sd-lb-close" aria-label="닫기">×</button>
+    </dialog>
 
     <!-- ===== 줄거리 (예전 Synopsis 페이지에서 옮겨 옴) ===== -->
     <section class="story" id="story">

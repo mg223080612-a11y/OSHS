@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex, nofollow" />
   <title>공연 관리 | Our Story, His Story</title>
-  <!-- 운영진 전용 페이지 : 메뉴 어디에도 연결하지 않음. 주소 story.gvcs.kr/admin.html -->
+  <!-- 운영진 전용 페이지 : 메뉴 어디에도 연결하지 않음. 주소 story.gvcs.kr/admin.html
+       관리자 비밀번호(ADMIN_KEY) : 공연 종료 + 사진 / 사진 담당 비밀번호(PHOTO_KEY) : 사진만 -->
   <link rel="icon" href="favicon.ico" sizes="any" />
   <link rel="stylesheet" href="css/fonts.css" />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -19,7 +20,7 @@
 
     <!-- 1. 비밀번호 -->
     <form class="ad-login" action="#">
-      <label for="ad-key">관리자 비밀번호</label>
+      <label for="ad-key">비밀번호</label>
       <div class="ad-row">
         <input id="ad-key" type="password" autocomplete="current-password" required />
         <button type="submit">들어가기</button>
@@ -27,9 +28,42 @@
       <p class="ad-msg" role="alert"></p>
     </form>
 
-    <!-- 2. 상태 + 버튼 -->
-    <section class="ad-panel" hidden aria-labelledby="ad-now-title">
-      <h2 id="ad-now-title" class="sr-only">지금 상태</h2>
+    <!-- 2. 탭 (관리자만 둘 다, 사진 담당은 사진만) -->
+    <div class="ad-tabs" role="tablist" aria-label="관리 메뉴" hidden>
+      <button type="button" role="tab" id="tab-photos" aria-controls="panel-photos" aria-selected="true">현장 사진</button>
+      <button type="button" role="tab" id="tab-show" aria-controls="panel-show" aria-selected="false">공연 종료</button>
+    </div>
+
+    <!-- 2-1. 현장 사진 -->
+    <section class="ad-photos" id="panel-photos" role="tabpanel" aria-labelledby="tab-photos" hidden>
+      <div class="ad-pick">
+        <label class="ad-pick-btn ad-pick-cam">
+          <input type="file" accept="image/*" capture="environment" class="sr-only" data-pick />
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.4-2h5.8l1.4 2h2.2A1.5 1.5 0 0 1 20 8.5v9A1.5 1.5 0 0 1 18.5 19h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="13" r="3.4"/></svg>
+          <span>바로 찍기</span>
+        </label>
+        <label class="ad-pick-btn">
+          <input type="file" accept="image/*" multiple class="sr-only" data-pick />
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><circle cx="9" cy="10" r="1.8"/><path d="M4 17l5-5 4 4 3-3 4 4"/></svg>
+          <span>앨범에서 고르기</span>
+        </label>
+      </div>
+      <label class="ad-cap-label" for="ad-cap">설명 <small>(선택 · 먼저 쓰고 사진을 고르면 그 사진들에 붙어요)</small></label>
+      <input id="ad-cap" class="ad-cap" type="text" maxlength="60" placeholder="예: M05 태권도 시범" autocomplete="off" />
+      <p class="ad-help">사진은 이 폰에서 작게 줄이고 <b>위치정보를 지운 뒤</b> 올라가요. 올리면 1~2분 안에 홈 화면에 나타나요.</p>
+
+      <ul class="ad-queue" aria-live="polite"></ul>
+
+      <div class="ad-list-head">
+        <h2>올린 사진 <span data-count></span></h2>
+        <a href="index.html?preview=onair" target="_blank" rel="noopener">홈에서 보기 ↗</a>
+      </div>
+      <p class="ad-empty" data-empty>아직 올린 사진이 없어요.</p>
+      <ul class="ad-grid" data-grid></ul>
+    </section>
+
+    <!-- 2-2. 공연 종료 (관리자만) -->
+    <section class="ad-panel" id="panel-show" role="tabpanel" aria-labelledby="tab-show" hidden>
       <p class="ad-label">지금 방문자 화면</p>
       <p class="ad-now" aria-live="polite"><span class="ad-dot" aria-hidden="true"></span><b data-now>확인 중…</b></p>
       <p class="ad-sub" data-sub></p>
@@ -46,8 +80,9 @@
         <li><a href="index.html?preview=onair" target="_blank" rel="noopener">공연 중 화면 미리보기 ↗</a></li>
         <li><a href="index.html?preview=after" target="_blank" rel="noopener">공연 후 화면 미리보기 ↗</a></li>
       </ul>
-      <button type="button" class="ad-logout" data-logout>로그아웃</button>
     </section>
+
+    <button type="button" class="ad-logout" data-logout hidden>로그아웃</button>
   </main>
   <script src="js/admin.js"></script>
 </body>
