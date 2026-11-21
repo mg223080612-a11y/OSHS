@@ -65,9 +65,11 @@ favicon.ico · favicon-16/32.png · apple-touch-icon.png   (브라우저가 맨 
 
 ### Cloudflare 설정 (한 번만)
 
-1. Cloudflare 대시보드 → **Storage & Databases → KV** → **Create** → 이름 `oshs-showday`
-2. **Workers & Pages** → 이 사이트 프로젝트 → **Settings → Bindings → Add → KV namespace**
-   변수 이름 `SHOWDAY`, 네임스페이스 `oshs-showday` 선택 → 저장
-3. 같은 **Settings → Variables and Secrets → Add** → 종류 **Secret**, 이름 `ADMIN_KEY`, 값 = 관리자 비밀번호
-   한 번 더 **Add** → 종류 **Secret**, 이름 `PHOTO_KEY`, 값 = 사진 업로드용 비밀번호 (`ADMIN_KEY` 와 다르게)
-4. `main` 에 push(또는 다시 배포)하면 적용. `story.gvcs.kr/api/showday` 를 열어 `{"ended":false,...}` 가 보이면 성공
+이 사이트는 Cloudflare **Worker(oshs)** 로 배포됩니다. 보통 파일은 Cloudflare 가 그대로 보내고,
+`/api/*` · `/photos/*` 만 `worker/index.js` 가 받아서 `functions/` 의 코드를 실행합니다 (`wrangler.jsonc`).
+
+1. `main` 에 push → 자동 배포. KV 저장소(`SHOWDAY`)는 첫 배포 때 자동으로 만들어짐
+2. Cloudflare 대시보드 → **Workers 및 Pages → oshs → 설정 → 변수 및 비밀 → 추가**
+   - 유형 **비밀**, 이름 `ADMIN_KEY`, 값 = 관리자 비밀번호 (공연 종료 + 사진)
+   - 유형 **비밀**, 이름 `PHOTO_KEY`, 값 = 사진 업로드용 비밀번호 (사진만)
+3. `story.gvcs.kr/api/showday` 를 열어 `{"ended":false,...}` 가 보이면 성공

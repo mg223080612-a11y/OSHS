@@ -6,3 +6,7 @@
 README.md
 # 서버 기능 코드 (Cloudflare 가 따로 실행함. 파일로 내려받을 필요 없음)
 functions
+# Worker 코드 · 설정 (Cloudflare 가 실행함)
+worker
+wrangler.jsonc
+.wrangler
