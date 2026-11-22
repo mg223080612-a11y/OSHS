@@ -3,6 +3,8 @@
 //   (사진은 올리는 폰에서 미리 줄이고 위치정보를 지운 뒤 보냄 — js/admin.js)
 // 관리 : JSON — { key, action: 'list' | 'hide' | 'show' | 'hero' | 'unhero' | 'delete' | 'kind', id, value }
 //   kind : value 'show'(공연) · 'rehearsal'(리허설) · 'auto'(촬영 시각으로 자동)
+// 촬영 시각 옮기기 : { key, action: 'shift', ids: [사진 id …], value: 옮길 분(더하기 + · 빼기 −, 24시간 이내) }
+//   카메라 시계가 틀린 사진들을 한꺼번에 고칠 때. 되돌리려면 같은 만큼 반대로
 // 저장 : KV SHOWDAY 의 img:<id> · th:<id> (사진), photos (목록 하나)
 // 비밀번호 : ADMIN_KEY 또는 PHOTO_KEY
 
@@ -13,6 +15,7 @@ const json = (body, status = 200) => new Response(JSON.stringify(body), {
 const MAX_FULL = 4 * 1024 * 1024;
 const MAX_THUMB = 700 * 1024;
 const MAX_PHOTOS = 400;
+const MAX_SHIFT_MIN = 24 * 60;
 
 async function sameKey(given, expected) {
   if (typeof given !== 'string' || !given || typeof expected !== 'string' || !expected) return false;
@@ -70,6 +73,16 @@ export async function onRequestPost({ request, env }) {
   if (!(await allowed(body && body.key, env))) return json({ error: 'wrong-key' }, 401);
   const list = await env.SHOWDAY.get('photos', { type: 'json' }) || [];
   if (body.action === 'list') return json({ photos: list });
+  if (body.action === 'shift') {
+    const minutes = Number(body.value);
+    const ids = new Set(Array.isArray(body.ids) ? body.ids.filter((x) => typeof x === 'string').slice(0, MAX_PHOTOS) : []);
+    if (!Number.isInteger(minutes) || minutes === 0 || Math.abs(minutes) > MAX_SHIFT_MIN || !ids.size) return json({ error: 'bad-request' }, 400);
+    const hit = list.filter((x) => ids.has(x.id));
+    if (!hit.length) return json({ error: 'not-found' }, 404);
+    hit.forEach((x) => { x.taken = (x.taken || x.at) + minutes * 60000; });   // 촬영 시각이 없던 사진은 올린 시각에서
+    await saveList(env, list);
+    return json({ photos: list, shifted: hit.length });
+  }
   const p = list.find((x) => x.id === body.id);
   if (!p) return json({ error: 'not-found' }, 404);
   if (body.action === 'hide') p.hidden = true;

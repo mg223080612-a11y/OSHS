@@ -101,3 +101,32 @@
 .t-kind { color: #fff; }
 .t-show { background: #b3263a; }
 .t-rehearsal { background: #4a5bb8; }
+
+/* ---------- 촬영 시각 고치기 : 사진을 눌러 고르고, 아래 막대에서 옮길 시간 ---------- */
+.ad-fix-toggle { width: 100%; min-height: 44px; margin-top: 12px; border: 1px dashed rgba(240, 196, 107, .55); color: var(--apricot-soft); background: transparent; font: 500 14px var(--sans); cursor: pointer; }
+.ad-fix-toggle[aria-expanded="true"] { border-style: solid; color: #2a1a10; background: var(--apricot-soft); font-weight: 700; }
+.ad-fix-toggle:focus-visible, .ad-ph-pick:focus-visible, .ad-fix button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.ad-ph-pick { display: none; position: absolute; inset: 0; z-index: 1; width: 100%; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.ad-ph-pick::after { content: ''; position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; border: 2px solid #fff; border-radius: 50%; background: rgba(0, 0, 0, .35); box-shadow: 0 1px 4px rgba(0, 0, 0, .5); }
+.ad-ph.is-picked { border-color: var(--apricot); box-shadow: 0 0 0 2px var(--apricot); }
+.ad-ph.is-picked .ad-ph-pick::after { content: '✓'; display: grid; place-items: center; border-color: var(--apricot); color: #2a1a10; background: var(--apricot); font: 700 16px/1 var(--sans); }
+.ad-grid.is-fixing .ad-ph-pick { display: block; }
+.ad-grid.is-fixing .ad-ph-acts { display: none; }
+.ad-fix {
+  position: sticky; bottom: 0; z-index: 5; margin: 14px -22px 0; padding: 14px 22px calc(14px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--apricot); background: rgba(18, 13, 28, .97); box-shadow: 0 -10px 30px rgba(0, 0, 0, .5);
+}
+.ad-fix-head { display: flex; align-items: baseline; justify-content: space-between; font-size: 15px; }
+.ad-fix-head b { color: var(--apricot-soft); }
+.ad-fix-clear { padding: 4px 0; border: 0; color: var(--muted); background: none; font: 13px var(--sans); text-decoration: underline; cursor: pointer; }
+.ad-fix-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 10px; font-size: 14px; color: var(--muted); }
+.ad-fix-sign { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid rgba(240, 196, 107, .5); }
+.ad-fix-sign button { min-height: 42px; padding: 0 12px; border: 0; color: var(--muted); background: transparent; font: 500 14px var(--sans); cursor: pointer; }
+.ad-fix-sign button[aria-pressed="true"] { color: #2a1a10; background: var(--apricot-soft); font-weight: 700; }
+.ad-fix-row label { display: inline-flex; align-items: center; gap: 6px; }
+.ad-fix-row input { width: 58px; height: 42px; padding: 0 8px; border: 1px solid rgba(240, 196, 107, .5); border-radius: 0; color: var(--text); background: #120d1c; font: 17px var(--sans); text-align: center; }
+.ad-fix-row input:focus { outline: 2px solid var(--apricot); outline-offset: 1px; }
+.ad-fix-preview { min-height: 20px; margin-top: 10px; color: var(--text); font-size: 13.5px; line-height: 1.5; }
+.ad-fix-apply { width: 100%; min-height: 48px; margin-top: 10px; border: 0; color: #2a1a10; background: var(--apricot-soft); font: 700 15px var(--sans); cursor: pointer; }
+.ad-fix-apply:disabled { color: var(--muted); background: #2a2236; cursor: default; }
+

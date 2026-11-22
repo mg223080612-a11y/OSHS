@@ -50,7 +50,7 @@
       </div>
       <label class="ad-cap-label" for="ad-cap">설명 <small>(선택 · 먼저 쓰고 사진을 고르면 그 사진들에 붙어요)</small></label>
       <input id="ad-cap" class="ad-cap" type="text" maxlength="60" placeholder="예: M05 태권도 시범" autocomplete="off" />
-      <p class="ad-help">사진은 이 폰에서 작게 줄이고 <b>위치정보를 지운 뒤</b> 올라가요. 올리면 1~2분 안에 홈 화면에 나타나요.</p>
+      <p class="ad-help">사진은 이 폰에서 작게 줄이고 <b>위치정보를 지운 뒤</b> 올라가요. 올리면 1~2분 안에 홈 화면에 나타나요.<br />사진 속 촬영 시각으로 줄을 세워요. 카메라 시계가 틀렸으면 아래 <b>촬영 시각 고치기</b>로 고칠 수 있어요.</p>
 
       <ul class="ad-queue" aria-live="polite"></ul>
 
@@ -58,8 +58,23 @@
         <h2>올린 사진 <span data-count></span></h2>
         <a href="index.html?preview=onair" target="_blank" rel="noopener">홈에서 보기 ↗</a>
       </div>
+      <!-- 촬영 시각 고치기 : 카메라 시계가 틀린 사진들을 골라 한꺼번에 옮김 (js/admin.js) -->
+      <button type="button" class="ad-fix-toggle" data-fix-toggle aria-expanded="false">촬영 시각 고치기</button>
       <p class="ad-empty" data-empty>아직 올린 사진이 없어요.</p>
       <ul class="ad-grid" data-grid></ul>
+      <div class="ad-fix" data-fix hidden>
+        <p class="ad-fix-head"><span><b data-fix-n>0장</b> 골랐어요</span> <button type="button" class="ad-fix-clear" data-fix-clear>모두 풀기</button></p>
+        <div class="ad-fix-row">
+          <div class="ad-fix-sign" role="group" aria-label="방향">
+            <button type="button" data-fix-sign="-1" aria-pressed="true">− 빼기</button>
+            <button type="button" data-fix-sign="1" aria-pressed="false">+ 더하기</button>
+          </div>
+          <label><input type="number" inputmode="numeric" min="0" max="23" value="0" data-fix-h /> 시간</label>
+          <label><input type="number" inputmode="numeric" min="0" max="59" value="0" data-fix-m /> 분</label>
+        </div>
+        <p class="ad-fix-preview" data-fix-preview aria-live="polite"></p>
+        <button type="button" class="ad-fix-apply" data-fix-apply disabled>옮기기</button>
+      </div>
     </section>
 
     <!-- 2-2. 공연 종료 (관리자만) -->

@@ -24,6 +24,10 @@
     return data;
   }
   const hhmm = (t) => new Date(t).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Seoul' });
+  // 날짜까지 : 공연 날 사진은 '17:01', 다른 날은 '11/22 02:18' (카메라 시계가 틀린 사진을 알아보기 쉽게)
+  const monthDay = (t) => new Date(t).toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', timeZone: 'Asia/Seoul' });
+  const fullTime = (t) => `${monthDay(t)} ${hhmm(t)}`;
+  const stamp = (t) => (monthDay(t) === monthDay(SHOW_START) ? hhmm(t) : fullTime(t));
 
   // ---------- 들어가기 · 탭 ----------
   function enter(r) {
@@ -103,7 +107,8 @@
   }
   const toBlob = (c, q) => new Promise((ok, no) => c.toBlob((b) => (b ? ok(b) : no(new Error('encode'))), 'image/jpeg', q));
 
-  // 사진 파일 안의 촬영 시각(EXIF DateTimeOriginal)만 읽음. 없거나 못 읽으면 null → 서버는 올린 시각을 씀
+  // 사진 파일 안의 촬영 시각(EXIF DateTimeOriginal, 없으면 DateTimeDigitized)만 읽음. 없거나 못 읽으면 null → 서버는 올린 시각을 씀
+  // 수정 시각(DateTime)은 쓰지 않음 : 사진을 편집 · 저장하거나 내려받은 시각인 경우가 많음
   // (위치정보 등 나머지 정보는 다시 그리면서 모두 사라짐)
   async function shotTime(file) {
     try {
@@ -127,10 +132,12 @@
     const ascii = (tag) => (tag ? str(tag.count > 4 ? u32(tag.at) : tag.at, tag.count) : '');
     const ifd0 = tags(u32(4));
     const exif = ifd0[0x8769] ? tags(u32(ifd0[0x8769].at)) : {};
-    const when = ascii(exif[0x9003]) || ascii(ifd0[0x0132]);   // 촬영 시각, 없으면 수정 시각
+    const original = ascii(exif[0x9003]);                     // 찍은 시각
+    const when = original || ascii(exif[0x9004]);             // 없으면 디지털화 시각 (스캔 · 일부 카메라)
     const m = /^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})/.exec(when);
     if (!m) return null;
-    const zone = /^[+-]\d{2}:\d{2}$/.test(ascii(exif[0x9011])) ? ascii(exif[0x9011]) : '+09:00';   // 시간대가 없으면 한국 시간
+    const offset = ascii(exif[original ? 0x9011 : 0x9012]);   // 그 시각의 시간대
+    const zone = /^[+-]\d{2}:\d{2}$/.test(offset) ? offset : '+09:00';   // 시간대가 없으면 한국 시간
     const ms = Date.parse(`${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:${m[6]}${zone}`);
     return Number.isFinite(ms) && ms > Date.now() - 3 * 86400000 && ms < Date.now() + 10 * 60000 ? ms : null;
   }
@@ -228,22 +235,28 @@
 
   // ---------- 올린 사진 목록 : 대표 · 숨기기 · 삭제 ----------
   const grid = $('[data-grid]');
+  const picked = new Set();   // 촬영 시각 고치기에서 고른 사진 id
   async function loadList() {
     try { renderList((await call('/api/photos', { key, action: 'list' })).photos); } catch (e) { /* 다음에 다시 */ }
   }
   // 공연 / 리허설 : 직접 고른 게 있으면 그대로, 아니면 촬영 시각(없으면 올린 시각)이 17:00 이후인지로 (js/showday.js 와 같은 규칙)
   const kindOf = (p) => p.kind || ((p.taken || p.at) >= SHOW_START ? 'show' : 'rehearsal');
+  let photos = [];   // 마지막으로 받은 목록 (촬영 시각 고치기에서 씀)
   function renderList(list) {
+    photos = list;
+    [...picked].forEach((id) => { if (!list.some((p) => p.id === id)) picked.delete(id); });   // 지워진 사진은 고른 것에서 뺌
     const items = [...list].reverse();
     $('[data-count]').textContent = items.length ? `${items.length}장` : '';
     $('[data-empty]').hidden = items.length > 0;
     grid.replaceChildren(...items.map((p) => {
       const li = document.createElement('li');
       const kind = kindOf(p);
-      li.className = `ad-ph${p.hidden ? ' is-hidden' : ''}${p.hero ? ' is-hero' : ''}`;
+      const on = picked.has(p.id);
+      li.className = `ad-ph${p.hidden ? ' is-hidden' : ''}${p.hero ? ' is-hero' : ''}${on ? ' is-picked' : ''}`;
       li.dataset.id = p.id;
       li.innerHTML = `<img src="/photos/${p.id}-t.jpg" alt="" loading="lazy" width="${p.w}" height="${p.h}" />
-        <span class="ad-ph-meta"><b>${hhmm(p.taken || p.at)}<small>${p.taken ? ' 촬영' : ' 올림'}</small></b><span class="ad-ph-cap"></span></span>
+        <button type="button" class="ad-ph-pick" data-pick aria-pressed="${on}" aria-label="${stamp(p.taken || p.at)} 사진 고르기"></button>
+        <span class="ad-ph-meta"><b>${stamp(p.taken || p.at)}<small>${p.taken ? ' 촬영' : ' 올림'}</small></b><span class="ad-ph-cap"></span></span>
         <span class="ad-ph-tags"><i class="t-kind t-${kind}">${kind === 'show' ? '공연' : '리허설'}${p.kind ? '' : ' · 자동'}</i>${p.hero ? '<i class="t-hero">대표</i>' : ''}${p.hidden ? '<i class="t-hidden">숨김</i>' : ''}</span>
         <span class="ad-ph-acts">
           <button type="button" data-act="kind" data-value="${kind === 'show' ? 'rehearsal' : 'show'}">${kind === 'show' ? '리허설로' : '공연으로'}</button>
@@ -254,8 +267,18 @@
       $('.ad-ph-cap', li).textContent = p.cap || '';
       return li;
     }));
+    if (fixing) paintFix();
   }
   grid.addEventListener('click', async (e) => {
+    const pick = e.target.closest('[data-pick]');
+    if (pick) {
+      const id = pick.closest('[data-id]').dataset.id;
+      if (picked.has(id)) picked.delete(id); else picked.add(id);
+      pick.setAttribute('aria-pressed', String(picked.has(id)));
+      pick.closest('.ad-ph').classList.toggle('is-picked', picked.has(id));
+      paintFix();
+      return;
+    }
     const b = e.target.closest('[data-act]');
     if (!b) return;
     const id = b.closest('[data-id]').dataset.id;
@@ -264,6 +287,70 @@
     b.disabled = true;
     try { renderList((await call('/api/photos', { key, action: act, id, value: b.dataset.value })).photos); }
     catch (err) { b.disabled = false; if (err.status === 401) logout('비밀번호가 바뀌었어요. 다시 들어와 주세요.'); }
+  });
+
+  // ---------- 촬영 시각 고치기 : 카메라 시계가 틀린 사진들을 골라 한꺼번에 옮김 ----------
+  // 예) 카메라 시계가 9시간 16분 빠르면 '− 빼기 9시간 16분'. 되돌리려면 같은 만큼 반대로
+  const fixBar = $('[data-fix]'), fixToggle = $('[data-fix-toggle]'), fixApply = $('[data-fix-apply]');
+  const fixH = $('[data-fix-h]'), fixM = $('[data-fix-m]');
+  let fixing = false, fixSign = -1, fixNote = '';
+  function setFixing(on) {
+    fixing = on;
+    if (!on) picked.clear();
+    fixNote = '';
+    grid.classList.toggle('is-fixing', on);
+    fixBar.hidden = !on;
+    fixToggle.textContent = on ? '고치기 그만' : '촬영 시각 고치기';
+    fixToggle.setAttribute('aria-expanded', String(on));
+    renderList(photos);
+  }
+  const clampInt = (el, max) => Math.max(0, Math.min(max, Math.floor(Number(el.value) || 0)));
+  const shiftMinutes = () => fixSign * (clampInt(fixH, 23) * 60 + clampInt(fixM, 59));
+  const amountText = (mins) => {
+    const h = Math.floor(Math.abs(mins) / 60), m = Math.abs(mins) % 60;
+    return [h ? `${h}시간` : '', m ? `${m}분` : ''].filter(Boolean).join(' ');
+  };
+  function paintFix() {
+    const mins = shiftMinutes();
+    const times = photos.filter((p) => picked.has(p.id)).map((p) => p.taken || p.at).sort((a, b) => a - b);
+    const range = (a, b) => (a === b ? fullTime(a) : `${fullTime(a)} ~ ${fullTime(b)}`);
+    $('[data-fix-n]').textContent = `${picked.size}장`;
+    let text = '바꿀 사진을 눌러 고르세요.';
+    if (times.length) {
+      const [a, b] = [times[0], times[times.length - 1]];
+      text = mins ? `${range(a, b)}  →  ${range(a + mins * 60000, b + mins * 60000)}` : `지금 ${range(a, b)} · 옮길 시간을 넣으세요.`;
+    }
+    $('[data-fix-preview]').textContent = fixNote || text;
+    fixApply.disabled = !picked.size || !mins;
+    fixApply.textContent = picked.size && mins ? `${picked.size}장 ${amountText(mins)} ${mins < 0 ? '빼기' : '더하기'}` : '옮기기';
+  }
+  fixToggle.addEventListener('click', () => setFixing(!fixing));
+  $('[data-fix-clear]').addEventListener('click', () => { picked.clear(); fixNote = ''; renderList(photos); });
+  fixBar.querySelectorAll('[data-fix-sign]').forEach((b) => b.addEventListener('click', () => {
+    fixSign = Number(b.dataset.fixSign);
+    fixBar.querySelectorAll('[data-fix-sign]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    fixNote = ''; paintFix();
+  }));
+  // 칸에 넣은 값이 범위를 넘으면 칸에도 고친 값을 보여 줌 (시간 0~23 · 분 0~59)
+  [[fixH, 23], [fixM, 59]].forEach(([el, max]) => el.addEventListener('input', () => {
+    if (el.value !== '' && String(clampInt(el, max)) !== el.value) el.value = clampInt(el, max);
+    fixNote = ''; paintFix();
+  }));
+  fixApply.addEventListener('click', async () => {
+    const mins = shiftMinutes(), ids = [...picked];
+    if (!ids.length || !mins) return;
+    if (!confirm(`고른 ${ids.length}장의 촬영 시각에서 ${amountText(mins)}을 ${mins < 0 ? '빼요' : '더해요'}.\n되돌리려면 같은 만큼 반대로 옮기면 돼요.`)) return;
+    fixApply.disabled = true;
+    try {
+      const data = await call('/api/photos', { key, action: 'shift', ids, value: mins });
+      picked.clear();
+      fixNote = `${data.shifted}장을 옮겼어요. 홈 화면에는 1~2분 안에 반영돼요.`;
+      renderList(data.photos);
+    } catch (err) {
+      if (err.status === 401) { logout('비밀번호가 바뀌었어요. 다시 들어와 주세요.'); return; }
+      fixNote = '옮기지 못했어요. 다시 눌러 주세요.';
+      paintFix();
+    }
   });
 
   // ---------- 공연 종료 (관리자만) ----------
