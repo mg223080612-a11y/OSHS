@@ -130,3 +130,17 @@
 .ad-fix-apply { width: 100%; min-height: 48px; margin-top: 10px; border: 0; color: #2a1a10; background: var(--apricot-soft); font: 700 15px var(--sans); cursor: pointer; }
 .ad-fix-apply:disabled { color: var(--muted); background: #2a2236; cursor: default; }
 
+/* ---------- 카메라 : 사진의 기종 이름 · 자동 보정 표시 · 시계 차이를 기억한 카메라 목록 ---------- */
+.ad-ph-cam { color: var(--muted); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ad-ph-cam:empty { display: none; }
+.t-adj { color: #12301c; background: #8fe0a6; }
+.ad-cams { margin-top: 12px; padding: 12px 14px; border: 1px solid rgba(143, 224, 166, .45); background: rgba(143, 224, 166, .06); font-size: 13.5px; }
+.ad-cams > p { color: #8fe0a6; font-weight: 500; }
+.ad-cams ul { list-style: none; display: grid; gap: 6px; margin-top: 8px; }
+.ad-cams li { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.ad-cams li b { color: var(--text); font-weight: 700; }
+.ad-cams li button { min-height: 34px; padding: 0 12px; border: 1px solid rgba(240, 196, 107, .45); color: var(--apricot-soft); background: transparent; font: 500 13px var(--sans); cursor: pointer; }
+.ad-fix-learn { display: flex; gap: 8px; align-items: flex-start; margin-top: 10px; font-size: 13.5px; line-height: 1.5; color: var(--text); cursor: pointer; }
+.ad-fix-learn input { flex-shrink: 0; width: 20px; height: 20px; margin-top: 1px; accent-color: var(--apricot); }
+.ad-fix-learn b { color: #8fe0a6; }
+

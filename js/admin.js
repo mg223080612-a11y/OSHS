@@ -107,22 +107,24 @@
   }
   const toBlob = (c, q) => new Promise((ok, no) => c.toBlob((b) => (b ? ok(b) : no(new Error('encode'))), 'image/jpeg', q));
 
-  // 사진 파일 안의 촬영 시각(EXIF DateTimeOriginal, 없으면 DateTimeDigitized)만 읽음. 없거나 못 읽으면 null → 서버는 올린 시각을 씀
+  // 사진 파일 안의 정보 : 촬영 시각(EXIF DateTimeOriginal, 없으면 DateTimeDigitized) + 카메라(제조사 · 기종 · 일련번호)
+  // 촬영 시각이 없거나 못 읽으면 taken 이 비어 있음 → 서버는 올린 시각을 씀
   // 수정 시각(DateTime)은 쓰지 않음 : 사진을 편집 · 저장하거나 내려받은 시각인 경우가 많음
+  // 카메라는 같은 카메라로 찍은 사진의 시계 차이를 자동으로 고칠 때만 씀 (일련번호는 섞어서 알아볼 수 없게 보냄)
   // (위치정보 등 나머지 정보는 다시 그리면서 모두 사라짐)
-  async function shotTime(file) {
+  async function photoInfo(file) {
     try {
       const v = new DataView(await file.slice(0, 256 * 1024).arrayBuffer());
-      if (v.getUint16(0) !== 0xffd8) return null;
+      if (v.getUint16(0) !== 0xffd8) return {};
       let o = 2;
       while (o + 4 < v.byteLength) {
         const marker = v.getUint16(o), size = v.getUint16(o + 2);
         if (marker === 0xffe1 && v.getUint32(o + 4) === 0x45786966) return readExif(v, o + 10);
-        if ((marker & 0xff00) !== 0xff00) return null;
+        if ((marker & 0xff00) !== 0xff00) return {};
         o += 2 + size;
       }
     } catch (e) { /* 읽을 수 없는 형식 */ }
-    return null;
+    return {};
   }
   function readExif(v, t) {
     const le = v.getUint16(t) === 0x4949;
@@ -132,18 +134,32 @@
     const ascii = (tag) => (tag ? str(tag.count > 4 ? u32(tag.at) : tag.at, tag.count) : '');
     const ifd0 = tags(u32(4));
     const exif = ifd0[0x8769] ? tags(u32(ifd0[0x8769].at)) : {};
+    const info = {
+      make: ascii(ifd0[0x010f]).trim(), model: ascii(ifd0[0x0110]).trim(),
+      serial: (ascii(exif[0xa431]) || ascii(ifd0[0xc62f])).trim(),   // 카메라 본체 일련번호 (폰에는 보통 없음)
+    };
     const original = ascii(exif[0x9003]);                     // 찍은 시각
     const when = original || ascii(exif[0x9004]);             // 없으면 디지털화 시각 (스캔 · 일부 카메라)
     const m = /^(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})/.exec(when);
-    if (!m) return null;
+    if (!m) return info;
     const offset = ascii(exif[original ? 0x9011 : 0x9012]);   // 그 시각의 시간대
     const zone = /^[+-]\d{2}:\d{2}$/.test(offset) ? offset : '+09:00';   // 시간대가 없으면 한국 시간
     const ms = Date.parse(`${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:${m[6]}${zone}`);
-    return Number.isFinite(ms) && ms > Date.now() - 3 * 86400000 && ms < Date.now() + 10 * 60000 ? ms : null;
+    // 60일 전 ~ 하루 뒤 : 카메라 시계가 앞서 있으면 '미래'로 찍혀 오므로 하루 뒤까지는 받아 둠 (서버와 같은 범위)
+    if (Number.isFinite(ms) && ms > Date.now() - 60 * 86400000 && ms < Date.now() + 86400000) info.taken = ms;
+    return info;
+  }
+  // 카메라 표시 : 제조사 · 기종 · 일련번호를 섞은 16자리 (같은 카메라면 늘 같음) + 보여 줄 기종 이름
+  async function cameraOf({ make = '', model = '', serial = '' }) {
+    if (!make && !model) return null;
+    const name = (model.toLowerCase().startsWith(make.toLowerCase()) ? model : `${make} ${model}`).replace(/[^\x20-\x7e]/g, '').trim().slice(0, 40);
+    if (!crypto.subtle) return null;
+    const hash = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(`${make}|${model}|${serial}`)));
+    return { id: [...hash.slice(0, 8)].map((b) => b.toString(16).padStart(2, '0')).join(''), name };
   }
 
   function paintItem(item) {
-    const text = { shrink: '줄이는 중…', wait: '기다리는 중', up: `올리는 중 ${item.pct || 0}%`, done: '올렸어요', fail: item.err || '못 올렸어요' }[item.state];
+    const text = { shrink: '줄이는 중…', wait: '기다리는 중', up: `올리는 중 ${item.pct || 0}%`, done: item.adj ? `올렸어요 · 카메라 시계 ${amountText(item.adj)} ${item.adj < 0 ? '빼서' : '더해서'} 고침` : '올렸어요', fail: item.err || '못 올렸어요' }[item.state];
     item.el.className = `ad-q is-${item.state}`;
     $('.ad-q-state', item.el).textContent = text;
     $('.ad-q-bar', item.el).style.setProperty('--p', item.state === 'done' ? 1 : (item.pct || 0) / 100);
@@ -176,6 +192,7 @@
       fd.append('w', item.w); fd.append('h', item.h);
       fd.append('cap', item.cap);
       if (item.taken) fd.append('taken', item.taken);
+      if (item.cam) { fd.append('cam', item.cam.id); fd.append('camName', item.cam.name); }
       fd.append('full', item.full, 'full.jpg');
       fd.append('thumb', item.thumb, 'thumb.jpg');
       const x = new XMLHttpRequest();
@@ -199,7 +216,9 @@
       try {
         if (!item.full) {
           item.state = 'shrink'; paintItem(item);
-          item.taken = await shotTime(item.file);
+          const info = await photoInfo(item.file);
+          item.taken = info.taken || null;
+          item.cam = await cameraOf(info).catch(() => null);
           const src = await decode(item.file);
           const big = draw(src, FULL_PX), small = draw(src, THUMB_PX);
           if (src.close) src.close();
@@ -211,7 +230,8 @@
           $('.ad-q-thumb', item.el).replaceChildren(prev);
         }
         item.state = 'up'; item.pct = 0; paintItem(item);
-        await send(item);
+        const sent = await send(item);
+        item.adj = (sent.photo && sent.photo.adj) || 0;   // 서버가 카메라 시계 차이만큼 고쳤으면 알려 줌
         item.state = 'done'; paintItem(item);
         loadList();
         setTimeout(() => item.el.remove(), 4000);
@@ -237,7 +257,7 @@
   const grid = $('[data-grid]');
   const picked = new Set();   // 촬영 시각 고치기에서 고른 사진 id
   async function loadList() {
-    try { renderList((await call('/api/photos', { key, action: 'list' })).photos); } catch (e) { /* 다음에 다시 */ }
+    try { show(await call('/api/photos', { key, action: 'list' })); } catch (e) { /* 다음에 다시 */ }
   }
   // 공연 / 리허설 : 직접 고른 게 있으면 그대로, 아니면 촬영 시각(없으면 올린 시각)이 17:00 이후인지로 (js/showday.js 와 같은 규칙)
   const kindOf = (p) => p.kind || ((p.taken || p.at) >= SHOW_START ? 'show' : 'rehearsal');
@@ -256,8 +276,8 @@
       li.dataset.id = p.id;
       li.innerHTML = `<img src="/photos/${p.id}-t.jpg" alt="" loading="lazy" width="${p.w}" height="${p.h}" />
         <button type="button" class="ad-ph-pick" data-pick aria-pressed="${on}" aria-label="${stamp(p.taken || p.at)} 사진 고르기"></button>
-        <span class="ad-ph-meta"><b>${stamp(p.taken || p.at)}<small>${p.taken ? ' 촬영' : ' 올림'}</small></b><span class="ad-ph-cap"></span></span>
-        <span class="ad-ph-tags"><i class="t-kind t-${kind}">${kind === 'show' ? '공연' : '리허설'}${p.kind ? '' : ' · 자동'}</i>${p.hero ? '<i class="t-hero">대표</i>' : ''}${p.hidden ? '<i class="t-hidden">숨김</i>' : ''}</span>
+        <span class="ad-ph-meta"><b>${stamp(p.taken || p.at)}<small>${p.taken ? ' 촬영' : ' 올림'}</small></b><span class="ad-ph-cap"></span><span class="ad-ph-cam"></span></span>
+        <span class="ad-ph-tags"><i class="t-kind t-${kind}">${kind === 'show' ? '공연' : '리허설'}${p.kind ? '' : ' · 자동'}</i>${p.hero ? '<i class="t-hero">대표</i>' : ''}${p.hidden ? '<i class="t-hidden">숨김</i>' : ''}${p.adj ? '<i class="t-adj">시각 자동 보정</i>' : ''}</span>
         <span class="ad-ph-acts">
           <button type="button" data-act="kind" data-value="${kind === 'show' ? 'rehearsal' : 'show'}">${kind === 'show' ? '리허설로' : '공연으로'}</button>
           <button type="button" data-act="${p.hero ? 'unhero' : 'hero'}">${p.hero ? '대표 해제' : '대표로'}</button>
@@ -265,6 +285,7 @@
           <button type="button" data-act="delete" class="danger">삭제</button>
         </span>`;
       $('.ad-ph-cap', li).textContent = p.cap || '';
+      $('.ad-ph-cam', li).textContent = p.camName || '';
       return li;
     }));
     if (fixing) paintFix();
@@ -285,7 +306,7 @@
     const act = b.dataset.act;
     if (act === 'delete' && !confirm('이 사진을 지울까요? 홈 화면에서도 사라져요.')) return;
     b.disabled = true;
-    try { renderList((await call('/api/photos', { key, action: act, id, value: b.dataset.value })).photos); }
+    try { show(await call('/api/photos', { key, action: act, id, value: b.dataset.value })); }
     catch (err) { b.disabled = false; if (err.status === 401) logout('비밀번호가 바뀌었어요. 다시 들어와 주세요.'); }
   });
 
@@ -321,6 +342,10 @@
       text = mins ? `${range(a, b)}  →  ${range(a + mins * 60000, b + mins * 60000)}` : `지금 ${range(a, b)} · 옮길 시간을 넣으세요.`;
     }
     $('[data-fix-preview]').textContent = fixNote || text;
+    // 고른 사진 가운데 사진 속 촬영 시각 · 카메라 정보가 있는 것 : 그 카메라의 시계 차이를 기억할 수 있음
+    const camNames = [...new Set(photos.filter((p) => picked.has(p.id) && p.cam && p.taken).map((p) => p.camName || '이 카메라'))];
+    $('[data-fix-learn-row]').hidden = !camNames.length;
+    $('[data-fix-cams]').textContent = camNames.join(' · ');
     fixApply.disabled = !picked.size || !mins;
     fixApply.textContent = picked.size && mins ? `${picked.size}장 ${amountText(mins)} ${mins < 0 ? '빼기' : '더하기'}` : '옮기기';
   }
@@ -339,19 +364,48 @@
   fixApply.addEventListener('click', async () => {
     const mins = shiftMinutes(), ids = [...picked];
     if (!ids.length || !mins) return;
-    if (!confirm(`고른 ${ids.length}장의 촬영 시각에서 ${amountText(mins)}을 ${mins < 0 ? '빼요' : '더해요'}.\n되돌리려면 같은 만큼 반대로 옮기면 돼요.`)) return;
+    const learn = !$('[data-fix-learn-row]').hidden && $('[data-fix-learn]').checked;
+    const camText = learn ? `\n앞으로 ${$('[data-fix-cams]').textContent}(으)로 찍어 올리는 사진도 자동으로 같은 만큼 고쳐요.` : '';
+    if (!confirm(`고른 ${ids.length}장의 촬영 시각에서 ${amountText(mins)}을 ${mins < 0 ? '빼요' : '더해요'}.${camText}\n되돌리려면 같은 만큼 반대로 옮기면 돼요.`)) return;
     fixApply.disabled = true;
     try {
-      const data = await call('/api/photos', { key, action: 'shift', ids, value: mins });
+      const data = await call('/api/photos', { key, action: 'shift', ids, value: mins, learn });
       picked.clear();
       fixNote = `${data.shifted}장을 옮겼어요. 홈 화면에는 1~2분 안에 반영돼요.`;
-      renderList(data.photos);
+      show(data);
     } catch (err) {
       if (err.status === 401) { logout('비밀번호가 바뀌었어요. 다시 들어와 주세요.'); return; }
       fixNote = '옮기지 못했어요. 다시 눌러 주세요.';
       paintFix();
     }
   });
+
+  // ---------- 시계 차이를 기억한 카메라 ----------
+  const camsBox = $('[data-cams]');
+  function renderCams(cams) {
+    const list = Object.entries(cams || {});
+    camsBox.hidden = !list.length;
+    $('[data-cams-list]', camsBox).replaceChildren(...list.map(([id, c]) => {
+      const li = document.createElement('li');
+      li.innerHTML = '<span><b></b> · <span></span></span><button type="button">그만</button>';
+      $('b', li).textContent = c.name || '이름 모르는 카메라';
+      $('span span', li).textContent = `${amountText(c.offset)} ${c.offset < 0 ? '빼기' : '더하기'}`;
+      const b = $('button', li);
+      b.setAttribute('aria-label', `${c.name || '이 카메라'} 자동으로 고치기 그만`);
+      b.addEventListener('click', async () => {
+        if (!confirm(`${c.name || '이 카메라'}로 찍은 사진을 더는 자동으로 고치지 않을까요?\n이미 올린 사진의 시각은 그대로예요.`)) return;
+        b.disabled = true;
+        try { show(await call('/api/photos', { key, action: 'forget', id })); }
+        catch (err) { b.disabled = false; if (err.status === 401) logout('비밀번호가 바뀌었어요. 다시 들어와 주세요.'); }
+      });
+      return li;
+    }));
+  }
+  // 서버 답 그리기 : 사진 목록 + (있으면) 카메라 목록
+  function show(data) {
+    if (data.photos) renderList(data.photos);
+    if (data.cams) renderCams(data.cams);
+  }
 
   // ---------- 공연 종료 (관리자만) ----------
   function showState(state) {

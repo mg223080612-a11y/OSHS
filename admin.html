@@ -60,6 +60,11 @@
       </div>
       <!-- 촬영 시각 고치기 : 카메라 시계가 틀린 사진들을 골라 한꺼번에 옮김 (js/admin.js) -->
       <button type="button" class="ad-fix-toggle" data-fix-toggle aria-expanded="false">촬영 시각 고치기</button>
+      <!-- 시계 차이를 기억한 카메라 : 이 카메라로 찍은 사진은 올라올 때 자동으로 시각을 고침 -->
+      <div class="ad-cams" data-cams hidden>
+        <p>올라오면 촬영 시각을 자동으로 고치는 카메라</p>
+        <ul data-cams-list></ul>
+      </div>
       <p class="ad-empty" data-empty>아직 올린 사진이 없어요.</p>
       <ul class="ad-grid" data-grid></ul>
       <div class="ad-fix" data-fix hidden>
@@ -73,6 +78,7 @@
           <label><input type="number" inputmode="numeric" min="0" max="59" value="0" data-fix-m /> 분</label>
         </div>
         <p class="ad-fix-preview" data-fix-preview aria-live="polite"></p>
+        <label class="ad-fix-learn" data-fix-learn-row hidden><input type="checkbox" data-fix-learn checked /> <span>앞으로 <b data-fix-cams></b>(으)로 찍어 올리는 사진도 같은 만큼 자동으로 고치기</span></label>
         <button type="button" class="ad-fix-apply" data-fix-apply disabled>옮기기</button>
       </div>
     </section>
